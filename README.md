@@ -193,3 +193,5 @@ Say hello at contributors@bynovl.com!
 You can use `@novl/optimize` as a library to build your own tools, workflows, or integrations for non-commercial distribution. For license terms and more information, see the [LICENSE](./LICENSE) file.
 
 This is an update that should get published to both the private and public branches
+
+Currently testing a version bump. 
