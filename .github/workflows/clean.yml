@@ -1,0 +1,50 @@
+name: Cleanup Workflow Runs
+
+on:
+  workflow_dispatch:
+    inputs:
+      workflow_id:
+        description: 'Workflow file name or ID to clean up'
+        required: true
+        default: 'your_workflow.yml'
+      confirm:
+        description: 'Type YES to confirm deletion'
+        required: true
+        default: 'NO'
+
+jobs:
+  cleanup:
+    if: ${{ github.event.inputs.confirm == 'YES' }}
+    runs-on: ubuntu-latest
+    steps:
+        - name: Install jq
+          run: sudo apt-get update && sudo apt-get install -y jq
+
+        - name: Delete all runs for workflow
+          env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            OWNER: ${{ github.repository_owner }}
+            REPO: ${{ github.event.repository.name }}
+            WORKFLOW_ID: ${{ github.event.inputs.workflow_id }}
+          run: |
+            PER_PAGE=100
+            PAGE=1
+            while :; do
+              echo "Fetching runs from page $PAGE..."
+              RESPONSE=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
+                "https://api.github.com/repos/$OWNER/$REPO/actions/workflows/$WORKFLOW_ID/runs?per_page=$PER_PAGE&page=$PAGE")
+              RUNS=$(echo "$RESPONSE" | jq '.workflow_runs[].id')
+              if [[ -z "$RUNS" ]]; then
+                echo "No more runs to delete. Done."
+                break
+              fi
+              for RUN_ID in $RUNS; do
+                echo "Deleting run ID: $RUN_ID"
+                curl -s -X DELETE \
+                  -H "Authorization: token $GITHUB_TOKEN" \
+                  "https://api.github.com/repos/$OWNER/$REPO/actions/runs/$RUN_ID"
+              done
+              ((PAGE++))
+              sleep 1
+            done
+  

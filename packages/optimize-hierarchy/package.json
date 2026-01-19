@@ -1,0 +1,43 @@
+{
+  "name": "@bynovl/optimize-hierarchy",
+  "version": "1.0.0",
+  "description": "Hierarchy validation submodule for the NOVL Optimize. Checks the order and nesting of HTML elements, such as headings and sections, to ensure semantic and accessible structure in static sites.",
+  "main": "index.js",
+  "type": "module",
+  "private": false,
+  "bin": {
+    "optimize-hierarchy": "bin/cli.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bynovl/optimize"
+  },
+  "author": "bynovl",
+  "license": "SEE LICENSE IN ../../LICENSE",
+  "keywords": [
+    "html-hierarchy",
+    "heading-order",
+    "semantic-html",
+    "structure",
+    "nesting",
+    "accessibility",
+    "static-site",
+    "validation",
+    "seo",
+    "novl",
+    "optimize"
+  ],
+  "dependencies": {
+    "@bynovl/optimize-utils": "workspace:*",
+    "@bynovl/optimize-lib": "workspace:*"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "files": [
+    "index.js",
+    "default.config.js",
+    "bin/cli.js",
+    "scripts"
+  ]
+}

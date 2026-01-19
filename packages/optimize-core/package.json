@@ -1,0 +1,32 @@
+{
+  "name": "@bynovl/optimize",
+  "version": "1.0.0",
+  "description": "Core CLI for @novl/optimize. Orchestrates all modular checks for static site optimization.",
+  "author": "NOVL",
+  "license": "ISC",
+  "private": false,
+  "bin": {
+    "optimize": "bin/cli.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bynovl/optimize"
+  },
+  "main": "index.js",
+  "type": "module",
+  "dependencies": {
+    "@bynovl/optimize-accessibility": "workspace:*",
+    "@bynovl/optimize-hierarchy": "workspace:*",
+    "@bynovl/optimize-links": "workspace:*",
+    "@bynovl/optimize-media": "workspace:*",
+    "@bynovl/optimize-meta": "workspace:*",
+    "@bynovl/optimize-open-graph": "workspace:*",
+    "@bynovl/optimize-schema": "workspace:*",
+    "@bynovl/optimize-sources": "workspace:*",
+    "@bynovl/optimize-utils": "workspace:*",
+    "@bynovl/optimize-lib": "workspace:*"
+  },
+  "scripts": {
+    "test": "echo \"No tests yet\" && exit 0"
+  }
+}

@@ -1,0 +1,54 @@
+name: Publish to Verdaccio (Public Test)
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    env:
+      VERDACCIO_SERVER: ${{ secrets.VERDACCIO_SERVER }}
+      VERDACCIO_TOKEN: ${{ secrets.VERDACCIO_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - run: pnpm install
+
+      - name: Configure npm for Verdaccio
+        run: |
+          echo "@bynovl:registry=https://${VERDACCIO_SERVER}/" >> ~/.npmrc
+          echo "//${VERDACCIO_SERVER}/:_authToken=${VERDACCIO_TOKEN}" >> ~/.npmrc
+
+      - name: Debug .npmrc
+        run: cat ~/.npmrc
+
+      - name: Debug npm registry config
+        run: |
+          npm config get registry
+          npm config get @bynovl:registry
+      
+      - name: Set up Git user
+        run: |
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+
+      - name: Version packages
+        run: pnpm changeset version
+
+      - name: Commit version bumps
+        run: |
+          git add .
+          git commit -m "chore: version bump [skip ci]" || echo "No changes to commit"
+          git push origin main
+
+      - name: Publish packages
+        run: pnpm changeset publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.VERDACCIO_TOKEN }}

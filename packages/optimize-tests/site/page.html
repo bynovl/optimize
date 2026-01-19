@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page</title>
+  <meta name="description" content="This is a valid meta description for the page.">
+  <meta name="keywords" content="valid, meta, open graph, schema, test">
+  <link rel="canonical" href="/page.html">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Valid Open Graph Title">
+  <meta property="og:description" content="A valid Open Graph description for the page.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="/page.html">
+  <meta property="og:image" content="/assets/images/banner.png">
+  <link rel="stylesheet" href="/styles/styles.css" />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Valid Twitter Title">
+  <meta name="twitter:description" content="A valid Twitter description for the page.">
+  <meta name="twitter:image" content="/assets/images/banner.png">
+</head>
+
+<body>
+  <h1>Title</h1>
+  <div id="test"></div>
+  <header id="header">
+    <a href="#test">Link to Test</a>
+  </header>
+  <main>
+    <h2>Should start with H1</h2>
+    <h1>Main Heading (should be first)</h1>
+    <h3>Subsection</h3>
+    <h2>Back to H2 (should not go backwards)</h2>
+    <h4>Sub-subsection</h4>
+    <h2>Another H2 after H4 (should not go backwards)</h2>
+    <h6>Deep section</h6>
+    <h5>Should not go backwards from H6</h5>
+    <h1>Second H1 (should only be one H1)</h1>
+    <section>
+      <h2>Section 3</h2>
+      <p>Content for section 3.</p>
+      <a href="https://nodejs.org/en/learn/manipulating-files/nodejs-file-stats'">Link to Section 3</a>
+    </section>
+    <section>
+      <h2>Section 4</h2>
+      <p>Content for section 4.</p>
+      <a href="https://example.com">Link to Section 4</a>
+    </section>
+  </main>
+  <footer id="footer">
+    <p>Footer content here.</p>
+    <a href="#header">Link to Header</a>
+  </footer>
+  <!-- Schema.org JSON-LD -->
+  <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "name": "Valid Page Title",
+        "description": "This is a valid meta description for the page.",
+        "author": {
+          "@type": "Person",
+          "name": "Jane Doe"
+        }
+      }
+    </script>
+</body>
+
+</html>

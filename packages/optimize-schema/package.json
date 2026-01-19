@@ -1,0 +1,43 @@
+{
+  "name": "@bynovl/optimize-schema",
+  "version": "1.0.0",
+  "description": "Schema.org validation submodule for the NOVL Optimize project. Checks HTML for Schema.org structured data, required properties, and best practices for SEO in static sites.",
+  "main": "index.js",
+  "private": false,
+  "bin": {
+    "optimize-schema": "bin/cli.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bynovl/optimize"
+  },
+  "author": "bynovl",
+  "license": "SEE LICENSE IN ../../LICENSE",
+  "keywords": [
+    "schema",
+    "schema.org",
+    "structured-data",
+    "seo",
+    "meta",
+    "validation",
+    "static-site",
+    "json-ld",
+    "microdata",
+    "novl",
+    "optimize"
+  ],
+  "type": "module",
+  "dependencies": {
+    "@bynovl/optimize-utils": "workspace:*",
+    "@bynovl/optimize-lib": "workspace:*"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "files": [
+    "index.js",
+    "default.config.js",
+    "bin/cli.js",
+    "scripts"
+  ]
+}

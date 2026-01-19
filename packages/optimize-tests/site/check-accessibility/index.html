@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Accessible Example</title>
+  <meta name="description" content="This is a valid meta description for the page.">
+  <meta name="keywords" content="valid, meta, open graph, schema, test">
+  <link rel="canonical" href="/page.html">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Valid Open Graph Title">
+  <meta property="og:description" content="A valid Open Graph description for the page.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="/page.html">
+  <meta property="og:image" content="/assets/images/banner.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Valid Twitter Title">
+  <meta name="twitter:description" content="A valid Twitter description for the page.">
+  <meta name="twitter:image" content="/assets/images/banner.png">
+  <!-- Schema.org JSON-LD -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      "name": "Valid Page Title",
+      "description": "This is a valid meta description for the page.",
+      "author": {
+        "@type": "Person",
+        "name": "Jane Doe"
+      }
+    }
+  </script>
+</head>
+
+<body>
+  <h1>Check Accessibility</h1>
+  <!-- Navigation with ARIA role and label -->
+  <nav aria-label="Main Navigation" role="navigation">
+    <ul>
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#contact">Contact</a></li>
+      <li><a href="https://example.com">Hi</a></li>
+    </ul>
+  </nav>
+
+  <section id="about">
+    <h2>About</h2>
+    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis recusandae aperiam voluptate numquam laboriosam
+      fugit animi vitae officia accusamus mollitia.</p>
+  </section>
+  <section id="services">
+    <h2></h2>
+    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis recusandae aperiam voluptate numquam laboriosam
+      fugit animi vitae officia accusamus mollitia.</p>
+  </section>
+  <section id="contact">
+    <h2></h2>
+    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis recusandae aperiam voluptate numquam laboriosam
+      fugit animi vitae officia accusamus mollitia.</p>
+
+    <form>
+      <label for="username">Username</label>
+      <input type="text" id="username" name="username">
+
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password">
+    </form>
+  </section>
+
+
+  <!-- Button with proper tabindex -->
+  <button tabindex="0">Submit</button>
+</body>
+
+</html>

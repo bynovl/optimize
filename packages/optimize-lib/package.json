@@ -1,0 +1,54 @@
+{
+  "name": "@bynovl/optimize-lib",
+  "version": "1.0.0",
+  "description": "Core utilities and shared functions for NOVL Optimize submodules. Provides reusable logic for validation, configuration, and data processing.",
+  "main": "aggregate-stats.js",
+  "type": "module",
+  "private": false,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bynovl/optimize"
+  },
+  "author": "bynovl",
+  "license": "SEE LICENSE IN ../../LICENSE",
+  "keywords": [
+    "core",
+    "utilities",
+    "shared",
+    "validation",
+    "config",
+    "data-processing",
+    "novl",
+    "optimize"
+  ],
+  "dependencies": {
+    "@bynovl/optimize-utils": "workspace:*",
+    "chalk": "5.6.2"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "files": [
+    "api.js",
+    "aggregate-stats.js",
+    "check-link-validity-ext.js",
+    "check-link-validity-int.js",
+    "check-link-validity.js",
+    "cli-args.js",
+    "cli-banner.js",
+    "cli-dispatch.js",
+    "print-summary.js",
+    "display-logs.js",
+    "get-config.js",
+    "get-help.js",
+    "get-json.js",
+    "issue-keys.js",
+    "merge-config.js",
+    "return.js",
+    "save-json.js",
+    "script-footer.js",
+    "script-header.js",
+    "set-config.js",
+    "should-ignore.js"
+  ]
+}

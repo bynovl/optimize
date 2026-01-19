@@ -1,0 +1,43 @@
+{
+  "name": "@bynovl/optimize-accessibility",
+  "version": "1.0.0",
+  "description": "Accessibility validation submodule for the NOVL Optimize. Checks HTML for accessibility best practices, ARIA usage, contrast, alt text, and semantic structure in static sites.",
+  "main": "index.js",
+  "private": false,
+  "bin": {
+    "optimize-accessibility": "bin/cli.js"
+  },
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bynovl/optimize"
+  },
+  "author": "bynovl",
+  "license": "SEE LICENSE IN ../../LICENSE",
+  "keywords": [
+    "accessibility",
+    "a11y",
+    "aria",
+    "alt-text",
+    "contrast",
+    "semantic-html",
+    "static-site",
+    "validation",
+    "best-practices",
+    "novl",
+    "optimize"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@bynovl/optimize-utils": "workspace:*",
+    "@bynovl/optimize-lib": "workspace:*"
+  },
+  "files": [
+    "index.js",
+    "default.config.js",
+    "bin/cli.js",
+    "scripts"
+  ]
+}

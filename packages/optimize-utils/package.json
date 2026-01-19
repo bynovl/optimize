@@ -1,0 +1,43 @@
+{
+  "name": "@bynovl/optimize-utils",
+  "version": "1.0.0",
+  "description": "Shared utility functions for NOVL Optimize submodules. Provides helpers for batch processing, link/media extraction, regex, path resolution, and more.",
+  "main": "batch-process.js",
+  "type": "module",
+  "private": false,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bynovl/optimize"
+  },
+  "author": "bynovl",
+  "license": "SEE LICENSE IN ../../LICENSE",
+  "keywords": [
+    "utilities",
+    "helpers",
+    "batch-processing",
+    "regex",
+    "links",
+    "media",
+    "novl",
+    "optimize"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "files": [
+    "batch-process.js",
+    "check-external-link.js",
+    "debug-log.js",
+    "export-as.js",
+    "extract-tags.js",
+    "extract-urls.js",
+    "filter-html.js",
+    "helpers.js",
+    "online-status.js",
+    "regex-links.js",
+    "resolve-path.js",
+    "spinner.js",
+    "transform-links.js",
+    "walk.js"
+  ]
+}

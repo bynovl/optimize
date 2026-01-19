@@ -1,0 +1,42 @@
+{
+  "name": "@bynovl/optimize-media",
+  "version": "1.0.0",
+  "description": "Media validation submodule for the NOVL Optimize project. Checks images, video, audio, and media accessibility and best practices in static sites.",
+  "main": "index.js",
+  "private": false,
+  "bin": {
+    "optimize-media": "bin/cli.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bynovl/optimize"
+  },
+  "author": "bynovl",
+  "license": "SEE LICENSE IN ../../LICENSE",
+  "type": "module",
+  "keywords": [
+    "media",
+    "images",
+    "video",
+    "audio",
+    "accessibility",
+    "static-site",
+    "media-check",
+    "media-validation",
+    "novl",
+    "optimize"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@bynovl/optimize-utils": "workspace:*",
+    "@bynovl/optimize-lib": "workspace:*"
+  },
+  "files": [
+    "index.js",
+    "default.config.js",
+    "bin/cli.js",
+    "scripts"
+  ]
+}

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Missing og:image</title>
+  <link rel="canonical" href="https://example.com/">
+  <meta name="description" content="Meta description present." />
+  <meta name="keywords" content="meta, test" />
+  <!-- Open Graph -->
+  <meta property="og:title" content="Open Graph Title" />
+  <meta property="og:description" content="A valid Open Graph description." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="/page.html" />
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Valid Twitter Title">
+  <meta name="twitter:description" content="A valid Twitter description for the page.">
+</head>
+
+<body>
+  <h1>Missing og:image</h1>
+  <!-- Schema.org JSON-LD -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      "name": "Valid Page Title",
+      "description": "This is a valid meta description for the page.",
+      "author": {
+        "@type": "Person",
+        "name": "Jane Doe"
+      }
+    }
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Index</title>
+  <meta name="description" content="This is a valid meta description for the page.">
+  <meta name="keywords" content="valid, meta, open graph, schema, test">
+  <link rel="canonical" href="/page.html">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Valid Open Graph Title">
+  <meta property="og:description" content="A valid Open Graph description for the page.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="/page.html">
+  <meta property="og:image" content="/assets/images/banner.png">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Valid Twitter Title">
+  <meta name="twitter:description" content="A valid Twitter description for the page.">
+  <meta name="twitter:image" content="/assets/images/banner.png">
+
+  <!-- Scripts -->
+  <link rel="stylesheet" href="/styles/styles.css">
+  <script src="/scripts/main.js"></script>
+</head>
+
+<body>
+  <div id="test"></div>
+  <header id="header">
+    <a href="#test">Link to Test</a>
+    <a href="/test.pdf">Testing PDF</a>
+    <a href="/test.xml">Testing XML</a>
+  </header>
+  <main>
+    <h1>Hello World</h1>
+    <section id="missing-id">
+      <h2>Section 1</h2>
+      <p>Content for section 1.</p>
+      <a href="#footer">Link to Footer</a>
+    </section>
+    <section>
+      <h2>Section 2</h2>
+      <p>Content for section 2.</p>
+      <a href="/home/#section2">Link to Section 2</a>
+    </section>
+    <section>
+      <h2>Section 3</h2>
+      <p>Content for section 3.</p>
+      <a href="https://mozilla.org/">Link to Section 3</a>
+      <img src="https://placeholdit.com/600x400/dddddd/999999" alt="">
+    </section>
+    <section>
+      <h2>Section 4</h2>
+      <p>Content for section 4.</p>
+      <a href="https://mozilla.org/this-would-be-cool-if-it-exists">Link to Section 4</a>
+    </section>
+  </main>
+  <footer id="footer">
+    <p>Footer content here.</p>
+    <a href="#header">Link to Header</a>
+  </footer>
+
+  <!-- Schema.org JSON-LD -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      "name": "Valid Page Title",
+      "description": "This is a valid meta description for the page.",
+      "author": {
+        "@type": "Person",
+        "name": "Jane Doe"
+      }
+    }
+  </script>
+</body>
+
+</html>

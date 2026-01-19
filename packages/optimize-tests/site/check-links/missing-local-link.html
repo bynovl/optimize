@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Broken Local Link</title>
+  <meta name="description" content="This is a valid meta description for the page.">
+  <meta name="keywords" content="valid, meta, open graph, schema, test">
+  <link rel="canonical" href="/page.html">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Valid Open Graph Title">
+  <meta property="og:description" content="A valid Open Graph description for the page.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="/page.html">
+  <meta property="og:image" content="/assets/images/banner.png">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Valid Twitter Title">
+  <meta name="twitter:description" content="A valid Twitter description for the page.">
+  <meta name="twitter:image" content="/assets/images/banner.png">
+</head>
+
+<body>
+  <h1>Check Links</h1>
+  <a href="/missing-page.html">Broken Local Link</a>
+
+  <!-- Schema.org JSON-LD -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      "name": "Valid Page Title",
+      "description": "This is a valid meta description for the page.",
+      "author": {
+        "@type": "Person",
+        "name": "Jane Doe"
+      }
+    }
+  </script>
+</body>
+
+</html>
