@@ -1,1 +1,5 @@
 node_modules/
+debug.md
+.docs/
+site-ext/
+_temp-backup/
