@@ -1,30 +1,32 @@
 import chalk from 'chalk';
+import { clearSpinnerLine } from '@bynovl/optimize-utils/spinner.js';
 
 // Show Banner
 export async function displayLogs(input) {
     const result = typeof input === 'function' ? await input() : input;
     if (result && result.log) {
-        console.log('\n');
         try {
             const stepName = result.name || result.type || 'Check';
-            if (result.success) {
-                // Show check headline with type
-                console.log(
-                    chalk.bgGreen.black.bold(`✅ CHECK: ${stepName}  `) +
-                    '\n' +
-                    chalk.white(result.log) +
-                    '\n'
-                );
-                // Print type-specific stats for successful checks if present
-                if (result.globalStats && Object.keys(result.globalStats).length > 0) {
-                    const statsLine = Object.entries(result.globalStats)
-                        .map(([key, value]) => `${key}: ${value}`)
-                        .join(' | ');
-                    if (statsLine.length > 0) {
-                        console.log(chalk.magenta(`${statsLine}`));
-                    }
-                }
-            } else {
+            // if (result.success) {
+            //     // Show check headline with type
+            //     console.log(
+            //         chalk.bgGreen.black.bold(`✅ CHECK: ${stepName}  `) +
+            //         '\n' +
+            //         chalk.white(result.log) +
+            //         '\n'
+            //     );
+            //     // Print type-specific stats for successful checks if present
+            //     if (result.globalStats && Object.keys(result.globalStats).length > 0) {
+            //         const statsLine = Object.entries(result.globalStats)
+            //             .map(([key, value]) => `${key}: ${value}`)
+            //             .join(' | ');
+            //         if (statsLine.length > 0) {
+            //             console.log(chalk.magenta(`${statsLine}`));
+            //         }
+            //     }
+            // }
+            if (!result.success) {
+                clearSpinnerLine();
                 // Header with one ❌ and check type
                 console.log(chalk.bgRed.white.bold(`❌ CHECK: ${stepName}  `));
                 // Found... line
@@ -85,9 +87,8 @@ export async function displayLogs(input) {
                         });
                     }
                 });
+                console.log(chalk.gray.bold(`===========================================\n`));
             }
-            console.log(chalk.gray.bold(`===========================================\n`));
-
         } catch (err) {
             console.error(err);
         }

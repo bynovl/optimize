@@ -36,7 +36,11 @@ export function parseCliArgs(argv = process.argv.slice(2), helpText = sharedHelp
     opts._handled = true;
   }
 
-  return opts;
+  if (opts['--file'] && argv.indexOf('--file') + 1 < argv.length) {
+    opts['--file'] = argv[argv.indexOf('--file') + 1];
+  }
+
+  return opts
 }
 
 export const sharedHelpText = `

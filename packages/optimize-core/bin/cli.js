@@ -12,7 +12,7 @@ import checkMedia from '@bynovl/optimize-media/index.js';
 import checkSources from '@bynovl/optimize-sources/index.js';
 
 // Initialize CLI options
-const { args, enabledChecks } = cliDispatch();
+const { args, enabledChecks, file } = cliDispatch();
 
 if (args._handled) {
   process.exit(0);
@@ -32,7 +32,7 @@ const isFirstCheck = enabledChecks[0];
 // Accepts optional startUrl for local testing or integration
 export async function runAllChecks(startUrl) {
   try {
-    const { config, nonIgnoredHtmlFiles } = await scriptHeader(isFirstCheck, enabledChecks);
+    const { config, nonIgnoredHtmlFiles } = await scriptHeader(isFirstCheck, enabledChecks, file);
     const actualChecks = Array.isArray(config.enabledChecks) ? config.enabledChecks : enabledChecks;
 
     // Map actualChecks (flags) to checkModules, preserving flag and fn

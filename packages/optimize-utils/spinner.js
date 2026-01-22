@@ -30,16 +30,19 @@ function stopSpinner() {
     }
 }
 
+function clearSpinnerLine() {
+    process.stdout.write('\r\x1b[K');
+}
 
 function startStopSpinner(start = true) {
     // if (process.env.DEBUG === 'true') {
     if (start) {
         startTime = Date.now();
-        startSpinner();
+        startSpinner() + '\n';
     } else {
         stopSpinner();
     }
     // }
 }
 
-export { startStopSpinner };
+export { startStopSpinner, clearSpinnerLine };

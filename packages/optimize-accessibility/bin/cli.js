@@ -5,7 +5,7 @@ import { cliDispatch } from '@bynovl/optimize-lib/cli-dispatch.js';
 import checkAccessibility from '../index.js';
 
 const currentFlag = '--accessibility';
-const { args, enabledChecks } = cliDispatch([currentFlag]);
+const { args, enabledChecks, file } = cliDispatch([currentFlag]);
 
 if (args._handled) {
     // Help/version was shown, exit early
@@ -15,7 +15,7 @@ if (args._handled) {
 const isFirstCheck = enabledChecks[0] === currentFlag;
 
 export default async function runAllChecks() {
-    const { config, nonIgnoredHtmlFiles } = await scriptHeader(isFirstCheck, enabledChecks);
+    const { config, nonIgnoredHtmlFiles } = await scriptHeader(isFirstCheck, enabledChecks, file);
     const actualChecks = Array.isArray(config.enabledChecks) ? config.enabledChecks : enabledChecks;
     const isApiMode = config.apiMode || process.env.MODE === 'API';
     if (isApiMode) return;

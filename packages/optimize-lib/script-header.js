@@ -5,7 +5,7 @@ import shouldIgnore from './should-ignore.js';
 import { cliBanner } from './cli-banner.js';
 import { startStopSpinner } from '@bynovl/optimize-utils/spinner.js';
 
-export async function scriptHeader(isFirstCheck = true, enabledChecks = []) {
+export async function scriptHeader(isFirstCheck = true, enabledChecks = [], file) {
     // Load configuration and checksOverride
     const { config, userEnabledChecks } = await getConfig(enabledChecks);
 
@@ -33,9 +33,24 @@ export async function scriptHeader(isFirstCheck = true, enabledChecks = []) {
     config.allSchemaKeys = [...defaultKeys, ...customKeys];
 
     const siteDir = config.outDir;
-    const htmlFiles = walk(siteDir, [], ['.html']);
-    const nonIgnoredHtmlFiles = htmlFiles.filter((file) => {
-        const relPath = file.replace(siteDir + '/', '');
+    let htmlFiles;
+
+    if (file) {
+        // If file has an extension, treat as file; otherwise, treat as directory
+        const hasExt = /\.[^/.]+$/.test(file);
+        if (hasExt) {
+            const filePath = file.startsWith('/') ? file : `${siteDir}/${file}`;
+            htmlFiles = [filePath];
+        } else {
+            // Treat as directory, traverse for HTML files
+            const dirPath = file.startsWith('/') ? file : `${siteDir}/${file}`;
+            htmlFiles = walk(dirPath, [], ['.html']);
+        }
+    } else {
+        htmlFiles = walk(siteDir, [], ['.html']);
+    }
+    const nonIgnoredHtmlFiles = htmlFiles.filter((f) => {
+        const relPath = f.replace(siteDir + '/', '');
         return !shouldIgnore(config, relPath);
     });
     return { config, nonIgnoredHtmlFiles, htmlFiles, userEnabledChecks };
