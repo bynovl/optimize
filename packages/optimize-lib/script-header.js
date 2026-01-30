@@ -35,6 +35,7 @@ export async function scriptHeader(isFirstCheck = true, enabledChecks = [], file
     const siteDir = config.outDir;
     let htmlFiles;
 
+    // check if specific file or directory is provided
     if (file) {
         // If file has an extension, treat as file; otherwise, treat as directory
         const hasExt = /\.[^/.]+$/.test(file);

@@ -58,13 +58,17 @@ Options:
 --all                                  Run all checks (default)
 -v, --version                          Show version
 -h, --help                             Show help
---ci                                   For CI/
+--ci                                   For CI/CD environments (non-interactive)
+--file <path>                          Specify input file path (directory or HTML file)
 
 Examples:
 
-You can pass any number of flags to isolate the checks you want to run:
-npx optimize --meta --hierarchy       
+Pass any number of flags to isolate the checks you want to run:
+npx optimize --meta --hierarchy  
 
-Or you can run all checks at once:
+Check a specific file:
+npx optimize --file ./path/to/file.html --accessibility
+
+Run all checks at once:
 npx optimize                         
 `;
