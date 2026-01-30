@@ -1,5 +1,17 @@
 # @bynovl/optimize-meta
 
+## 1.2.0
+
+### Minor Changes
+
+- 0f57f17: Improve file and directory check; remove passed check from CLI to minimize bloat
+
+### Patch Changes
+
+- Updated dependencies [0f57f17]
+  - @bynovl/optimize-lib@1.2.0
+  - @bynovl/optimize-utils@1.2.0
+
 ## 1.1.0
 
 ### Minor Changes

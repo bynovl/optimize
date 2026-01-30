@@ -1,5 +1,26 @@
 # @bynovl/optimize-tests
 
+## 1.2.0
+
+### Minor Changes
+
+- 0f57f17: Improve file and directory check; remove passed check from CLI to minimize bloat
+
+### Patch Changes
+
+- Updated dependencies [0f57f17]
+  - @bynovl/optimize-accessibility@1.2.0
+  - @bynovl/optimize@1.2.0
+  - @bynovl/optimize-hierarchy@1.2.0
+  - @bynovl/optimize-lib@1.2.0
+  - @bynovl/optimize-links@1.2.0
+  - @bynovl/optimize-media@1.2.0
+  - @bynovl/optimize-meta@1.2.0
+  - @bynovl/optimize-open-graph@1.2.0
+  - @bynovl/optimize-schema@1.2.0
+  - @bynovl/optimize-sources@1.2.0
+  - @bynovl/optimize-utils@1.2.0
+
 ## 1.1.0
 
 ### Minor Changes

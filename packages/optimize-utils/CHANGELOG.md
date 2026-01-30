@@ -1,5 +1,11 @@
 # @bynovl/optimize-utils
 
+## 1.2.0
+
+### Minor Changes
+
+- 0f57f17: Improve file and directory check; remove passed check from CLI to minimize bloat
+
 ## 1.1.0
 
 ### Minor Changes
