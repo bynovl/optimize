@@ -1,5 +1,13 @@
 # @bynovl/optimize-lib
 
+## 1.2.1
+
+### Patch Changes
+
+- ce085a5: License updates
+- Updated dependencies [ce085a5]
+  - @bynovl/optimize-utils@1.2.1
+
 ## 1.2.0
 
 ### Minor Changes
