@@ -33,7 +33,7 @@ const isFirstCheck = enabledChecks[0];
 export async function runAllChecks(startUrl) {
   try {
     const { config, nonIgnoredHtmlFiles } = await scriptHeader(isFirstCheck, enabledChecks, file);
-    const actualChecks = Array.isArray(config.enabledChecks) ? config.enabledChecks : enabledChecks;
+    const actualChecks = Array.isArray(config.enabledChecks) && config.enabledChecks.length > 0 ? config.enabledChecks : enabledChecks;
 
     // Map actualChecks (flags) to checkModules, preserving flag and fn
     const checksToRun = actualChecks
