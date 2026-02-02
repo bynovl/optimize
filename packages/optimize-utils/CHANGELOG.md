@@ -1,5 +1,11 @@
 # @bynovl/optimize-utils
 
+## 1.2.2
+
+### Patch Changes
+
+- e1ad065: Update how empty enabledChecks setting is handled; fix outdated README; and added an example config that can be us used to quickly setup project
+
 ## 1.2.1
 
 ### Patch Changes
