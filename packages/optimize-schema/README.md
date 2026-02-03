@@ -51,6 +51,8 @@ const results = await checkSchema(config, htmlFiles);
   - `batchSize`: Number of files to process in parallel.
   - `schemaDataDefault`: Array of keys required in every schema block.
   - `schemaDataCustom`: Array of custom/nested keys to validate (dot notation, `:required` for strict presence).
+  - `schemaDataExceptions`: Array of keys to ignore
+
 
 See the [project README](../../README.md) for full configuraton. 
 

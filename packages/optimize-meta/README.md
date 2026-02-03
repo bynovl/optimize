@@ -46,7 +46,6 @@ const results = await checkMeta(config, htmlFiles);
   - `ignore`: Array of glob patterns or paths to exclude.
   - `batchSize`: Number of files to process in parallel.
 
-
 See the [project README](../../README.md) for full configuraton. 
 
 ## Output
