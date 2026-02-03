@@ -1,5 +1,26 @@
 # @bynovl/optimize-tests
 
+## 1.3.0
+
+### Minor Changes
+
+- 85c3396: Improve media check; update how ignore list is handled
+
+### Patch Changes
+
+- Updated dependencies [85c3396]
+  - @bynovl/optimize-accessibility@1.3.0
+  - @bynovl/optimize@1.3.0
+  - @bynovl/optimize-hierarchy@1.3.0
+  - @bynovl/optimize-lib@1.3.0
+  - @bynovl/optimize-links@1.3.0
+  - @bynovl/optimize-media@1.3.0
+  - @bynovl/optimize-meta@1.3.0
+  - @bynovl/optimize-open-graph@1.3.0
+  - @bynovl/optimize-schema@1.3.0
+  - @bynovl/optimize-sources@1.3.0
+  - @bynovl/optimize-utils@1.3.0
+
 ## 1.2.2
 
 ### Patch Changes

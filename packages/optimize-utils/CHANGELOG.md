@@ -1,5 +1,11 @@
 # @bynovl/optimize-utils
 
+## 1.3.0
+
+### Minor Changes
+
+- 85c3396: Improve media check; update how ignore list is handled
+
 ## 1.2.2
 
 ### Patch Changes
