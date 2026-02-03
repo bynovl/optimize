@@ -6,9 +6,9 @@ export const DEFAULT_CONFIG_SETTINGS = {
     ...globalConfig,
     mediaTypes: ['video', 'audio', 'embed', 'img'],
     inlineStyles: true,
-    scriptFiles: true,
+    styleBlocks: true,
     cssFiles: true,
-    htmlFiles: true
+    htmlFiles: true,
 }
 
 export default DEFAULT_CONFIG_SETTINGS;

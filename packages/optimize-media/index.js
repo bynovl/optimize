@@ -18,6 +18,9 @@ export default async function checkMedia(config, htmlFiles, startUrl) {
     const cssFiles = walk(config.outDir, [], ['.css'], config);
     const failedItems = [];
 
+    console.log(`CSS files to check: ${cssFiles.length}`);
+    console.log(`HTML files to check: ${htmlFiles.length}`);
+
     // Process HTML files separately (on page CSS and img tags)
     const processHtmlFile = async (file) => {
         try {
@@ -33,8 +36,13 @@ export default async function checkMedia(config, htmlFiles, startUrl) {
 
             // Populate item.media.results with errors/warnings
             await validateImgTag(item, filteredContent, config, file, startUrl);
-            await validateInlineStyles(item, filteredContent, config, file, startUrl);
-            await validateStyleTagBlocks(item, filteredContent, config, file, startUrl);
+
+            if (config.inlineStyles) {
+                await validateInlineStyles(item, filteredContent, config, file, startUrl);
+            }
+            if (config.styleBlocks) {
+                await validateStyleTagBlocks(item, filteredContent, config, file, startUrl);
+            }
 
             // Custom labels matching all required media stats
             const labels = {
@@ -59,6 +67,7 @@ export default async function checkMedia(config, htmlFiles, startUrl) {
     };
 
     // Process CSS files separately
+
     const processCssFile = async (file) => {
         resolveFilePath(config, file);
         // Read file content
@@ -100,20 +109,24 @@ export default async function checkMedia(config, htmlFiles, startUrl) {
     };
 
     // Process HTML files in batches if over batch size
-    if (htmlFiles.length < config.batchSize) {
-        for (const file of htmlFiles) {
-            await processHtmlFile(file);
+    if (config.htmlFiles) {
+        if (htmlFiles.length < config.batchSize) {
+            for (const file of htmlFiles) {
+                await processHtmlFile(file);
+            }
+        } else {
+            await batchProcess(htmlFiles, config.batchSize, processHtmlFile);
         }
-    } else {
-        await batchProcess(htmlFiles, config.batchSize, processHtmlFile);
     }
     // Process CSS files in batches if over batch size
-    if (cssFiles.length < config.batchSize) {
-        for (const file of cssFiles) {
-            await processCssFile(file);
+    if (config.cssFiles) {
+        if (cssFiles.length < config.batchSize) {
+            for (const file of cssFiles) {
+                await processCssFile(file);
+            }
+        } else {
+            await batchProcess(cssFiles, config.batchSize, processCssFile);
         }
-    } else {
-        await batchProcess(cssFiles, config.batchSize, processCssFile);
     }
     // Return all failed items with media issues
     return returnResults(failedItems, 'Media');
