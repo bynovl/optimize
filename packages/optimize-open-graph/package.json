@@ -1,6 +1,6 @@
 {
   "name": "@bynovl/optimize-open-graph",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "Open Graph validation submodule for the NOVL Optimize project. Checks HTML for Open Graph meta tags, content completeness, and best practices for social sharing in static sites.",
   "main": "index.js",
   "private": false,

@@ -1,5 +1,22 @@
 # @bynovl/optimize
 
+## 1.2.2
+
+### Patch Changes
+
+- e1ad065: Update how empty enabledChecks setting is handled; fix outdated README; and added an example config that can be us used to quickly setup project
+- Updated dependencies [e1ad065]
+  - @bynovl/optimize-accessibility@1.2.2
+  - @bynovl/optimize-hierarchy@1.2.2
+  - @bynovl/optimize-lib@1.2.2
+  - @bynovl/optimize-links@1.2.2
+  - @bynovl/optimize-media@1.2.2
+  - @bynovl/optimize-meta@1.2.2
+  - @bynovl/optimize-open-graph@1.2.2
+  - @bynovl/optimize-schema@1.2.2
+  - @bynovl/optimize-sources@1.2.2
+  - @bynovl/optimize-utils@1.2.2
+
 ## 1.2.1
 
 ### Patch Changes
