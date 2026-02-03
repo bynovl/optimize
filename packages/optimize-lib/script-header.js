@@ -1,4 +1,6 @@
 import { getConfig } from './get-config.js';
+import path from 'path';
+import fs from 'fs';
 import { walk } from '@bynovl/optimize-utils/walk.js';
 import { isOffline } from '@bynovl/optimize-utils/online-status.js';
 import shouldIgnore from './should-ignore.js';
@@ -7,7 +9,7 @@ import { startStopSpinner } from '@bynovl/optimize-utils/spinner.js';
 
 export async function scriptHeader(isFirstCheck = true, enabledChecks = [], file) {
     // Load configuration and checksOverride
-    const { config, userEnabledChecks } = await getConfig(enabledChecks);
+    const { config } = await getConfig(enabledChecks);
 
     if (!config.apiMode) {
         // Start timer (update for accuracy)
@@ -34,25 +36,23 @@ export async function scriptHeader(isFirstCheck = true, enabledChecks = [], file
 
     const siteDir = config.outDir;
     let htmlFiles;
-
-    // check if specific file or directory is provided
     if (file) {
-        // If file has an extension, treat as file; otherwise, treat as directory
-        const hasExt = /\.[^/.]+$/.test(file);
-        if (hasExt) {
-            const filePath = file.startsWith('/') ? file : `${siteDir}/${file}`;
+        const filePath = path.resolve(siteDir, file);
+        if (fs.existsSync(filePath) && fs.lstatSync(filePath).isFile()) {
             htmlFiles = [filePath];
+        } else if (fs.existsSync(filePath) && fs.lstatSync(filePath).isDirectory()) {
+            htmlFiles = walk(filePath, [], ['.html']);
         } else {
-            // Treat as directory, traverse for HTML files
-            const dirPath = file.startsWith('/') ? file : `${siteDir}/${file}`;
-            htmlFiles = walk(dirPath, [], ['.html']);
+            // File or directory does not exist
+            console.error(`Error: The specified file or directory does not exist within siteDir: ${file}`);
+            process.exit(1);
         }
     } else {
         htmlFiles = walk(siteDir, [], ['.html']);
     }
     const nonIgnoredHtmlFiles = htmlFiles.filter((f) => {
-        const relPath = f.replace(siteDir + '/', '');
+        const relPath = path.relative(siteDir, f).replace(/\\/g, '/');
         return !shouldIgnore(config, relPath);
     });
-    return { config, nonIgnoredHtmlFiles, htmlFiles, userEnabledChecks };
+    return { config, nonIgnoredHtmlFiles, htmlFiles };
 }
