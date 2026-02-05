@@ -1,5 +1,11 @@
 # @bynovl/optimize-lib
 
+## 1.3.1
+
+### Patch Changes
+
+- 5430b91: Update link validity ext/int orchestrator detection
+
 ## 1.3.0
 
 ### Minor Changes
