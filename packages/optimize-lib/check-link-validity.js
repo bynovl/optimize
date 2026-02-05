@@ -20,9 +20,6 @@ import { debug } from '../optimize-utils/debug-log.js'
 // For external links, rely on URL resolution to determine final URL
 
 export async function checkLinkValidity(content, link, config = {}, sourceFile, startUrl) {
-  // Currently log every link being validated
-  debug(`[checkLinkValidity] Validating link: ${link} from sourceFile: ${sourceFile}`);
-
   // Helper: treat hash-only links as internal immediately
   if (link && link.startsWith('#')) {
     return await checkLinkValidityInt(content, link, config, sourceFile);
@@ -33,34 +30,40 @@ export async function checkLinkValidity(content, link, config = {}, sourceFile, 
   if (link && link.startsWith('//')) normalizedLink = 'https:' + link;
   debug(`[checkLinkValidity] Normalized link: ${normalizedLink}`);
 
-  // Improved heuristics for external vs internal:
-  // - Any http(s):// URL (except localhost) is always external
-  // - Protocol-relative (//) is external unless localhost
-  // - startUrl provided => we will resolve relative links against it and decide by origin
-  // - Otherwise, no scheme or no leading // => internal
+  // Determine if external
+  let isExternal = Boolean(
+    typeof normalizedLink === 'string' &&
+    (/^https?:\/\//i.test(normalizedLink) || normalizedLink.startsWith('//'))
+  ) || Boolean(startUrl);
 
+  // Internal/local link resolution: handles localhost and all internal links, with error handling
+  const isLocalhost = typeof normalizedLink === 'string' && (/^https?:\/\/localhost/i.test(normalizedLink) || /^\/\/localhost/i.test(normalizedLink));
+  let internalPath = link;
+  if (isLocalhost) {
+    try {
+      const urlObj = new URL(normalizedLink.startsWith('//') ? 'http:' + normalizedLink : normalizedLink);
+      internalPath = urlObj.pathname + (urlObj.search || '') + (urlObj.hash || '');
+    } catch {
+      internalPath = normalizedLink;
+    }
+  }
 
-  let isExternal = false;
-  if (typeof normalizedLink === 'string' &&
-    (/^https?:\/\//i.test(normalizedLink) && !/^https?:\/\/localhost/i.test(normalizedLink))) {
-    isExternal = true;
-  } else if (typeof normalizedLink === 'string' && normalizedLink.startsWith('//')) {
-    // Protocol-relative: treat as external unless localhost
-    isExternal = !/^\/\/localhost/i.test(normalizedLink);
-  } else if (startUrl) {
-    isExternal = true;
-  } else {
-    isExternal = false;
+  // Verify as internal if not external and not localhost
+  if (!isExternal) {
+    try { 
+      const result = await checkLinkValidityInt(content, internalPath, config, sourceFile);
+      if (result && result.isError) {
+        return { ...result, reason: `${result.reason}`, message: `Validated path: ${internalPath}`, sourceFile };
+      }
+      return { isError: false, isWarning: false, reason: `Link is valid`, message: internalPath, target: internalPath, sourceFile };
+    } catch (err) {
+      return { isError: true, isWarning: false, reason: 'Internal link validation error', message: err.message, target: internalPath };
+    }
   }
 
   // Prevent accidental double .html tokens in user-supplied hrefs
   if (typeof normalizedLink === 'string' && normalizedLink.endsWith('.html.html')) {
     normalizedLink = normalizedLink.replace(/\.html\.html$/, '.html');
-  }
-
-  // Treat localhost absolute URLs as internal
-  if (typeof normalizedLink === 'string' && (/^https?:\/\/localhost/i.test(normalizedLink))) {
-    return await checkLinkValidityInt(content, normalizedLink, config, sourceFile);
   }
 
   // If offline, skip external validation early
@@ -129,17 +132,5 @@ export async function checkLinkValidity(content, link, config = {}, sourceFile, 
       return { isError: false, isWarning: false, reason: `Link is valid`, message: urlObj.href, target: urlObj.href, sourceFile };
     }
     return result;
-  }
-
-  // Internal/local link resolution: delegate to internal validator which already
-  // handles routing (appends index.html) and tries .html fallbacks.
-  try {
-    const result = await checkLinkValidityInt(content, link, config, sourceFile);
-    if (result && result.isError) {
-      return { ...result, reason: `${result.reason}`, message: `Validated path: ${link}`, sourceFile };
-    }
-    return { isError: false, isWarning: false, reason: `Link is valid`, message: link, target: link, sourceFile };
-  } catch (err) {
-    return { isError: true, isWarning: false, reason: 'Internal link validation error', message: err.message, target: link };
   }
 }
