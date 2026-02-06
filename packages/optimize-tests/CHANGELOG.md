@@ -1,5 +1,13 @@
 # @bynovl/optimize-tests
 
+## 1.3.3
+
+### Patch Changes
+
+- Updated dependencies [ff2728d]
+  - @bynovl/optimize-media@1.5.0
+  - @bynovl/optimize@1.3.3
+
 ## 1.3.2
 
 ### Patch Changes
