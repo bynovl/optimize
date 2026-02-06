@@ -19,6 +19,10 @@ export async function validateCSS(item, content, config, cssFileDir, startUrl) {
             item.media.results.push(result);
             continue;
         }
+        // Ignore data:image/svg (and other data URIs if desired)
+        if (link.startsWith('data:')) {
+            continue;
+        }
         const linkError = await checkLinkValidity(content, url, config, cssFileDir, startUrl);
         if (linkError && linkError.isError) {
             const isExternal = linkError.type === ISSUE_KEY.unreachableExtLink || linkError.type === ISSUE_KEY.invalidExtLink;

@@ -13,7 +13,7 @@ import { debug } from '../optimize-utils/debug-log.js'
  * @param {string} [startUrl] - Optional. If included, all on-page links are treated as external and resolved relative to startUrl.
  * @returns {Promise<object>} - Validation result object.
  *
- */
+*/
 
 // For internal testing naturally get file extensions
 // For example when searching if file exists search as-is and with .html, .htm, .php, etc. extensions
@@ -23,6 +23,17 @@ export async function checkLinkValidity(content, link, config = {}, sourceFile, 
   // Helper: treat hash-only links as internal immediately
   if (link && link.startsWith('#')) {
     return await checkLinkValidityInt(content, link, config, sourceFile);
+  }
+
+  // Treat root '/' and localhost/127.0.0.1 URLs with no pathname as index.html
+  if (
+    link && (
+      link === '/' ||
+      /^https?:\/\/localhost(:\d+)?\/?$/i.test(link) ||
+      /^https?:\/\/127\.0\.0\.1(:\d+)?\/?$/i.test(link)
+    )
+  ) {
+    return await checkLinkValidityInt(content, 'index.html', config, sourceFile);
   }
 
   // Normalize protocol-relative links for parsing but don't assume external forever
@@ -36,21 +47,20 @@ export async function checkLinkValidity(content, link, config = {}, sourceFile, 
     (/^https?:\/\//i.test(normalizedLink) || normalizedLink.startsWith('//'))
   ) || Boolean(startUrl);
 
-  // Internal/local link resolution: handles localhost and all internal links, with error handling
-  const isLocalhost = typeof normalizedLink === 'string' && (/^https?:\/\/localhost/i.test(normalizedLink) || /^\/\/localhost/i.test(normalizedLink));
-  let internalPath = link;
-  if (isLocalhost) {
-    try {
-      const urlObj = new URL(normalizedLink.startsWith('//') ? 'http:' + normalizedLink : normalizedLink);
-      internalPath = urlObj.pathname + (urlObj.search || '') + (urlObj.hash || '');
-    } catch {
-      internalPath = normalizedLink;
+  // Combined internal/local/localhost link resolution with error handling
+  const isLocal = !isExternal || (typeof normalizedLink === 'string' && (/^https?:\/\/localhost/i.test(normalizedLink) || /^\/\/localhost/i.test(normalizedLink)));
+  if (isLocal) {
+    let internalPath = link;
+    // For localhost, extract the pathname; for others, use as-is or normalized
+    if (typeof normalizedLink === 'string' && (/^https?:\/\/localhost/i.test(normalizedLink) || /^\/\/localhost/i.test(normalizedLink))) {
+      try {
+        const urlObj = new URL(normalizedLink.startsWith('//') ? 'http:' + normalizedLink : normalizedLink);
+        internalPath = urlObj.pathname + (urlObj.search || '') + (urlObj.hash || '');
+      } catch {
+        internalPath = normalizedLink;
+      }
     }
-  }
-
-  // Verify as internal if not external and not localhost
-  if (!isExternal) {
-    try { 
+    try {
       const result = await checkLinkValidityInt(content, internalPath, config, sourceFile);
       if (result && result.isError) {
         return { ...result, reason: `${result.reason}`, message: `Validated path: ${internalPath}`, sourceFile };
@@ -71,11 +81,7 @@ export async function checkLinkValidity(content, link, config = {}, sourceFile, 
     return { isError: false, isWarning: true, reason: `Offline mode: external link validation skipped`, message: link, target: link, sourceFile };
   }
 
-  // When marked external we still try to resolve against startUrl/config.startUrl and
-  // prefer local validation when the resolved URL matches the site origin and a local
-  // output directory (config.outDir) is available. This allows natural routing (e.g. '/about')
-  // to be validated against local files (index.html or .html variants) instead of forcing
-  // an external HTTP check or appending .html blindly.
+  // External link validation
   if (isExternal) {
     let baseForUrl;
     if (startUrl) {
