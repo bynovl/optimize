@@ -1,5 +1,16 @@
 # @bynovl/optimize-media
 
+## 1.4.0
+
+### Minor Changes
+
+- 293e6ca: Fix localhost issues with link validation; skip data URI background images
+
+### Patch Changes
+
+- Updated dependencies [293e6ca]
+  - @bynovl/optimize-lib@1.4.0
+
 ## 1.3.1
 
 ### Patch Changes

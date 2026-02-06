@@ -1,5 +1,21 @@
 # @bynovl/optimize-tests
 
+## 1.3.2
+
+### Patch Changes
+
+- Updated dependencies [293e6ca]
+  - @bynovl/optimize-lib@1.4.0
+  - @bynovl/optimize-media@1.4.0
+  - @bynovl/optimize-accessibility@1.3.2
+  - @bynovl/optimize@1.3.2
+  - @bynovl/optimize-hierarchy@1.3.2
+  - @bynovl/optimize-links@1.3.2
+  - @bynovl/optimize-meta@1.3.2
+  - @bynovl/optimize-open-graph@1.3.2
+  - @bynovl/optimize-schema@1.3.2
+  - @bynovl/optimize-sources@1.3.2
+
 ## 1.3.1
 
 ### Patch Changes
