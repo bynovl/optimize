@@ -1,5 +1,11 @@
 # @bynovl/optimize-lib
 
+## 1.4.1
+
+### Patch Changes
+
+- ddde536: Fix start url issues
+
 ## 1.4.0
 
 ### Minor Changes

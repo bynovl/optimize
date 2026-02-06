@@ -1,5 +1,12 @@
 # @bynovl/optimize-media
 
+## 1.5.1
+
+### Patch Changes
+
+- Updated dependencies [ddde536]
+  - @bynovl/optimize-lib@1.4.1
+
 ## 1.5.0
 
 ### Minor Changes
