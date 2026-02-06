@@ -1,5 +1,11 @@
 # @bynovl/optimize-media
 
+## 1.5.0
+
+### Minor Changes
+
+- ff2728d: Fix invalid link variable name
+
 ## 1.4.0
 
 ### Minor Changes
