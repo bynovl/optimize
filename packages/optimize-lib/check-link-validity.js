@@ -25,10 +25,14 @@ export async function checkLinkValidity(content, link, config = {}, sourceFile, 
     return await checkLinkValidityInt(content, link, config, sourceFile);
   }
 
-  // Treat root '/' and localhost/127.0.0.1 URLs with no pathname as index.html
+  // Treat root '/' as internal only if startUrl is not present
+  if (link && link === '/' && !startUrl) {
+    return await checkLinkValidityInt(content, 'index.html', config, sourceFile);
+  }
+
+  // Treat localhost/127.0.0.1 URLs with no pathname as index.html
   if (
     link && (
-      link === '/' ||
       /^https?:\/\/localhost(:\d+)?\/?$/i.test(link) ||
       /^https?:\/\/127\.0\.0\.1(:\d+)?\/?$/i.test(link)
     )
