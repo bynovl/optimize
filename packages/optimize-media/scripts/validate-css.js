@@ -20,7 +20,7 @@ export async function validateCSS(item, content, config, cssFileDir, startUrl) {
             continue;
         }
         // Ignore data:image/svg (and other data URIs if desired)
-        if (link.startsWith('data:')) {
+        if (url.startsWith('data:')) {
             continue;
         }
         const linkError = await checkLinkValidity(content, url, config, cssFileDir, startUrl);
