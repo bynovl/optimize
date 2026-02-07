@@ -1,5 +1,14 @@
 # @bynovl/optimize-hierarchy
 
+## 1.3.4
+
+### Patch Changes
+
+- 3920d03: Changed package registry
+- Updated dependencies [3920d03]
+  - @bynovl/optimize-lib@1.4.2
+  - @bynovl/optimize-utils@1.3.1
+
 ## 1.3.3
 
 ### Patch Changes
