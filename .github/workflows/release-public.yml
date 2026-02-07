@@ -1,4 +1,4 @@
-name: Publish to Verdaccio (Public Test)
+name: Release (Public)
 
 on:
   push:
@@ -6,11 +6,8 @@ on:
       - main
 
 jobs:
-  publish:
+  release:
     runs-on: ubuntu-latest
-    env:
-      VERDACCIO_SERVER: ${{ secrets.VERDACCIO_SERVER }}
-      VERDACCIO_TOKEN: ${{ secrets.VERDACCIO_TOKEN }}
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v2
@@ -19,21 +16,11 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 18
+          registry-url: 'https://npm.pkg.github.com/'
       - run: pnpm install
+      - name: Configure npm for GitHub Packages
+        run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.GH_PUBLISH_TOKEN }}" > ~/.npmrc
 
-      - name: Configure npm for Verdaccio
-        run: |
-          echo "@bynovl:registry=https://${VERDACCIO_SERVER}/" >> ~/.npmrc
-          echo "//${VERDACCIO_SERVER}/:_authToken=${VERDACCIO_TOKEN}" >> ~/.npmrc
-
-      - name: Debug .npmrc
-        run: cat ~/.npmrc
-
-      - name: Debug npm registry config
-        run: |
-          npm config get registry
-          npm config get @bynovl:registry
-      
       - name: Set up Git user
         run: |
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
@@ -51,4 +38,6 @@ jobs:
       - name: Publish packages
         run: pnpm changeset publish
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.VERDACCIO_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.GH_PUBLISH_TOKEN }}
+
+# Manage public package releases with Githhub
