@@ -1,5 +1,14 @@
 # @bynovl/optimize-open-graph
 
+## 1.3.5
+
+### Patch Changes
+
+- b9c8051: Added support for SKILL.md to make it easier to integrate optimize into workflow
+- Updated dependencies [b9c8051]
+  - @bynovl/optimize-lib@1.4.3
+  - @bynovl/optimize-utils@1.3.2
+
 ## 1.3.4
 
 ### Patch Changes
