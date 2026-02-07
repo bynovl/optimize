@@ -1,5 +1,11 @@
 # @bynovl/optimize-utils
 
+## 1.3.1
+
+### Patch Changes
+
+- 3920d03: Changed package registry
+
 ## 1.3.0
 
 ### Minor Changes

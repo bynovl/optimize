@@ -1,5 +1,13 @@
 # @bynovl/optimize-lib
 
+## 1.4.2
+
+### Patch Changes
+
+- 3920d03: Changed package registry
+- Updated dependencies [3920d03]
+  - @bynovl/optimize-utils@1.3.1
+
 ## 1.4.1
 
 ### Patch Changes
