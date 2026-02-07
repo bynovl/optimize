@@ -1,5 +1,11 @@
 # @bynovl/optimize-utils
 
+## 1.3.2
+
+### Patch Changes
+
+- b9c8051: Added support for SKILL.md to make it easier to integrate optimize into workflow
+
 ## 1.3.1
 
 ### Patch Changes
