@@ -3,3 +3,5 @@ debug.md
 .docs/
 site-ext/
 _temp-backup/
+env.sh
+.npmrc
