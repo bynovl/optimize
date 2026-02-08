@@ -7,29 +7,7 @@
     "type": "git",
     "url": "https://github.com/bynovl/optimize"
   },
-  "scripts": {
-    "test:meta": "node ../optimize-meta/bin/cli.js --meta",
-    "test:hierarchy": "node ../optimize-hierarchy/bin/cli.js --hierarchy",
-    "test:open-graph": "node ../optimize-open-graph/bin/cli.js --open-graph",
-    "test:schema": "node ../optimize-schema/bin/cli.js --schema",
-    "test:accessibility": "node ../optimize-accessibility/bin/cli.js --accessibility",
-    "test:links": "node ../optimize-links/bin/cli.js --links",
-    "test:media": "node ../optimize-media/bin/cli.js --media",
-    "test:sources": "node ../optimize-sources/bin/cli.js --sources",
-    "test:multi": "node ../optimize-meta/bin/cli.js --meta && node ../optimize-hierarchy/bin/cli.js --hierarchy",
-    "test:optimize": "node ../optimize-core/bin/cli.js"
-  },
-  "dependencies": {
-    "@bynovl/optimize-accessibility": "workspace:*",
-    "@bynovl/optimize-hierarchy": "workspace:*",
-    "@bynovl/optimize-links": "workspace:*",
-    "@bynovl/optimize-media": "workspace:*",
-    "@bynovl/optimize-meta": "workspace:*",
-    "@bynovl/optimize-open-graph": "workspace:*",
-    "@bynovl/optimize-schema": "workspace:*",
-    "@bynovl/optimize-sources": "workspace:*",
-    "@bynovl/optimize-utils": "workspace:*",
-    "@bynovl/optimize-lib": "workspace:*",
+  "peerDependencies": {
     "@bynovl/optimize": "workspace:*"
   },
   "keywords": [
