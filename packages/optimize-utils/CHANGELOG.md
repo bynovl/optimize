@@ -1,5 +1,11 @@
 # @bynovl/optimize-utils
 
+## 1.4.0
+
+### Minor Changes
+
+- 64402f6: Update README.md; added SKILL.md to make it easier to analyze results; and improved tests package README instructions for usage'
+
 ## 1.3.2
 
 ### Patch Changes

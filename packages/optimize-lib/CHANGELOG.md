@@ -1,5 +1,16 @@
 # @bynovl/optimize-lib
 
+## 1.5.0
+
+### Minor Changes
+
+- 64402f6: Update README.md; added SKILL.md to make it easier to analyze results; and improved tests package README instructions for usage'
+
+### Patch Changes
+
+- Updated dependencies [64402f6]
+  - @bynovl/optimize-utils@1.4.0
+
 ## 1.4.3
 
 ### Patch Changes
