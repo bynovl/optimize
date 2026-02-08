@@ -1,5 +1,25 @@
 # @bynovl/optimize
 
+## 1.4.0
+
+### Minor Changes
+
+- 64402f6: Update README.md; added SKILL.md to make it easier to analyze results; and improved tests package README instructions for usage'
+
+### Patch Changes
+
+- Updated dependencies [64402f6]
+  - @bynovl/optimize-accessibility@1.4.0
+  - @bynovl/optimize-hierarchy@1.4.0
+  - @bynovl/optimize-lib@1.5.0
+  - @bynovl/optimize-links@1.4.0
+  - @bynovl/optimize-media@1.6.0
+  - @bynovl/optimize-meta@1.4.0
+  - @bynovl/optimize-open-graph@1.4.0
+  - @bynovl/optimize-schema@1.4.0
+  - @bynovl/optimize-sources@1.4.0
+  - @bynovl/optimize-utils@1.4.0
+
 ## 1.3.6
 
 ### Patch Changes
