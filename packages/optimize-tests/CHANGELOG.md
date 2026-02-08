@@ -1,5 +1,12 @@
 # @bynovl/optimize-tests
 
+## 1.3.7
+
+### Patch Changes
+
+- 4112559: Update package.json to remove unused scripts
+- 961912a: Improve optimize tests package for ease of install to quickly test package and capabilities
+
 ## 1.3.6
 
 ### Patch Changes
