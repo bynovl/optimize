@@ -6,12 +6,12 @@ You can use this out of the box or create new scripts and validate against this 
 
 ## Purpose
 - Centralized space for local testing and validation of optimize modules.
-- Easy onboarding for contributors to validate package checks against sample data.
-- Not required by any core package; use directly from the monorepo or copy config as needed.
+- Easy onboarding to validate package checks against sample data.
+- Not required by any core package; use directly from the monorepo and copy config as needed. 
 
 ## Usage
 
-Add the `optmize-tests` package to an existing project to validate modules against sample data. You can use an empty directory or include it in an existing project without interference. To do so create or update your project’s `optimize.config.js` in your root directory. Import the `defaultConfig` and `dir`:
+Add the `optmize-tests` package to an existing project to validate modules against sample data. You can use an empty directory or include it in an existing project without interference. To do so create or update your project’s `optimize.config.js` in your root directory. Import the `defaultConfig` and `dir` from package:
 
 ```javascript
 import defaultConfig, { dir } from '@bynovl/optimize-tests/optimize.config.js';
@@ -29,14 +29,38 @@ npx optimize
 
 **Run specific checks:**
 ```bash
-npx optimize -- --meta --hierarchy
-npx optimize -- --links
+npx optimize --meta --hierarchy
+npx optimize --links
 ```
 
-You can add new test cases or sample data to the `site/` or `site-ext/` directory as needed. Note: these may be overwritten during updates.
+**Run directory or file checks:**
+```bash
+npx optimize --file check-meta/index.html
+npx optimize --file check-hierarchy
+```
 
-See the [project README](../../README.md) for full configuration details.
+**Combine patterns:**
+```bash
+npx optimize --file check-meta/index.html --meta --hierarchy
+```
 
+**⚠️ Note on Editing Sample Files**
+
+For demonstration or test purposes, you (or automated tools like AI assistants) may directly edit files inside `node_modules/@bynovl/optimize-tests/site/` (for example, to quickly fix or experiment with meta, schema, or accessibility issues). **This is not recommended for production or real projects**—any changes made here will be lost whenever you reinstall, update, or re-link the package, as package managers overwrite the contents of `node_modules`.
+
+If you want to make permanent changes, always copy the relevant files or code to your own project’s source directory and apply fixes there. The sample files in this package are intended for testing and validation only, not for use in production sites.
+
+## Automate with SKILL.md
+
+We developed a global SKILL.md to help you summarize, analyze, and fix issues with AI. You can use it in the CLI or directly in the chat window—just choose your model and go!
+
+**How to use:**
+- Download or copy the SKILL file from the repo (see link below)
+- Add it to your project SKILLS folder `.github/skills` or `.claude/skills`.
+- Use it to interpret optimize results, get summaries, and generate fixes automatically
+
+**Get the global SKILL file:**
+- [Global SKILL file (optimize)](https://github.com/bynovl/optimize/skills/optimize/SKILL.md)
 
 ## Power Your Project
 

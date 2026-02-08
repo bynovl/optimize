@@ -344,34 +344,6 @@ npx optimize  # Accurate results
 
 ---
 
-## Integration with Other Skills
-
-Enhance your workflow by combining optimize with other skills:
-
-### With [SEO Skill](../seo/SKILL.md)
-- **SEO skill** = What to implement (theory)
-- **Optimize** = Verify implementation (validation and feedback)
-
-**Workflow:**
-1. Read SEO skill for best practices
-2. Implement in templates
-3. Build site
-4. Run optimize to verify implementation and catch issues
-5. Fix issues optimize finds
-6. Repeat
-
----
-
-## Integration with Github Copilot CLI and AI Tools
-Use AI to summarize optimize results and generate fixes:
-```bash
-# Run optimize and summarize with AI
-npx optimize > audit.txt
-cat audit.txt | ai-summarize --prioritize
-```
-
----
-
 ## Resources
 
 - [Optimize GitHub](https://github.com/bynovl/optimize)

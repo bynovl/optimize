@@ -177,16 +177,24 @@ If you're using optimize in an external project you'll want to disable CLI displ
 ```
 
 ## CI/CD Workflows
+
 You can add optimize to any CI/CD workflow. We've made it easy for you do so by adding an [optimize.yml.draft](./optimize.yml.draft) in the root of the repo. If any module fails, your workflow will return as failed helping you catch issues before you go live.
 
-## Contributing
-Times are changing and we needed something in-house that can help us work smarter not harder. This project started out as a need to solve some of our own unseen static site generator (SSG) problems and figured it might help some of you too. 
+## Automate with AI SKILLS
 
-We don't have time to manage pull requests at the moment.  However we'll do our best to regularly make updates and push changes tri-weekly. We actively use Optimize in our projects so you'll see updates regularly. 
- 
-For features you'd like to see or if you spot any bugs, submit an issue.  Want to contribute? Yes please, let's build together and make websites better, faster, accessible and AI-ready without any dependencies other than the ones you choose to use. 
+We developed a global SKILL.md to help you summarize, analyze, and fix issues with AI. You can use it in the CLI or directly in the chat window—just choose your model and go!
 
-Say hello at contributors@bynovl.com! 
+**How to use:**
+- Download or copy the SKILL file from the repo (see link below)
+- Add it to your project SKILLS folder `.github/skills` or `.claude/skills`.
+- Use it to interpret optimize results, get summaries, and generate fixes automatically
+
+**Get the global SKILL file:**
+- [Global SKILL file (optimize)](https://github.com/bynovl/optimize/skills/optimize/SKILL.md)
+
+**Learn more about SKILLS**
+- [Agent SKILLS](https://agentskills.io/what-are-skills)
+
 
 ## Power your own project
 
@@ -194,4 +202,12 @@ You can use `@novl/optimize` as a library to build your own tools, workflows, or
 
 This is an update that should get published to both the private and public branches
 
-Currently testing a version bump. 
+## Contributing
+
+Times are changing and we needed something in-house that can help us work smarter not harder. This project started out as a need to solve some of our own unseen static site generator (SSG) problems and figured it might help some of you too. 
+
+We don't have time to manage pull requests at the moment.  However we'll do our best to regularly make updates and push changes tri-weekly. We actively use Optimize in our projects so you'll see updates regularly. 
+ 
+For features you'd like to see or if you spot any bugs, submit an issue.  Want to contribute? Yes please, let's build together and optimize the web one static site at time.
+
+Say hello at contributors@bynovl.com! 

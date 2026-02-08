@@ -83,12 +83,28 @@ Returns an array of result objects per file, with details for each source issue:
   `content, item, relPath, siteDir, file (optional), ...function-specific`
 - To add new source checks, create a new helper in `optimize-sources/scripts/new-validation.js` and follow the module code patten and logic. *Note: this hasn't been thoroughly tested so if you use this feature and see a bug please let us know*
 
+## Automate with AI SKILLS
+
+We developed a global SKILL.md to help you summarize, analyze, and fix issues with AI. You can use it in the CLI or directly in Visual Studio Code chat window. Just choose your model and go! 
+
+**How to use:**
+- Download or copy the SKILL file from the repo (see link below)
+- Add it to your project SKILLS folder `.github/skills` or `.claude/skills`.
+- Use it to interpret optimize results, get summaries, and generate fixes automatically
+
+**Get the global SKILL file:**
+- [Global SKILL file (optimize)](https://github.com/bynovl/optimize/skills/optimize/SKILL.md)
+
+**Learn more about SKILLS**
+- [Agent SKILLS](https://agentskills.io/what-are-skills)
+
+
 ## Power your project
-We love building and seeing other builds! Go ahead and use it your project. You can use `@bynovl/optimize-sources` to build your own tools or use it as a reference for best-practice utility logic for non-commercial use. *For full license terms see the [LICENSE](./LICENSE) file.*
+We love building and seeing other builds! Go ahead and use `@bynovl/optimize-sources` to build your own static site QA tools, or as a reference for best-practice utility logic for non-commercial use. *For full license terms see the [LICENSE](./LICENSE) file.*
 
 ## Contributing
-We don't have the in-house capacity yet to manage a full pull-request lifecycle but we welcome new utilities and improvements. And we're committed to making changes every 3-weeks. Feel free to report an issue, suggest a patch, or request a feature and all that. 
+We don't have time to manage pull requests at the moment but we welcome new ideas and improvements. We do actively use Optimize in our projects so you'll see fresh updates regularly. 
 
-If you're inspired to contribute, yay we love hellos. Join us in building cool things sometimes just because, others for a cause and a few with a dash of for profit to keep the lights on (no this wasn't AI).
+For features you'd like to see or if you spot any bugs, submit an issue. Want to contribute? Yes please! Join us in building cool things sometimes just because, others for a cause and a few for profit to keep the lights on (no this wasn't AI).
 
-Reach out at contributors@bynovl.com
+Say hello at contributors@bynovl.com and introduce yourself in the "Introductions" discussion! 
