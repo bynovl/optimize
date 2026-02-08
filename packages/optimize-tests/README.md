@@ -6,57 +6,31 @@ You can use this out of the box or create new scripts and validate against this 
 
 ## Purpose
 - Centralized space for local testing and validation of optimize modules.
-- Easy onboarding for contributors to validate changes against sample data.
+- Easy onboarding for contributors to validate package checks against sample data.
 - Not required by any core package; use directly from the monorepo or copy config as needed.
 
 ## Usage
 
-### Standalone Usage
+Add the `optmize-tests` package to an existing project to validate modules against sample data. You can use an empty directory or include it in an existing project without interference. To do so create or update your project’s `optimize.config.js` in your root directory. Import the `defaultConfig` and `dir`:
 
-1. Download or clone the `@novl/optimize-tests` package.
-
-2. Install dependencies:
-```bash
-npm install
-# or
-pnpm install
-```
-
-3. Navigate to the package root:
-```bash
-cd /optimize-tests/
-```
-
-4. Run any of the included test scripts to validate modules:
-```bash
-npm run test:meta # meta check only 
-npm run test:hierarchy # heirarchy check only
-npm run test:optimize # run all checks
-# ...and more
-```
-
-### Existing Project
-
-
-You can add the test package to an existing project to validate modules against sample data. Update your project’s `outDir` in `optimize.config.js` to point to `node_modules/@bynovl/optimize-tests/site`.
-
-**Import the test config in your project:**
 ```javascript
-import testConfig from 'node_modules/@bynovl/optimize-tests/optimize.config.js';
+import defaultConfig, { dir } from '@bynovl/optimize-tests/optimize.config.js';
 export default {
-  ...testConfig
+  outDir: dir,
+  ...defaultConfig
 };
+// You are now ready to start testing
 ```
 
 **Run all checks:**
 ```bash
-npm run optimize
+npx optimize
 ```
 
 **Run specific checks:**
 ```bash
-npm run optimize -- --meta --hierarchy
-npm run optimize -- --links
+npx optimize -- --meta --hierarchy
+npx optimize -- --links
 ```
 
 You can add new test cases or sample data to the `site/` or `site-ext/` directory as needed. Note: these may be overwritten during updates.
