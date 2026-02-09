@@ -1,5 +1,16 @@
 # @bynovl/optimize-lib
 
+## 1.6.0
+
+### Minor Changes
+
+- 0d5ee79: Update LICENSE, added Contributing, Code of Conduct and Security files; Improved orchestrator to accept args vs passing a single arg
+
+### Patch Changes
+
+- Updated dependencies [0d5ee79]
+  - @bynovl/optimize-utils@1.5.0
+
 ## 1.5.0
 
 ### Minor Changes

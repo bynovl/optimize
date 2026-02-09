@@ -1,5 +1,11 @@
 # @bynovl/optimize-utils
 
+## 1.5.0
+
+### Minor Changes
+
+- 0d5ee79: Update LICENSE, added Contributing, Code of Conduct and Security files; Improved orchestrator to accept args vs passing a single arg
+
 ## 1.4.0
 
 ### Minor Changes

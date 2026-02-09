@@ -1,5 +1,16 @@
 # @bynovl/optimize-tests
 
+## 3.0.0
+
+### Minor Changes
+
+- 0d5ee79: Update LICENSE, added Contributing, Code of Conduct and Security files; Improved orchestrator to accept args vs passing a single arg
+
+### Patch Changes
+
+- Updated dependencies [0d5ee79]
+  - @bynovl/optimize@1.5.0
+
 ## 2.0.0
 
 ### Minor Changes
