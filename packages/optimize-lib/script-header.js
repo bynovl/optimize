@@ -35,12 +35,12 @@ export async function scriptHeader(isFirstCheck = true, enabledChecks = [], args
     config.allSchemaKeys = [...defaultKeys, ...customKeys];
 
     // Determine which HTML files to check based on --path argument and config.outDir
-    const path = args['--path'] || null;
+    const file = args['--path'] || null;
     const siteDir = config.outDir;
     let htmlFiles;
 
-    if (path) {
-        const filePath = path.resolve(siteDir, path);
+    if (file) {
+        const filePath = path.resolve(siteDir, file);
         if (fs.existsSync(filePath) && fs.lstatSync(filePath).isFile()) {
             htmlFiles = [filePath];
         } else if (fs.existsSync(filePath) && fs.lstatSync(filePath).isDirectory()) {
