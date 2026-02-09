@@ -30,6 +30,6 @@ If you experience or witness behavior that violates this Code of Conduct, please
 
 ## Commitment
 
-By participating in the Optimize community, you agree to uphold these values and help create a positive, inclusive environment for everyone.
+By participating in the community, you agree to uphold these values and help create a positive, inclusive environment for everyone.
 
 Thank you in advncne for making this a welcoming and supportive space!
