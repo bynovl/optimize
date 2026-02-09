@@ -79,7 +79,7 @@ Pass any number of flags to isolate the checks you want to run:
 npx optimize --meta --hierarchy  
 
 Check a specific file:
-npx optimize --file ./path/to/file.html --accessibility
+npx optimize --path ./path/to/file.html --accessibility
 
 Run all checks at once:
 npx optimize                         

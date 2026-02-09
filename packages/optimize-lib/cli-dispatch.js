@@ -23,7 +23,6 @@ export const checkModules = [
 export function cliDispatch() {
   const argv = process.argv.slice(2);
   const args = parseCliArgs(argv, sharedHelpText, pkg.version);
-  const file = args['--file'] || null;
 
   // Determine which module flags are present
   const moduleFlags = checkModules.map(m => m.flag);
@@ -36,5 +35,5 @@ export function cliDispatch() {
     // Only run specified module flags
     enabledChecks = presentModuleFlags;
   }
-  return { args, enabledChecks, file };
+  return { args, enabledChecks };
 }

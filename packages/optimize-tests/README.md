@@ -35,13 +35,13 @@ npx optimize --links
 
 **Run directory or file checks:**
 ```bash
-npx optimize --file check-meta/index.html
-npx optimize --file check-hierarchy
+npx optimize --path check-meta/index.html
+npx optimize --path check-hierarchy
 ```
 
 **Combine patterns:**
 ```bash
-npx optimize --file check-meta/index.html --meta --hierarchy
+npx optimize --path check-meta/index.html --meta --hierarchy
 ```
 
 **⚠️ Note on Editing Sample Files**
