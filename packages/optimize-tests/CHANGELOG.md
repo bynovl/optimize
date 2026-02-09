@@ -1,5 +1,13 @@
 # @bynovl/optimize-tests
 
+## 3.0.1
+
+### Patch Changes
+
+- 002b184: Update to --path from --file and fix issues referencing old nam
+- Updated dependencies [002b184]
+  - @bynovl/optimize@1.5.1
+
 ## 3.0.0
 
 ### Minor Changes
