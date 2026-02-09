@@ -1,13 +1,6 @@
-# Contributing to Optimize
+# Contributing 
 
-We welcome everyone to participate in the Optimize community! Our goal is to create an inclusive, respectful, and supportive environment where all voices are valued and everyone can contribute, regardless of background or experience.
-
-## Community Principles
-
-- **Inclusivity:** Everyone is welcome. We encourage participation from people of all backgrounds, identities, and skill levels.
-- **Respect:** Treat others with respect. Listen, be patient, and value different perspectives.
-- **Kindness:** Be friendly and supportive. Offer help, encouragement, and constructive feedback.
-- **Helpfulness:** If you see someone struggling or have knowledge to share, lend a hand. We grow stronger together.
+We welcome everyone to participate! Our goal is to create an inclusive, respectful, and supportive space where all voices are valued and everyone can contribute, regardless of background or experience.
 
 ## How to Contribute
 
@@ -19,15 +12,18 @@ We welcome everyone to participate in the Optimize community! Our goal is to cre
 Want to contribute to code? Say hello contributors@bynovl.com. We're looking for a few dedicated folks, excited about helping businesses have a fighting chance in generative and traditional search.
 
 ## Guidelines
+Before contributing make sure to read the full [Code of Conduct](./CODE_OF_CODUCT.md). The short version:
 
 - Be welcoming and open-minded.
 - Communicate clearly and kindly.
-- Avoid personal attacks, harassment, or exclusionary behavior.
+- Avoid personal attacks, harassment, discrimination or exclusionary behavior.
 - Respect privacy and confidentiality.
 - Focus on helping, learning, and improving together.
 
 ## Need Help?
 
-If you’re new or unsure, just ask! Our community is here to support you. No question is too basic, and every contribution matters.
+If you’re new or unsure, just ask! Our community is here to support you. A great place to start is heading to the [Community Support]() board.
 
-Thank you for making Optimize a positive and inclusive space!
+No question is too basic, and every contribution matters.
+
+Thank you you in advance for making this a positive and inclusive space!
