@@ -35,9 +35,17 @@ export function parseCliArgs(argv = process.argv.slice(2), helpText = sharedHelp
     }
     opts._handled = true;
   }
-
-  if (opts['--file'] && argv.indexOf('--file') + 1 < argv.length) {
-    opts['--file'] = argv[argv.indexOf('--file') + 1];
+  // path input option (use only --path for both file and directory)
+  if (opts['--path'] && argv.indexOf('--path') + 1 < argv.length) {
+    opts['--path'] = argv[argv.indexOf('--path') + 1];
+  }
+  // JSON output option
+  if (opts['--json'] && argv.indexOf('--json') + 1 < argv.length) {
+    opts['--json'] = argv[argv.indexOf('--json') + 1];
+  }
+  // CSV output option
+  if (opts['--csv'] && argv.indexOf('--csv') + 1 < argv.length) {
+    opts['--csv'] = argv[argv.indexOf('--csv') + 1];
   }
 
   return opts
@@ -56,10 +64,14 @@ Options:
 --media                                Run media checks
 --sources                              Run sources checks
 --all                                  Run all checks (default)
+
 -v, --version                          Show version
 -h, --help                             Show help
+
 --ci                                   For CI/CD environments (non-interactive)
---file <path>                          Specify input file path (directory or HTML file)
+--path <path>                          Specify input path (directory or HTML file)
+--json <path>                          Output results to JSON file
+--csv <path>                           Output results to CSV file
 
 Examples:
 

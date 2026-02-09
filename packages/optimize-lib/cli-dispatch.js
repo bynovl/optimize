@@ -24,6 +24,7 @@ export function cliDispatch() {
   const argv = process.argv.slice(2);
   const args = parseCliArgs(argv, sharedHelpText, pkg.version);
   const file = args['--file'] || null;
+
   // Determine which module flags are present
   const moduleFlags = checkModules.map(m => m.flag);
   const presentModuleFlags = Object.keys(args).filter(flag => moduleFlags.includes(flag));

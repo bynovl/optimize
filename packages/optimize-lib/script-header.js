@@ -7,7 +7,7 @@ import shouldIgnore from './should-ignore.js';
 import { cliBanner } from './cli-banner.js';
 import { startStopSpinner } from '@bynovl/optimize-utils/spinner.js';
 
-export async function scriptHeader(isFirstCheck = true, enabledChecks = [], file) {
+export async function scriptHeader(isFirstCheck = true, enabledChecks = [], args) {
     // Load configuration and checksOverride
     const { config } = await getConfig(enabledChecks);
 
@@ -34,8 +34,11 @@ export async function scriptHeader(isFirstCheck = true, enabledChecks = [], file
 
     config.allSchemaKeys = [...defaultKeys, ...customKeys];
 
+    // Determine which HTML files to check based on --file argument and config.outDir
+    const file = args['--file'] || null;
     const siteDir = config.outDir;
     let htmlFiles;
+
     if (file) {
         const filePath = path.resolve(siteDir, file);
         if (fs.existsSync(filePath) && fs.lstatSync(filePath).isFile()) {

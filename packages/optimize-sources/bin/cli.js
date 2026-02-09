@@ -5,7 +5,7 @@ import { cliDispatch } from '@bynovl/optimize-lib/cli-dispatch.js';
 import checkSources from '../index.js';
 
 const currentFlag = '--sources';
-const { args, enabledChecks, file } = cliDispatch([currentFlag]);
+const { args, enabledChecks } = cliDispatch([currentFlag]);
 
 if (args._handled) {
     // Help/version was shown, exit early
@@ -13,7 +13,7 @@ if (args._handled) {
 }
 const isFirstCheck = enabledChecks[0] === currentFlag;
 export default async function runAllChecks(startUrl) {
-    const { config, nonIgnoredHtmlFiles } = await scriptHeader(isFirstCheck, enabledChecks, file);
+    const { config, nonIgnoredHtmlFiles } = await scriptHeader(isFirstCheck, enabledChecks, args);
     const actualChecks = Array.isArray(config.enabledChecks) ? config.enabledChecks : enabledChecks;
     const isApiMode = config.apiMode || process.env.MODE === 'API';
     if (isApiMode) return;
@@ -25,7 +25,7 @@ export default async function runAllChecks(startUrl) {
     if (actualChecks.includes(currentFlag)) {
         results = [await checkSources(config, nonIgnoredHtmlFiles, effectiveStartUrl)];
     }
-    await scriptFooter(results, config);
+    await scriptFooter(results, config, args);
 }
 
 // Run if executed from CLI

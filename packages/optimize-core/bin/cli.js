@@ -12,7 +12,7 @@ import checkMedia from '@bynovl/optimize-media/index.js';
 import checkSources from '@bynovl/optimize-sources/index.js';
 
 // Initialize CLI options
-const { args, enabledChecks, file } = cliDispatch();
+const { args, enabledChecks } = cliDispatch();
 
 if (args._handled) {
   process.exit(0);
@@ -32,7 +32,7 @@ const isFirstCheck = enabledChecks[0];
 // Accepts optional startUrl for local testing or integration
 export async function runAllChecks(startUrl) {
   try {
-    const { config, nonIgnoredHtmlFiles } = await scriptHeader(isFirstCheck, enabledChecks, file);
+    const { config, nonIgnoredHtmlFiles } = await scriptHeader(isFirstCheck, enabledChecks, args);
     const actualChecks = Array.isArray(config.enabledChecks) && config.enabledChecks.length > 0 ? config.enabledChecks : enabledChecks;
 
     // Map actualChecks (flags) to checkModules, preserving flag and fn
@@ -52,7 +52,7 @@ export async function runAllChecks(startUrl) {
       checksToRun.map(async (mod) => mod.fn(config, nonIgnoredHtmlFiles, effectiveStartUrl))
     );
 
-    await scriptFooter(results, config);
+    await scriptFooter(results, config, args);
   } catch (error) {
     console.error('Error occurred while checking optimization requirements:', error);
   }

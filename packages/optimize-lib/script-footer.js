@@ -7,7 +7,9 @@ import { startStopSpinner } from '@bynovl/optimize-utils/spinner.js';
 import { clearSpinnerLine } from '@bynovl/optimize-utils/spinner.js';
 import chalk from 'chalk';
 
-export async function scriptFooter(results, config) {
+export async function scriptFooter(results, config, args) {
+    const jsonOutput = args['--json'] || null;
+    const csvOutput = args['--csv'] || null;
     try {
         // Loop through each check and display results. 
         let allPassed = Array.isArray(results) && results.length > 0 && results.every(r => r && r.success);
@@ -31,12 +33,15 @@ export async function scriptFooter(results, config) {
         const { pageMap } = aggregateStats(filteredResults);
 
         // Optionally export results if config.exportResultsAs is set
-        if (config.exportResultsJson && config.exportResultsJson !== '') {
-            await exportResultsAsJson({ results: filteredResults }, config.exportResultsJson);
+        if (config.exportResultsJson && config.exportResultsJson !== '' || jsonOutput) {
+            const jsonPath = config.exportResultsJson || jsonOutput;
+            await exportResultsAsJson({ results: filteredResults }, jsonPath);
         }
+        console.log(csvOutput);
         // export results as CSV
-        if (config.exportResultsCsv && config.exportResultsCsv !== '') {
-            await exportResultsAsCsv(filteredResults, config.exportResultsCsv);
+        if (config.exportResultsCsv && config.exportResultsCsv !== '' || csvOutput) {
+            const csvPath = config.exportResultsCsv || csvOutput;
+            await exportResultsAsCsv(filteredResults, csvPath);
         }
 
         // End timer (update for accurracy)
