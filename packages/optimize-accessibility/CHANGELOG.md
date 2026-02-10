@@ -1,5 +1,14 @@
 # @bynovl/optimize-accessibility
 
+## 1.5.1
+
+### Patch Changes
+
+- 002b184: Update to --path from --file and fix issues referencing old nam
+- Updated dependencies [002b184]
+  - @bynovl/optimize-lib@1.6.1
+  - @bynovl/optimize-utils@1.5.1
+
 ## 1.5.0
 
 ### Minor Changes

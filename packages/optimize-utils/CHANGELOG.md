@@ -1,5 +1,11 @@
 # @bynovl/optimize-utils
 
+## 1.5.1
+
+### Patch Changes
+
+- 002b184: Update to --path from --file and fix issues referencing old nam
+
 ## 1.5.0
 
 ### Minor Changes
