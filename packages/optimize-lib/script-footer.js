@@ -7,7 +7,7 @@ import { startStopSpinner } from '@bynovl/optimize-utils/spinner.js';
 import { clearSpinnerLine } from '@bynovl/optimize-utils/spinner.js';
 import chalk from 'chalk';
 
-export async function scriptFooter(results, config, args) {
+export async function scriptFooter(results, config, args, totalPagesChecked) {
     const jsonOutput = args['--json'] || null;
     const csvOutput = args['--csv'] || null;
     try {
@@ -37,7 +37,6 @@ export async function scriptFooter(results, config, args) {
             const jsonPath = config.exportResultsJson || jsonOutput;
             await exportResultsAsJson({ results: filteredResults }, jsonPath);
         }
-        console.log(csvOutput);
         // export results as CSV
         if (config.exportResultsCsv && config.exportResultsCsv !== '' || csvOutput) {
             const csvPath = config.exportResultsCsv || csvOutput;
@@ -47,8 +46,10 @@ export async function scriptFooter(results, config, args) {
         // End timer (update for accurracy)
         startStopSpinner(false);
 
-        // Print summary of failed checks
-        printSummary(filteredResults);
+        if(!allPassed) {
+            // Print summary of failed checks
+            printSummary(filteredResults, totalPagesChecked);
+        } 
 
         return { results: filteredResults, pageMap };
     } catch (err) {

@@ -16,4 +16,7 @@ export { default as checkSchema } from '@bynovl/optimize-schema/index.js';
 export { default as checkAccessibility } from '@bynovl/optimize-accessibility/index.js';
 export { default as checkHierarchy } from '@bynovl/optimize-hierarchy/index.js';
 export { default as checkOpenGraph } from '@bynovl/optimize-open-graph/index.js';
-export { default as checkSources } from '@bynovl/optimize-sources/index.js';  
+export { default as checkSources } from '@bynovl/optimize-sources/index.js';
+
+// Supported custom example check, can be used as a template for your own custom checks
+// export { validateCheck as validateCustomCheck } from './custom-check-example/validate-check.js';

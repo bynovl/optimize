@@ -1,0 +1,41 @@
+{
+  "name": "@bynovl/optimize-custom-check",
+  "version": "1.0.0",
+  "description": "Template for creating custom checks in the NOVL Optimize project.",
+  "main": "index.js",
+  "private": false,
+  "bin": {
+    "optimize-custom-check": "bin/cli.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bynovl/optimize"
+  },
+  "author": "bynovl",
+  "license": "SEE LICENSE IN ../../LICENSE",
+  "type": "module",
+  "keywords": [
+    "custom-check",
+    "template",
+    "html-validation",
+    "static-site",
+    "seo",
+    "accessibility",
+    "novl",
+    "optimize"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "files": [
+    "index.js",
+    "default.config.js",
+    "bin/cli.js",
+    "validate-check.js",
+    "validate-patterns.js"
+  ],
+  "dependencies": {
+    "@bynovl/optimize-utils": "workspace:*",
+    "@bynovl/optimize-lib": "workspace:*"
+  }
+}

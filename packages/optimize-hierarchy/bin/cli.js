@@ -19,6 +19,7 @@ const isFirstCheck = enabledChecks[0] === currentFlag;
 export default async function runAllChecks() {
     const { config, nonIgnoredHtmlFiles } = await scriptHeader(isFirstCheck, enabledChecks, args);
     const actualChecks = Array.isArray(config.enabledChecks) ? config.enabledChecks : enabledChecks;
+    const totalPagesChecked = nonIgnoredHtmlFiles.length;
     const isApiMode = config.apiMode || process.env.MODE === 'API';
     if (isApiMode) return;
 
@@ -26,7 +27,7 @@ export default async function runAllChecks() {
     if (actualChecks.includes(currentFlag)) {
         results = [await checkHierarchy(config, nonIgnoredHtmlFiles)];
     }
-    await scriptFooter(results, config, args);
+    await scriptFooter(results, config, args, totalPagesChecked);
 }
 
 // Run if executed from CLI

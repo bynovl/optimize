@@ -5,6 +5,11 @@ import { DEFAULT_CONFIG_SETTINGS as mediaConfig } from '@bynovl/optimize-media/d
 import { DEFAULT_CONFIG_SETTINGS as openGraphConfig } from '@bynovl/optimize-open-graph/default.config.js';
 import { DEFAULT_CONFIG_SETTINGS as schemaConfig } from '@bynovl/optimize-schema/default.config.js';
 import { DEFAULT_CONFIG_SETTINGS as sourcesConfig } from '@bynovl/optimize-sources/default.config.js';
+import { DEFAULT_CONFIG_SETTINGS as langConfig } from '../optimize-lang/default.config.js';
+// Custom check default configuration settings.
+// import { DEFAULT_CONFIG_SETTINGS as customCheckConfig } from 'path-to-custom-check/default.config.js'; --- IGNORE ---
+
+// This file defines the default configuration settings for the custom check example.
 import defaultConfig from '@bynovl/optimize-lib/set-config.js';
 import mergeConfig from '@bynovl/optimize-lib/merge-config.js';
 
@@ -16,7 +21,8 @@ export const DEFAULT_CONFIG_SETTINGS = mergeConfig(
     mediaConfig,
     openGraphConfig,
     schemaConfig,
-    sourcesConfig
+    sourcesConfig,
+    langConfig,
+    // customCheckConfig, 
+    // customCheckConfig2
 );
-
-export default DEFAULT_CONFIG_SETTINGS;

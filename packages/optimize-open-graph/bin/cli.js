@@ -4,7 +4,6 @@ import { scriptFooter } from '@bynovl/optimize-lib/script-footer.js';
 import { cliDispatch } from '@bynovl/optimize-lib/cli-dispatch.js';
 import checkOpenGraph from '../index.js';
 
-
 const currentFlag = '--open-graph';
 const { args, enabledChecks } = cliDispatch([currentFlag]);
 
@@ -13,9 +12,12 @@ if (args._handled) {
     process.exit(0);
 }
 const isFirstCheck = enabledChecks[0] === currentFlag;
+
 export default async function runAllChecks(startUrl) {
     const { config, nonIgnoredHtmlFiles } = await scriptHeader(isFirstCheck, enabledChecks, args);
     const actualChecks = Array.isArray(config.enabledChecks) ? config.enabledChecks : enabledChecks;
+    const totalPagesChecked = nonIgnoredHtmlFiles.length;
+
     const isApiMode = config.apiMode || process.env.MODE === 'API';
     if (isApiMode) return;
 
@@ -26,7 +28,7 @@ export default async function runAllChecks(startUrl) {
     if (actualChecks.includes(currentFlag)) {
         results = [await checkOpenGraph(config, nonIgnoredHtmlFiles, effectiveStartUrl)];
     }
-    await scriptFooter(results, config, args);
+    await scriptFooter(results, config, args, totalPagesChecked);
 }
 
 // Run if executed from CLI
