@@ -195,6 +195,44 @@ We developed a global SKILL.md to help you summarize, analyze, and fix issues wi
 **Learn more about SKILLS**
 - [Agent SKILLS](https://agentskills.io/what-are-skills)
 
+## Custom Checks
+Custom checks should be able to work standalone or apart of the core package.
+
+### Module structure:
+optimize-[name-of-check]
+- bin/cli.js 
+- default.config.js
+- index.js
+- validate-check.js
+
+**bin/cli.js**: this is the orchestrator that hooks up everything and allows it to run standalone or as one. 
+**default.config.js**: if your module has custom settings that should be customized. *Note: you will need to update the optimize-core/default.config.js*
+**index.js**: where your validation logic goes
+**validate-check.js**: This is where you create issues based on validation logic
+
+
+### Quick start
+To make it easier to roll out your own custom check just copy the directory the package and add it into the folder. 
+
+```bash
+cp -r node_modules/@bynovl/optimize-core/custom-check-example/* node_modules/@bynovl/optimize-<new-check>/
+```
+
+This will create new check with everything you need to start creating custom checks that work with optimize. You will want to save a back-up. Make sure not to update the package while testing to avoid overwritting. 
+
+Once you have everything hooked up you'll need to import the default config and module to into the `optimize-core/default.config.js`. This is only required if there are custom settings for the check. *See file for more info* 
+
+Want to share your custom check? We welcome contributions. If you think your check is something that will help other SEOs and Developers alike, create a public repo and say hello. 
+
+Once your custom check is setup you should be able to use your `--custom-check` flag and it'll work as expected. 
+
+> Note: This is an experimental feature. It hasn't been thoroughly tested with different workflows. However it is working and it can used to plug into any enhance your workflow. Creating a robust experience. 
+
+**Issues**
+- Need to update the `optimize/index.js` enabledChecks list
+- Also need to update the `default.config.js`
+- And need to update  `optimize/index.js`
+- MUST relative URLS  for testing. Update to protocol relative when ready to make a package. 
 
 ## Power your own project
 
