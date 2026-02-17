@@ -4,27 +4,54 @@ Open Graph validation submodule for NOVL Optimize. Checks HTML files for the pre
 
 ---
 
+
 ## Quick Start
+### 1. Install package
+```bash 
+npm install @bynovl/optimize-open-graph
+```
+
+### 2. Configure `optimize.config.js`
+
+Add/update an `optimize.config.js` to your project root. And define required `outDir` setting:
+
+```js 
+export default = { 
+  outDir: "_site", // your build directory
+}
+```
+
+> Note: you can quickly add the optimize.config.js to your project using the [install script](../../scripts/install-examples.sh)
+
+### 3. Choose how you want to use it and optimize
 
 **CLI:**
 Single check
 ```bash
-npx optimize-open-graph
-```
-Core CLI with flags (with Core package only):
-```bash
 npx optimize --open-graph
 ```
-Defined config checks in `optimize.config.js` with Core package:
+
+Multiple flags:
+```bash
+npx optimize --open-graph --hierarchy
+#  Note: work with core package only. 
+```
+
+**Config:**
+If you regularly check the same things update your the `enabledChecks` in your config:
+
 ```js 
-{ 
-  "enabledChecks": ["--open-graph"]
+export default = { 
+  outDir: "_site", // your build directory, 
+  enabledChecks: ["--open-graph"]
 }
 ```
 
 **API:**
+Plug into any custom tool.
+
 ```js
-import checkOpenGraph from '@novl/optimize-open-graph';
+import checkOpenGraph from '@bynovl/optimize-open-graph/index.js';
 // config: object, htmlFiles: array of file paths
 const results = await checkOpenGraph(config, htmlFiles);
 ```
