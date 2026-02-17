@@ -6,19 +6,24 @@ export function printSummary(filteredResults, totalPagesChecked) {
   const passedChecks = filteredResults.filter(r => r && Array.isArray(r.failedItems) && r.failedItems.length === 0);
   // Count unique pages with issues by aggregating all failedItems' file/page properties
   const failedPages = new Set();
+  let totalIssues = 0;
   for (const check of failedChecks) {
     if (Array.isArray(check.failedItems)) {
       for (const item of check.failedItems) {
         if (item && (item.file || item.page)) {
           failedPages.add(item.file || item.page);
         }
+        // Aggregate all issues in item.results
+        if (item.stats && item.stats.totalIssues) {
+          totalIssues += item.stats.totalIssues;
+        }
       }
     }
   }
-
   console.log(chalk.gray.bold(`\n================= SUMMARY =================\n`));
   console.log(chalk.cyan(`⚠️  ${failedPages.size} out of ${totalPagesChecked} page(s) have issues`));
-  console.log(chalk.redBright(`❌ TOTAL CHECKS FAILED: ${failedChecks.length}\n`));
+  console.log(chalk.redBright(`❌ TOTAL CHECKS FAILED: ${failedChecks.length}`));
+  console.log(chalk.redBright(`❌ TOTAL ISSUES FOUND: ${totalIssues}\n`));
 
   if (failedChecks.length > 0) {
     console.log(chalk.gray('FAILED CHECKS:'));

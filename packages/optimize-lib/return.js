@@ -49,7 +49,6 @@ export function returnResults(failedItems, checkName, stats = {}) {
     if (failedItems.length) {
         log += `Found ${failedItems.length} files with issues in ${checkName} validation.\n`;
         updateGlobalTotals(failedItems, stats);
-
         return {
             log,
             success: false,

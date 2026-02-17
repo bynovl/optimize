@@ -46,11 +46,10 @@ export async function scriptFooter(results, config, args, totalPagesChecked) {
         // End timer (update for accurracy)
         startStopSpinner(false);
 
-        if(!allPassed) {
+        if (!allPassed) {
             // Print summary of failed checks
             printSummary(filteredResults, totalPagesChecked);
-        } 
-
+        }
         return { results: filteredResults, pageMap };
     } catch (err) {
         throw err;

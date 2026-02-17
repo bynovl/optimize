@@ -1,5 +1,4 @@
 import fs from 'fs';
-import { resolvePath } from '@bynovl/optimize-utils/resolve-path.js';
 import { debug } from '@bynovl/optimize-utils/debug-log.js';
 import mergeConfig from './merge-config.js';
 import globalConfig from './set-config.js';

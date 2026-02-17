@@ -4,8 +4,24 @@ import { createRequire } from 'module';
 const require = createRequire(import.meta.url);
 const pkg = require('./package.json');
 
+// Potential Extension: Possible to extend checks at this level with custom functions
+// Recommend format
+
+// Array of flag-function pairs (function names as strings)
+export const checkModules = [
+  { flag: '--meta', fn: 'checkMeta' },
+  { flag: '--open-graph', fn: 'checkOpenGraph' },
+  { flag: '--schema', fn: 'checkSchema' },
+  { flag: '--hierarchy', fn: 'checkHierarchy' },
+  { flag: '--accessibility', fn: 'checkAccessibility' },
+  { flag: '--links', fn: 'checkLinks' },
+  { flag: '--media', fn: 'checkMedia' },
+  { flag: '--sources', fn: 'checkSources' },
+  { flag: '--lang', fn: 'checkLang' },
+];
+
 // Return the requested flags, no imports or function references
-export function cliDispatch(checkModules) {
+export function cliDispatch() {
   const argv = process.argv.slice(2);
   const args = parseCliArgs(argv, sharedHelpText, pkg.version);
 

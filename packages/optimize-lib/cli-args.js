@@ -12,10 +12,6 @@ export const moduleHelpTexts = {
   '--sources': `--sources        Run sources checks\n  Checks source tags and resource references.`
 };
 
-// Add detection for custom module flags
-// These checks must show up in the config enabledChecks array to be executed, 
-// but we want to show relevant help if those flags are present
-
 export function parseCliArgs(argv = process.argv.slice(2), helpText = sharedHelpText, version = null) {
   const opts = {};
   argv.forEach(arg => {
@@ -68,7 +64,6 @@ Options:
 --media                                Run media checks
 --sources                              Run sources checks
 --all                                  Run all checks (default)
---custom-<name>                        Run a custom check (if implemented)
 
 -v, --version                          Show version
 -h, --help                             Show help

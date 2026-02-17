@@ -1,30 +1,26 @@
 import chalk from 'chalk';
 import { clearSpinnerLine } from '@bynovl/optimize-utils/spinner.js';
 
+// Key is title used in display-logs.js
+// Value is the property name used in the result item
+const stepKeyMap = {
+    'Open Graph': 'openGraph',
+    'Meta': 'meta',
+    'Links': 'links',
+    'Sources': 'sources',
+    'Media': 'media',
+    'Accessibility': 'accessibility',
+    'Hierarchy': 'hierarchy',
+    'Language': 'lang',
+    // Add new mappings here as needed
+};
+
 // Show Banner
 export async function displayLogs(input) {
     const result = typeof input === 'function' ? await input() : input;
     if (result && result.log) {
         try {
             const stepName = result.name || result.type || 'Check';
-            // if (result.success) {
-            //     // Show check headline with type
-            //     console.log(
-            //         chalk.bgGreen.black.bold(`✅ CHECK: ${stepName}  `) +
-            //         '\n' +
-            //         chalk.white(result.log) +
-            //         '\n'
-            //     );
-            //     // Print type-specific stats for successful checks if present
-            //     if (result.globalStats && Object.keys(result.globalStats).length > 0) {
-            //         const statsLine = Object.entries(result.globalStats)
-            //             .map(([key, value]) => `${key}: ${value}`)
-            //             .join(' | ');
-            //         if (statsLine.length > 0) {
-            //             console.log(chalk.magenta(`${statsLine}`));
-            //         }
-            //     }
-            // }
             if (!result.success) {
                 clearSpinnerLine();
                 // Header with one ❌ and check type
@@ -45,16 +41,6 @@ export async function displayLogs(input) {
                     ? result.failedItems
                     : [];
 
-                // Map stepName to the correct property key for the item
-                const stepKeyMap = {
-                    'Open Graph': 'openGraph',
-                    'Meta': 'meta',
-                    'Links': 'links',
-                    'Sources': 'sources',
-                    'Media': 'media',
-                    'Accessibility': 'accessibility',
-                    'Hierarchy': 'hierarchy',
-                };
                 failedItems.forEach((item) => {
                     // Print the file/page name as PATH: ...
                     console.log(chalk.cyan(`PATH: ${item.page || item.path}`));
