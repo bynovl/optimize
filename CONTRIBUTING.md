@@ -22,7 +22,7 @@ Before contributing make sure to read the full [Code of Conduct](./CODE_OF_CODUC
 
 ## Need Help?
 
-If you’re new or unsure, just ask! Our community is here to support you. A great place to start is heading to the [Community Support]() board.
+If you’re new or unsure, just ask! Our community is here to support you. A great place to start is heading to the [Community Support]() discusion.
 
 No question is too basic, and every contribution matters.
 
