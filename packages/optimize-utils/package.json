@@ -23,21 +23,5 @@
   ],
   "engines": {
     "node": ">=18"
-  },
-  "files": [
-    "batch-process.js",
-    "check-external-link.js",
-    "debug-log.js",
-    "export-as.js",
-    "extract-tags.js",
-    "extract-urls.js",
-    "filter-html.js",
-    "helpers.js",
-    "online-status.js",
-    "regex-links.js",
-    "resolve-path.js",
-    "spinner.js",
-    "transform-links.js",
-    "walk.js"
-  ]
+  }
 }

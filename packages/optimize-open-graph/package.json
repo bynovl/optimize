@@ -32,11 +32,5 @@
   },
   "engines": {
     "node": ">=18"
-  },
-  "files": [
-    "index.js",
-    "bin/cli.js",
-    "default.config.js",
-    "scripts"
-  ]
+  }
 }
