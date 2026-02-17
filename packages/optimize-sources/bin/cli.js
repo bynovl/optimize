@@ -3,15 +3,15 @@ import { scriptHeader } from '@bynovl/optimize-lib/script-header.js';
 import { scriptFooter } from '@bynovl/optimize-lib/script-footer.js';
 import { cliDispatch } from '@bynovl/optimize-lib/cli-dispatch.js';
 import checkSources from '../index.js';
+import { checkProps } from '../check-props.js';
 
-const currentFlag = '--sources';
-const { args, enabledChecks } = cliDispatch([currentFlag]);
+const { args, enabledChecks } = cliDispatch([checkProps.flag]);
 
 if (args._handled) {
     // Help/version was shown, exit early
     process.exit(0);
 }
-const isFirstCheck = enabledChecks[0] === currentFlag;
+const isFirstCheck = enabledChecks[0] === checkProps.flag; // Check if the current check's flag is the first in the enabledChecks array
 export default async function runAllChecks(startUrl) {
     const { config, nonIgnoredHtmlFiles } = await scriptHeader(isFirstCheck, enabledChecks, args);
     const actualChecks = Array.isArray(config.enabledChecks) ? config.enabledChecks : enabledChecks;
@@ -24,10 +24,10 @@ export default async function runAllChecks(startUrl) {
     const effectiveStartUrl = startUrl || config.startUrl || process.env.START_URL;
 
     let results = [];
-    if (actualChecks.includes(currentFlag)) {
+    if (actualChecks.includes(checkProps.flag)) {
         results = [await checkSources(config, nonIgnoredHtmlFiles, effectiveStartUrl)];
     }
-    await scriptFooter(results, config, args,totalPagesChecked);
+    await scriptFooter(results, config, args, totalPagesChecked);
 }
 
 // Run if executed from CLI

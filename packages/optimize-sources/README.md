@@ -4,30 +4,58 @@ Sources validation submodule for NOVL Optimize. Checks HTML files for valid, rea
 
 ---
 
+
 ## Quick Start
+### 1. Install package
+```bash 
+npm install @bynovl/optimize-sources
+```
+
+### 2. Configure `optimize.config.js`
+
+Add/update an `optimize.config.js` to your project root. And define required `outDir` setting:
+
+```js 
+export default = { 
+  outDir: "_site", // your build directory
+}
+```
+
+> Note: you can quickly add the optimize.config.js to your project using the [install script](../../scripts/install-examples.sh)
+
+### 3. Choose how you want to use it and optimize
 
 **CLI:**
 Single check
 ```bash
-npx optimize-sources
-```
-Core CLI with flags (with core package only):
-```bash
 npx optimize --sources
 ```
-Defined config checks in `optimize.config.js` with Core package:
+
+Multiple flags:
+```bash
+npx optimize --sources --hierarchy
+#  Note: work with core package only. 
+```
+
+**Config:**
+If you regularly check the same things update your the `enabledChecks` in your config:
+
 ```js 
-{ 
-  "enabledChecks": ["--sources"]
+export default = { 
+  outDir: "_site", // your build directory, 
+  enabledChecks: ["--sources"]
 }
 ```
 
 **API:**
+Plug into any custom tool.
+
 ```js
 import checkSources from '@bynovl/optimize-sources/index.js';
 // config: object, htmlFiles: array of file paths
 const results = await checkSources(config, htmlFiles);
 ```
+
 
 ---
 
