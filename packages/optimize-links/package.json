@@ -30,12 +30,6 @@
   "engines": {
     "node": ">=18"
   },
-  "files": [
-    "index.js",
-    "default.config.js",
-    "bin/cli.js",
-    "scripts"
-  ],
   "dependencies": {
     "@bynovl/optimize-utils": "workspace:*",
     "@bynovl/optimize-lib": "workspace:*"
