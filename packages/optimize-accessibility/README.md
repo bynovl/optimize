@@ -2,27 +2,54 @@
 
 Accessibility validation submodule for NOVL Optimize. Checks HTML files for accessibility best practices, ARIA usage, and common a11y issues to ensure static sites are usable by everyone.
 
+
 ## Quick Start
+### 1. Install package
+```bash 
+npm install @bynovl/optimize-accessibility
+```
+
+### 2. Configure `optimize.config.js`
+
+Add/update an `optimize.config.js` to your project root. And define required `outDir` setting:
+
+```js 
+export default = { 
+  outDir: "_site", // your build directory
+}
+```
+
+> Note: you can quickly add the optimize.config.js to your project using the [install script](../../scripts/install-examples.sh)
+
+### 3. Choose how you want to use it and optimize
 
 **CLI:**
 Single check
 ```bash
-npx optimize-accessibility
-```
-Core CLI with flags (with core package only):
-```bash
 npx optimize --accessibility
 ```
-Defined config checks in `optimize.config.js` with Core package:
+
+Multiple flags:
+```bash
+npx optimize --accessibility --hierarchy
+#  Note: work with core package only. 
+```
+
+**Config:**
+If you regularly check the same things update your the `enabledChecks` in your config:
+
 ```js 
-{ 
-  "enabledChecks": ["--accessibility"]
+export default = { 
+  outDir: "_site", // your build directory, 
+  enabledChecks: ["--accessibility"]
 }
 ```
 
 **API:**
+Plug into any custom tool.
+
 ```js
-import checkAccessibility from '@novl/optimize-accessibility/index.js';
+import checkAccessibility from '@bynovl/optimize-accessibility/index.js';
 // config: object, htmlFiles: array of file paths
 const results = await checkAccessibility(config, htmlFiles);
 ```
