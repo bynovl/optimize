@@ -2,14 +2,33 @@
 import { scriptHeader } from '@bynovl/optimize-lib/script-header.js';
 import { scriptFooter } from '@bynovl/optimize-lib/script-footer.js';
 import { cliDispatch } from '@bynovl/optimize-lib/cli-dispatch.js';
-import { checkModules } from '../index.js';
+import checkMeta from '@bynovl/optimize-meta/index.js';
+import checkHierarchy from '@bynovl/optimize-hierarchy/index.js';
+import checkOpenGraph from '@bynovl/optimize-open-graph/index.js';
+import checkSchema from '@bynovl/optimize-schema/index.js';
+import checkAccessibility from '@bynovl/optimize-accessibility/index.js';
+import checkLinks from '@bynovl/optimize-links/index.js';
+import checkMedia from '@bynovl/optimize-media/index.js';
+import checkSources from '@bynovl/optimize-sources/index.js';
+import checkLang from '../../optimize-lang/index.js';
 
 // Initialize CLI options
-const { args, enabledChecks } = cliDispatch(checkModules);
+const { args, enabledChecks } = cliDispatch();
 
 if (args._handled) {
   process.exit(0);
 }
+export const checkModules = [
+  { flag: '--meta', fn: checkMeta },
+  { flag: '--open-graph', fn: checkOpenGraph },
+  { flag: '--schema', fn: checkSchema },
+  { flag: '--hierarchy', fn: checkHierarchy },
+  { flag: '--accessibility', fn: checkAccessibility },
+  { flag: '--links', fn: checkLinks },
+  { flag: '--media', fn: checkMedia },
+  { flag: '--sources', fn: checkSources },
+  { flag: '--lang', fn: checkLang },
+];
 
 const isFirstCheck = enabledChecks[0];
 // Accepts optional startUrl for local testing or integration
