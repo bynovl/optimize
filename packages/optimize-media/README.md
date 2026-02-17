@@ -4,25 +4,52 @@ Media validation submodule for NOVL Optimize. Checks HTML files for valid, acces
 
 ---
 
+
 ## Quick Start
+### 1. Install package
+```bash 
+npm install @bynovl/optimize-media
+```
+
+### 2. Configure `optimize.config.js`
+
+Add/update an `optimize.config.js` to your project root. And define required `outDir` setting:
+
+```js 
+export default = { 
+  outDir: "_site", // your build directory
+}
+```
+
+> Note: you can quickly add the optimize.config.js to your project using the [install script](../../scripts/install-examples.sh)
+
+### 3. Choose how you want to use it and optimize
 
 **CLI:**
 Single check
 ```bash
-npx optimize-media
-```
-Core CLI with flags (with core package only):
-```bash
 npx optimize --media
 ```
-Defined config checks in `optimize.config.js` with Core package:
+
+Multiple flags:
+```bash
+npx optimize --media --hierarchy
+#  Note: work with core package only. 
+```
+
+**Config:**
+If you regularly check the same things update your the `enabledChecks` in your config:
+
 ```js 
-{ 
-  "enabledChecks": ["--media"]
+export default = { 
+  outDir: "_site", // your build directory, 
+  enabledChecks: ["--media"]
 }
 ```
 
 **API:**
+Plug into any custom tool.
+
 ```js
 import checkMedia from '@bynovl/optimize-media/index.js';
 // config: object, htmlFiles: array of file paths

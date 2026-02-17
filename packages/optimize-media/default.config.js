@@ -1,6 +1,5 @@
 import globalConfig from '@bynovl/optimize-lib/set-config.js';
 
-
 // Cutsom CLI module config settings
 export const DEFAULT_CONFIG_SETTINGS = {
     ...globalConfig,
