@@ -55,7 +55,8 @@
     "version": "changeset version",
     "release": ". ./automate/version-bump.sh",
     "publish": "changeset publish",
-    "serve": "node server.js"
+    "serve": "node server.js",
+    "public": "git push public HEAD:main"
   },
   "license": "ISC",
   "dependencies": {
