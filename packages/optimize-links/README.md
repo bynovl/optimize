@@ -5,25 +5,49 @@ Links validation submodule for NOVL Optimize. Checks HTML files for valid, worki
 ---
 
 ## Quick Start
+### 1. Install package
+```bash 
+npm install @bynovl/optimize-links
+```
+
+### 2. Configure `optimize.config.js`
+
+Add/update an `optimize.config.js` to your project root. And define required `outDir` setting:
+
+```js 
+export default = { 
+  outDir: "_site", // your build directory
+}
+```
+
+> Note: you can quickly add the optimize.config.js to your project using the [install script](../../scripts/install-examples.sh)
+
+### 3. Choose how you want to use it and optimize
 
 **CLI:**
 Single check
 ```bash
-npx optimize-links
-```
-Core CLI with flags (with core package only):
-```bash
 npx optimize --links
 ```
-Defined config checks in `optimize.config.js`:
+
+Multiple flags:
+```bash
+npx optimize --links --hierarchy
+#  Note: work with core package only. 
+```
+
+**Config:**
+If you regularly check the same things update your the `enabledChecks` in your config:
+
 ```js 
-{ 
-  "enabledChecks": ["--links"]
+export default = { 
+  outDir: "_site", // your build directory, 
+  enabledChecks: ["--links"]
 }
 ```
 
 **API:**
-Meant to be used for local use only.
+Plug into any custom tool.
 
 ```js
 import checkLinks from '@bynovl/optimize-links/index.js';
