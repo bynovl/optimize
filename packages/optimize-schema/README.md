@@ -6,28 +6,56 @@ Checks HTML files for valid, complete, and best-practice JSON-LD schema blocks t
 ---
 
 ## Quick Start
+### 1. Install package
+```bash 
+npm install @bynovl/optimize-schema
+```
+
+### 2. Configure `optimize.config.js`
+
+Add/update an `optimize.config.js` to your project root. And define required `outDir` setting:
+
+```js 
+export default = { 
+  outDir: "_site", // your build directory
+}
+```
+
+> Note: you can quickly add the optimize.config.js to your project using the [install script](../../scripts/install-examples.sh)
+
+### 3. Choose how you want to use it and optimize
 
 **CLI:**
 Single check
 ```bash
-npx optimize-schema
-```
-Core CLI with flags (with core package only):
-```bash
 npx optimize --schema
 ```
-Defined config checks in `optimize.config.js` with Core package:
+
+Multiple flags:
+```bash
+npx optimize --schema --hierarchy
+#  Note: work with core package only. 
+```
+
+**Config:**
+If you regularly check the same things update your the `enabledChecks` in your config:
+
 ```js 
-{ 
-  "enabledChecks": ["--schema"]
+export default = { 
+  outDir: "_site", // your build directory, 
+  enabledChecks: ["--schema"]
 }
 ```
+
 **API:**
+Plug into any custom tool.
+
 ```js
-import checkSchema from '@novl/optimize-schema';
+import checkSchema from '@bynovl/optimize-schema/index.js';
 // config: object, htmlFiles: array of file paths
 const results = await checkSchema(config, htmlFiles);
 ```
+
 
 ---
 
