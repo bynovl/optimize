@@ -31,41 +31,14 @@ jobs:
 
       - name: Commit version bumps
         run: |
+          git pull origin main
           git add .
           git commit -m "chore: version bump [skip ci]" || echo "No changes to commit"
           git push origin main
 
       - name: Publish packages
-        id: publish
-        run: |
-          pnpm changeset publish | tee publish.log
-          git fetch --tags
-          echo "TAGS=$(git tag --sort=-creatordate | head -n1)" >> $GITHUB_ENV
+        run: pnpm changeset publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GH_PUBLISH_TOKEN }}
-
-      - name: Push tags to origin
-        run: |
-          git push --follow-tags origin main
-
-      - name: Extract latest changelog entry
-        if: env.TAGS != ''
-        id: changelog
-        run: |
-          VERSION=$(node -p "require('./packages/optimize-core/package.json').version")
-          awk "/^##? v?$VERSION/,/^##? v?/{if (!x++) print; else exit}" packages/optimize-core/CHANGELOG.md > RELEASE_CHANGELOG.md
-          echo "RELEASE_NOTES<<EOF" >> $GITHUB_ENV
-          cat RELEASE_CHANGELOG.md >> $GITHUB_ENV
-          echo "EOF" >> $GITHUB_ENV
-
-      - name: Create GitHub Release
-        if: env.TAGS != ''
-        uses: actions/create-release@v1
-        with:
-          tag_name: ${{ env.TAGS }}
-          release_name: Release ${{ env.TAGS }}
-          body: ${{ env.RELEASE_NOTES }}
-          draft: false
-          prerelease: false
 
 # Manage public package releases with Githhub
