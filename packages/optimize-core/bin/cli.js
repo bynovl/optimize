@@ -10,7 +10,7 @@ import checkAccessibility from '@bynovl/optimize-accessibility/index.js';
 import checkLinks from '@bynovl/optimize-links/index.js';
 import checkMedia from '@bynovl/optimize-media/index.js';
 import checkSources from '@bynovl/optimize-sources/index.js';
-import checkLang from '../../optimize-lang/index.js';
+// import checkLang from '../../optimize-lang/index.js';
 
 // Initialize CLI options
 const { args, enabledChecks } = cliDispatch();
@@ -27,7 +27,7 @@ export const checkModules = [
   { flag: '--links', fn: checkLinks },
   { flag: '--media', fn: checkMedia },
   { flag: '--sources', fn: checkSources },
-  { flag: '--lang', fn: checkLang },
+  // { flag: '--lang', fn: checkLang },
 ];
 
 const isFirstCheck = enabledChecks[0];

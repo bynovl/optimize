@@ -6,7 +6,7 @@ import checkAccessibility from '@bynovl/optimize-accessibility/index.js';
 import checkHierarchy from '@bynovl/optimize-hierarchy/index.js';
 import checkOpenGraph from '@bynovl/optimize-open-graph/index.js';
 import checkSources from '@bynovl/optimize-sources/index.js';
-import checkLang from '../optimize-lang/index.js';
+// import checkLang from '../optimize-lang/index.js';
 
 // Export all checks for external use (e.g., API)
 export {
@@ -29,8 +29,8 @@ export const checkModules = [
   { flag: '--accessibility', fn: checkAccessibility },
   { flag: '--hierarchy', fn: checkHierarchy },
   { flag: '--open-graph', fn: checkOpenGraph },
-  { flag: '--sources', fn: checkSources },
-  { flag: '--lang', fn: checkLang },
+  { flag: '--sources', fn: checkSources }
+  // { flag: '--lang', fn: checkLang },
   // Add new checks here as needed
 ];
 
