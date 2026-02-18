@@ -1,5 +1,25 @@
 # @bynovl/optimize
 
+## 2.0.0
+
+### Major Changes
+
+- 1f78b22: Major refactor of core logic. Improves orchestration and customization settings
+
+### Patch Changes
+
+- Updated dependencies [1f78b22]
+  - @bynovl/optimize-accessibility@2.0.0
+  - @bynovl/optimize-hierarchy@2.0.0
+  - @bynovl/optimize-lib@2.0.0
+  - @bynovl/optimize-links@2.0.0
+  - @bynovl/optimize-media@2.0.0
+  - @bynovl/optimize-meta@2.0.0
+  - @bynovl/optimize-open-graph@2.0.0
+  - @bynovl/optimize-schema@2.0.0
+  - @bynovl/optimize-sources@2.0.0
+  - @bynovl/optimize-utils@2.0.0
+
 ## 1.5.1
 
 ### Patch Changes

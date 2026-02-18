@@ -1,5 +1,16 @@
 # @bynovl/optimize-tests
 
+## 4.0.0
+
+### Major Changes
+
+- 1f78b22: Major refactor of core logic. Improves orchestration and customization settings
+
+### Patch Changes
+
+- Updated dependencies [1f78b22]
+  - @bynovl/optimize@2.0.0
+
 ## 3.0.1
 
 ### Patch Changes
