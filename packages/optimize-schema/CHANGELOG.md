@@ -1,5 +1,11 @@
 # @bynovl/optimize-schema
 
+## 2.0.1
+
+### Patch Changes
+
+- 6010210: Fix duplicate check name issue causing schema to appear as links
+
 ## 2.0.0
 
 ### Major Changes

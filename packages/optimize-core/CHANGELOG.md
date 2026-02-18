@@ -1,5 +1,12 @@
 # @bynovl/optimize
 
+## 2.0.2
+
+### Patch Changes
+
+- Updated dependencies [6010210]
+  - @bynovl/optimize-schema@2.0.1
+
 ## 2.0.1
 
 ### Patch Changes
