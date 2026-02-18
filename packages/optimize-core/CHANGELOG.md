@@ -1,5 +1,11 @@
 # @bynovl/optimize
 
+## 2.0.1
+
+### Patch Changes
+
+- a9701dc: Fix import to stale file name
+
 ## 2.0.0
 
 ### Major Changes

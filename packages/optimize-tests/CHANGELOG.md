@@ -1,5 +1,12 @@
 # @bynovl/optimize-tests
 
+## 4.0.1
+
+### Patch Changes
+
+- Updated dependencies [a9701dc]
+  - @bynovl/optimize@2.0.1
+
 ## 4.0.0
 
 ### Major Changes
