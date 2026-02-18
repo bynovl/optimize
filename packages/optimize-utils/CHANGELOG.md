@@ -1,5 +1,11 @@
 # @bynovl/optimize-utils
 
+## 2.0.0
+
+### Major Changes
+
+- 1f78b22: Major refactor of core logic. Improves orchestration and customization settings
+
 ## 1.5.1
 
 ### Patch Changes
