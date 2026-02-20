@@ -1,5 +1,11 @@
 # @bynovl/optimize-utils
 
+## 2.0.1
+
+### Patch Changes
+
+- 5de6d0d: Re-formatted license
+
 ## 2.0.0
 
 ### Major Changes

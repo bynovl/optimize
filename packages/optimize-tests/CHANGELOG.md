@@ -1,5 +1,13 @@
 # @bynovl/optimize-tests
 
+## 4.0.3
+
+### Patch Changes
+
+- 5de6d0d: Re-formatted license
+- Updated dependencies [5de6d0d]
+  - @bynovl/optimize@2.0.3
+
 ## 4.0.2
 
 ### Patch Changes
