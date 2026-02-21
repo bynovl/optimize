@@ -1,5 +1,16 @@
 # @bynovl/optimize-tests
 
+## 5.0.0
+
+### Minor Changes
+
+- f26f5a5: Update package README and refactored core CLI checkModules for auto-detection and re-usability
+
+### Patch Changes
+
+- Updated dependencies [f26f5a5]
+  - @bynovl/optimize@2.1.0
+
 ## 4.0.3
 
 ### Patch Changes

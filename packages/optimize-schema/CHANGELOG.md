@@ -1,5 +1,17 @@
 # @bynovl/optimize-schema
 
+## 2.1.0
+
+### Minor Changes
+
+- f26f5a5: Update package README and refactored core CLI checkModules for auto-detection and re-usability
+
+### Patch Changes
+
+- Updated dependencies [f26f5a5]
+  - @bynovl/optimize-lib@2.1.0
+  - @bynovl/optimize-utils@2.1.0
+
 ## 2.0.2
 
 ### Patch Changes
