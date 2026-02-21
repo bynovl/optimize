@@ -1,5 +1,22 @@
 # @bynovl/optimize
 
+## 2.1.2
+
+### Patch Changes
+
+- c06b6ca: Update checkModule logic and cleaned up files and duplicate/redundant instances of code
+- Updated dependencies [c06b6ca]
+  - @bynovl/optimize-accessibility@2.1.2
+  - @bynovl/optimize-hierarchy@2.1.2
+  - @bynovl/optimize-lib@2.1.2
+  - @bynovl/optimize-links@2.1.2
+  - @bynovl/optimize-media@2.1.2
+  - @bynovl/optimize-meta@2.1.2
+  - @bynovl/optimize-open-graph@2.1.2
+  - @bynovl/optimize-schema@2.1.2
+  - @bynovl/optimize-sources@2.1.2
+  - @bynovl/optimize-utils@2.1.2
+
 ## 2.1.1
 
 ### Patch Changes

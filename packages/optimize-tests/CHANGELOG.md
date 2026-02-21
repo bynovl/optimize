@@ -1,5 +1,13 @@
 # @bynovl/optimize-tests
 
+## 5.0.2
+
+### Patch Changes
+
+- c06b6ca: Update checkModule logic and cleaned up files and duplicate/redundant instances of code
+- Updated dependencies [c06b6ca]
+  - @bynovl/optimize@2.1.2
+
 ## 5.0.1
 
 ### Patch Changes

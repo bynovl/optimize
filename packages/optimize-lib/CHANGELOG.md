@@ -1,5 +1,13 @@
 # @bynovl/optimize-lib
 
+## 2.1.2
+
+### Patch Changes
+
+- c06b6ca: Update checkModule logic and cleaned up files and duplicate/redundant instances of code
+- Updated dependencies [c06b6ca]
+  - @bynovl/optimize-utils@2.1.2
+
 ## 2.1.1
 
 ### Patch Changes

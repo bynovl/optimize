@@ -1,6 +1,6 @@
 {
   "name": "@bynovl/optimize-sources",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "description": "Source validation submodule for the NOVL Optimize project. Checks HTML for external and internal source references, script and stylesheet integrity, and best practices for static sites.",
   "main": "index.js",
   "private": false,
