@@ -1,4 +1,4 @@
-# @novl/optimize
+# @bynovl/optimize
 
 Automate accessibility, schema, meta, and other best practice checks for any static website. It's configurable, extensible, and compatible with all static site generators. Use it as a post-build package in your CI/CD workflow or contiuously while you're building and get the feedback you need to make sure your site is ready to go live. 
 
@@ -210,7 +210,6 @@ If you're using optimize in an external project you'll want to disable CLI displ
   "apiMode": true // or false
 }
 ```
-*Note: see "external tools" section*
 
 ## Custom Checks
 Need to add more functionality beyond Optimize's 8 primary checks and extend checks isn't enough you can build your own custom check. See `templates/custom-check` folder for required files and how to work it into the Optimize flow.
@@ -225,21 +224,21 @@ Import and run a single check:
 
 ```js
 // Intended for local checks only
-import { checkFns } from '@novl/optimize/optimize-core/index.js';
+import { checkFns } from '@bynovl/optimize/optimize-core/api.js';
 await checkFns.checkMeta(config, htmlFiles, startUrl);
 ```
 
 Import and run all checks:
 ```js
 // Full featured API can be used internally or externally with startUrl support
-import { runAllChecks } from '@novl/optimize/optimize-core/index.js';
+import { runAllChecks } from '@bynovl/optimize/optimize-core/api.js';
 await runAllChecks(config, htmlFiles, startUrl);
 ```
 
 So that the right settings are loaded you will also need to import the `getConfig`. Then you're ready to use optimize in your project. 
 ```js
 // In your main script you will also need 
-import getConfig from "@novl/optimize-lib/set-config.js" // config
+import getConfig from "@bynovl/optimize-lib/set-config.js" // config
 const htmlFiles = ['_site/index.html', '_site/about.html']; // paths to html files
 const results = await runAllChecks(config, htmlFiles);
 ```
@@ -258,4 +257,4 @@ Say hello at contributors@bynovl.com!
 
 ## Power your own project
 
-You can use `@novl/optimize` as a library to build your own tools, workflows, or integrations for non-commercial distribution. For license terms and more information, see the [LICENSE](./LICENSE) file.
+You can use `@bynovl/optimize` as a library to build your own tools, workflows, or integrations for non-commercial distribution. For license terms and more information, see the [LICENSE](./LICENSE) file.

@@ -1,72 +1,70 @@
 // Dynamically load checkProps and each check function from optimize-* modules
 import fs from 'fs';
 import path from 'path';
+import { fileURLToPath } from 'url';
+import { getPackageRoot, searchFromDir } from './resolve-packages.js';
 import { debug } from '@bynovl/optimize-utils/debug-log.js';
 
+// Get this module's directory (works for both symlinked and direct installs)
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 export async function getCheckModules() {
-  let isMonorepo = false;
-  let packagesDir = path.resolve(process.cwd(), 'packages');
-  let optimizeDeps = [];
-  let sourceType = 'external';
   const checkModules = [];
   const checkExports = {};
 
-  try {
-    const corePkgPath = require.resolve('@bynovl/optimize-core/package.json');
-    const corePkg = JSON.parse(fs.readFileSync(corePkgPath, 'utf8'));
-    optimizeDeps = Object.keys(corePkg.dependencies || {}).filter(dep => dep.startsWith('@bynovl/optimize-'));
-  } catch {
-    if (fs.existsSync(packagesDir)) {
-      isMonorepo = true;
-      sourceType = 'monorepo';
-      optimizeDeps = fs.readdirSync(packagesDir)
-        .filter(pkg => pkg.startsWith('optimize-'))
-        .filter(pkg => !pkg.endsWith('-tests') && !pkg.endsWith('-utils') && !pkg.endsWith('-lib') && !pkg.endsWith('-core'));
+  // Collect all check-props.js files from node_modules and packages/
+  const seen = new Set();
+  const checkPropsFiles = [];
+
+  // 1. Search from where THIS module is located (handles external installs, symlinks)
+  debug(`[getCheckModules] Module location: ${__dirname}`);
+  searchFromDir(__dirname, seen, checkPropsFiles);
+
+  // Dedupe by package root
+  debug(`[getCheckModules] Total check-props.js files found: ${checkPropsFiles.length}`);
+  const pkgRoots = new Set();
+  for (const checkPropsPath of checkPropsFiles) {
+    const pkgRoot = getPackageRoot(checkPropsPath);
+    if (pkgRoot && !pkgRoots.has(pkgRoot)) {
+      pkgRoots.add(pkgRoot);
     }
   }
 
-  // Helper to get check function and check-props paths for a given package
-  function isPathTransform(pkg) {
-    const checkFnPath = isMonorepo
-      ? path.join(packagesDir, pkg, 'index.js')
-      : `${pkg}/index.js`;
-    const checkPropsPath = isMonorepo
-      ? path.join(packagesDir, pkg, 'scripts', 'check-props.js')
-      : `${pkg}/scripts/check-props.js`;
-    if (isMonorepo && (!fs.existsSync(checkFnPath) || !fs.existsSync(checkPropsPath))) {
-      return null;
-    }
-    return { checkFnPath, checkPropsPath, module: isMonorepo ? path.join(packagesDir, pkg) : pkg };
-  }
+  // Load check modules from each package root
+  debug(`[getCheckModules] Unique package roots: ${[...pkgRoots].join(', ')}`);
+  for (const pkgRoot of pkgRoots) {
+    const pkgName = path.basename(pkgRoot);
+    const checkPropsPath = path.join(pkgRoot, 'scripts', 'check-props.js');
+    const indexPath = path.join(pkgRoot, 'index.js');
 
-  // Only log check loading and summary
-  for (const pkg of optimizeDeps) {
-    const paths = isPathTransform(pkg);
-    if (!paths) {
-      debug(`[getCheckModules] Skipping package (missing files): ${pkg}`);
+    if (!fs.existsSync(checkPropsPath) || !fs.existsSync(indexPath)) {
+      debug(`[getCheckModules] Skipping ${pkgName}: missing check-props.js or index.js`);
       continue;
     }
+
     try {
-      const checkPropsModule = await import(paths.checkPropsPath);
-      const checkFnModule = await import(paths.checkFnPath);
+      debug(`[getCheckModules] Importing: ${checkPropsPath}, ${indexPath}`);
+      const checkPropsModule = await import(checkPropsPath);
+      const checkFnModule = await import(indexPath);
       const checkProps = checkPropsModule.checkProps;
       const fn = checkFnModule.default || checkFnModule;
+
       checkModules.push({
         flag: checkProps.flag,
         fn,
         key: checkProps.key,
         label: checkProps.label,
-        module: paths.module
+        module: pkgName
       });
       checkExports[checkProps.key] = fn;
       checkExports['check' + checkProps.label.replace(/\s+/g, '')] = fn;
-      debug(`[getCheckModules] Loaded check: ${checkProps.key} (${pkg})`);
+      debug(`[getCheckModules] Loaded check: ${checkProps.key} (${pkgName})`);
     } catch (e) {
-      debug(`[getCheckModules] Error loading check for ${pkg}:`, e && e.message);
+      debug(`[getCheckModules] Error loading ${pkgName}:`, e && e.message);
     }
   }
 
   debug(`[getCheckModules] Total checks loaded: ${checkModules.length}`);
-
-  return { checkModules, checkExports, sourceType };
+  return { checkModules, checkExports };
 }

@@ -13,9 +13,9 @@ export async function getConfig(enabledChecks = []) {
         const coreConfig = (await import('@bynovl/optimize/default.config.js')).default;
         localDefaultConfig = mergeConfig(localDefaultConfig, coreConfig);
         globalCoreLoaded = true;
-        debug('Loaded global core config via package specifier.');
+        debug('[ATTENTION] Loaded global core config via package specifier.');
     } catch (e) {
-        debug('Could not import global core config via package specifier:', e.message);
+        debug('[ATTENTION] Could not import global core config via package specifier:', e.message);
     }
 
     // Load user config
@@ -38,14 +38,14 @@ export async function getConfig(enabledChecks = []) {
         for (const check of checksArray) {
             const packageName = check.replace('--', 'optimize-');
             let loaded = false;
-            let configSource = '';
             try {
                 // Try to import using the package specifier (production/external)
                 const packageDefaultConfig = (await import(`@bynovl/${packageName}/default.config.js`)).default;
                 localDefaultConfig = mergeConfig(localDefaultConfig, packageDefaultConfig);
                 loaded = true;
-                configSource = 'package specifier';
+                debug(`Package: Loaded default config for ${packageName} via package specifier.`);
             } catch (e) {
+                debug(`Error importing config for ${packageName} via package specifier:`, e.message);
                 // Fallback: Try physical path for monorepo/dev
                 const monorepoConfigPath = path.resolve('packages', packageName, 'default.config.js');
                 if (fs.existsSync(monorepoConfigPath)) {
@@ -53,15 +53,13 @@ export async function getConfig(enabledChecks = []) {
                         const packageDefaultConfig = (await import(monorepoConfigPath)).default;
                         localDefaultConfig = mergeConfig(localDefaultConfig, packageDefaultConfig);
                         loaded = true;
-                        configSource = 'monorepo';
+                        debug(`Monorepo: Loaded default config for ${packageName} from local monorepo packages.`);
                     } catch (e2) {
-                        // Only log if both fail
+                        debug(`Could not load default config for ${packageName} from local monorepo packages:`, e2.message);
                     }
                 }
             }
-            if (loaded) {
-                debug(`Loaded default config for ${packageName} from ${configSource}.`);
-            } else {
+            if (!loaded) {
                 debug(`Could not load default config for ${packageName} from either package specifier or local monorepo.`);
             }
         }

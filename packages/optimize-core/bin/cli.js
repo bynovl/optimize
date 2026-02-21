@@ -5,7 +5,6 @@ import { cliDispatch } from '@bynovl/optimize-lib/cli-dispatch.js';
 
 // Initialize CLI options and checkModules
 const { args, enabledChecks, checkModules } = await cliDispatch();
-
 if (args._handled) {
   process.exit(0);
 }
