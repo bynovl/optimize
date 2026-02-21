@@ -40,16 +40,6 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-# Debug: List contents of templates directory after cloning
-ls -l "$TMP_DIR/templates"
-
-# Check if the file/folder exists before copying
-if [ ! -e "$TMP_DIR/$FOLDER_PATH" ]; then
-    echo "Error: $FOLDER_PATH not found in the repository."
-    rm -rf "$TMP_DIR"
-    exit 1
-fi
-
 # Copy the desired folder to your target location
 cp -r "$TMP_DIR/$FOLDER_PATH" "$TARGET_DIR"
 
