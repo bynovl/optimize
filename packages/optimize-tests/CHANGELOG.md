@@ -1,5 +1,13 @@
 # @bynovl/optimize-tests
 
+## 5.0.1
+
+### Patch Changes
+
+- 29a2b3e: Fix file extension issues
+- Updated dependencies [29a2b3e]
+  - @bynovl/optimize@2.1.1
+
 ## 5.0.0
 
 ### Minor Changes

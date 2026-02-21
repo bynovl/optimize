@@ -1,5 +1,14 @@
 # @bynovl/optimize-media
 
+## 2.1.1
+
+### Patch Changes
+
+- 29a2b3e: Fix file extension issues
+- Updated dependencies [29a2b3e]
+  - @bynovl/optimize-lib@2.1.1
+  - @bynovl/optimize-utils@2.1.1
+
 ## 2.1.0
 
 ### Minor Changes
