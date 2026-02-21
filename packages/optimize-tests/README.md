@@ -1,4 +1,4 @@
-# @novl/optimize-tests
+# @bynovl/optimize-tests
 
 This package provides a global test and demo environment for NOVL Optimize. It contains sample HTML site and configuration for testing, validating, improving and adding new modules. No site setup is required. The package includes sample HTML and config for immediate testing.
 

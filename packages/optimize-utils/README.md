@@ -1,4 +1,4 @@
-# @novl/optimize-utils
+# @bynovl/optimize-utils
 
 Utility function library for NOVL Optimize. Provides low-level helpers for file handling, path resolution, batching, logging, and other common tasks used by all optimize submodules.
 
@@ -14,7 +14,7 @@ Utility function library for NOVL Optimize. Provides low-level helpers for file 
 Import utilities in your own submodule or custom tool:
 
 ```js
-import { batchProcess, debugLog, dirname } from '@novl/optimize-utils/index.js';
+import { batchProcess, debugLog, dirname } from '@bynovl/optimize-utils/index.js';
 
 const files = await batchProcess(fileList, batchSize, processFn);
 debugLog('Batch processing complete!');

@@ -1,4 +1,4 @@
-# @novl/optimize-lib
+# @bynovl/optimize-lib
 
 Shared logic and helper library for NOVL Optimize. Provides core functions, validation routines, CLI utilities, and result formatting used by all optimize submodules.
 
@@ -15,7 +15,7 @@ Shared logic and helper library for NOVL Optimize. Provides core functions, vali
 Import helpers in your own submodule or custom tool:
 
 ```js
-import { scriptHeader, scriptFooter, returnResults } from '@novl/optimize-lib';
+import { scriptHeader, scriptFooter, returnResults } from '@bynovl/optimize-lib';
 
 const { config, nonIgnoredHtmlFiles } = await scriptHeader('path/to/config.js');
 // ...run your checks...
