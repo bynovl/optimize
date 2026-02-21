@@ -38,14 +38,14 @@ export async function getConfig(enabledChecks = []) {
         for (const check of checksArray) {
             const packageName = check.replace('--', 'optimize-');
             let loaded = false;
+            let configSource = '';
             try {
                 // Try to import using the package specifier (production/external)
                 const packageDefaultConfig = (await import(`@bynovl/${packageName}/default.config.js`)).default;
                 localDefaultConfig = mergeConfig(localDefaultConfig, packageDefaultConfig);
                 loaded = true;
-                debug(`Package: Loaded default config for ${packageName} via package specifier.`);
+                configSource = 'package specifier';
             } catch (e) {
-                debug(`Error importing config for ${packageName} via package specifier:`, e.message);
                 // Fallback: Try physical path for monorepo/dev
                 const monorepoConfigPath = path.resolve('packages', packageName, 'default.config.js');
                 if (fs.existsSync(monorepoConfigPath)) {
@@ -53,13 +53,15 @@ export async function getConfig(enabledChecks = []) {
                         const packageDefaultConfig = (await import(monorepoConfigPath)).default;
                         localDefaultConfig = mergeConfig(localDefaultConfig, packageDefaultConfig);
                         loaded = true;
-                        debug(`Monorepo: Loaded default config for ${packageName} from local monorepo packages.`);
+                        configSource = 'monorepo';
                     } catch (e2) {
-                        debug(`Could not load default config for ${packageName} from local monorepo packages:`, e2.message);
+                        // Only log if both fail
                     }
                 }
             }
-            if (!loaded) {
+            if (loaded) {
+                debug(`Loaded default config for ${packageName} from ${configSource}.`);
+            } else {
                 debug(`Could not load default config for ${packageName} from either package specifier or local monorepo.`);
             }
         }

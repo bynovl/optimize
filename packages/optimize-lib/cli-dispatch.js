@@ -22,5 +22,5 @@ export async function cliDispatch() {
     // Only run specified module flags
     enabledChecks = presentModuleFlags;
   }
-  return { args, enabledChecks };
+  return { args, enabledChecks, checkModules };
 }

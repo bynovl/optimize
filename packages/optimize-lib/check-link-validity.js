@@ -19,6 +19,11 @@ import { debug } from '../optimize-utils/debug-log.js'
 // For example when searching if file exists search as-is and with .html, .htm, .php, etc. extensions
 // For external links, rely on URL resolution to determine final URL
 
+// Add a helper to ignore SSA URLs
+function isIgnoredSSAUrl(url) {
+  return /^https:\/\/ssa\..*\.com/.test(url);
+}
+
 export async function checkLinkValidity(content, link, config = {}, sourceFile, startUrl) {
   // Helper: treat hash-only links as internal immediately
   if (link && link.startsWith('#')) {
@@ -43,7 +48,6 @@ export async function checkLinkValidity(content, link, config = {}, sourceFile, 
   // Normalize protocol-relative links for parsing but don't assume external forever
   let normalizedLink = link;
   if (link && link.startsWith('//')) normalizedLink = 'https:' + link;
-  debug(`[checkLinkValidity] Normalized link: ${normalizedLink}`);
 
   // Determine if external
   let isExternal = Boolean(
@@ -135,6 +139,11 @@ export async function checkLinkValidity(content, link, config = {}, sourceFile, 
         return { isError: false, isWarning: false, reason: `Link is valid (resolved locally)`, message: urlObj.href, target: urlObj.href, sourceFile };
       }
       // otherwise fall through to external check
+    }
+
+    // Skip validation for ignored SSA URLs
+    if (isIgnoredSSAUrl(urlObj.href)) {
+      return { isError: false, isWarning: true, reason: `Ignored SSA URL`, message: urlObj.href, target: urlObj.href, sourceFile };
     }
 
     const result = await checkLinkValidityExt(urlObj.href, config, sourceFile);
