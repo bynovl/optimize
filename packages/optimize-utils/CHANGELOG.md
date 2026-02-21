@@ -1,5 +1,11 @@
 # @bynovl/optimize-utils
 
+## 2.1.0
+
+### Minor Changes
+
+- f26f5a5: Update package README and refactored core CLI checkModules for auto-detection and re-usability
+
 ## 2.0.1
 
 ### Patch Changes
