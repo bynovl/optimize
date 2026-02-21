@@ -26,10 +26,8 @@ We're committed to fostering an inclusive, respectful, and supportive community.
 
 ## Reporting
 
-If you experience or witness behavior that violates this Code of Conduct, please contact the maintainers or email os@bynovl.com. All reports will be handled confidentially and respectfully.
+If you experience or witness behavior that violates this Code of Conduct, please contact the maintainers or email us at  [os@bynovl.com](mailto:os@bynovl.com). *All reports will be handled confidentially and respectfully.*
 
 ## Commitment
 
 By participating in the community, you agree to uphold these values and help create a positive, inclusive environment for everyone.
-
-Thank you in advncne for making this a welcoming and supportive space!

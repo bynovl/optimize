@@ -1,64 +1,57 @@
 # @novl/optimize
 
-Automate accessibility, Schema, Meta, and other best practice checks for any static website. It's configurable, extensible, and compatible with all static site generators. Use it as a post-build package in your CI/CD workflow or test during development locally while you're building. Use linters to help you while you code and optimize to verify what you built is ready to go live. 
+Automate accessibility, schema, meta, and other best practice checks for any static website. It's configurable, extensible, and compatible with all static site generators. Use it as a post-build package in your CI/CD workflow or contiuously while you're building and get the feedback you need to make sure your site is ready to go live. 
 
 ## How It Works (Architecture Overview)
 
 - Each check (meta, accessibility, links, media, etc.) is its own module. 
-- Run them all together via the main CLI (`@bynovl/optimize-core` package), use what you need and run a single check(e.g. `@bynovl/optimize-meta`), or target multiple checks using `@bynovl/optimize-core` with flags (e.g. `--meta, --open-graph, --links'`)
-- Shared utilities and config logic are located in `@bynovl/optimize-utils` and `@bynovl/optimize-lib` packages which are installed as dependencies with you install a single package or the core.
-
-**Configuration is simple:**
-- Each check defines has its own defaults.
-- You can override the global and module defaults by adding a `optimize.config.js` in the root of your project
-- The config loader merges: global config > module config > user config
+- Run them all together and install the main package: `@bynovl/optimize-core`. 
+- Use only what you need and install/run a single check (e.g. `@bynovl/optimize-meta`).
+- Target multiple checks using `@bynovl/optimize-core` using flags (e.g. `--meta, --open-graph, --links`)
+- Shared utilities and config logic are located in `@bynovl/optimize-utils` and `@bynovl/optimize-lib` packages which are installed as dependencies when you install a single check package or the core.- 
+- A config loader that merges global config > module config > user config (your project settings)
 
 ## Getting Started
 
 ### Install
 
-Install from npm:
+Install from npm or pnpm:
 ```bash
 npm install @bynovl/optimize-core
 ```
 
-### Usage
+### Configure
 
-#### Local
-Optimize was designed to run locally in your build environment. Just run optmize as follows and see results:
+Add `optimize.config.js` in the root of your project. An `outDir` with the location of your build folder is all that's required
 
-```bash
+```javascript
+// optimize.config.js
+export default { 
+  outDir: '_site' // minimal required
+}
+```
+
+### Run Your First Audit
+Chec the state of your project and figure our what needs to get fixed. 
+
+```bash 
+# Run al checks
 npx optimize
 ```
 
-#### Programatically
-You can plug optimize into any project by using the API. You will need to rebuild the checks for your project. The following outlines the minmum required to get started. *You can also use any `optimize-lib` or `optimize-utils` to aide you in your development.*
+### Fix
+Once you know the areas that have the most problems you can run specific checks or dive into checks of a specific file or folder
 
-Import and run a single check.
-```js
-// Intended for local checks onlys
-import { checkMeta } from '@novl/optimize/optimize-core/api.js';
-await checkMeta(config, htmlFiles); 
+```bash
+# Run meta an accessibility checks only
+npx optimize --meta --accessibility
+# Run meta only on a single file
+npx optimize --meta --path /path/name-to-file.html
+# Run all checks on folder
+npx optimize  --path /path/folder-name
 ```
 
-Import and run all checks
-```js
-// Full featured API can be used internally or externally with startUrl support
-import { runAllChecks } from '@novl/optimize/optimize-core/api.js';
-await runAllChecks(config, htmlFiles, startUrl);
-```
-
-So that the right settings are loaded you will also need to import the `getConfig`. Then you're ready to use in your project. 
-```js
-// In your main script you will also need 
-import getConfig from "@novl/optimize-lib/set-config.js" // config
-const htmlFiles = ['_site/index.html', '_site/about.html']; // paths to html files
-const results = await runAllChecks(config, htmlFiles);
-```
-
-> Note: if you want to run multiple checks it's best to use the the runAllChecks and update `enabledChecks` unless you have a specfic use case for individual checks. 
-
-### Common Flags
+**flag Checks**
 - `--meta`: Check for required and recommended meta tags only.
 - `--open-graph`: Validate Open Graph tags for social sharing only.
 - `--schema`: Validate structured data (JSON-LD schema blocks) only.
@@ -68,27 +61,29 @@ const results = await runAllChecks(config, htmlFiles);
 - `--sources`: Check for valid source asset references only.
 - `--links`: Validate internal and external links only.
 
+**Other Flags**
+- `--path`: combine with and check flag and analyze a folder or file. 
+- `--json`: export results as JSON 
+- `--help`: list of flags
+- `--version`: current package version
 
-**Example:**
-```bash
-npx optimize --meta --accessibility
-```
-If no flags are provided, all checks will run.
+### Automate 
+You can use the `optimize-site` skill to help analyze and fix changes bringing AI agents to your workflow in a continuous feedback loop. Go to the [Skills](https://github.com/bynovl/skills) and install.
 
-**Note:** When running the CLI via an npm script, you must use `-- --[check]` (e.g., `npm run optimize -- --sources`). The first `--` tells npm to forward arguments to your script. Otherwise, all checks will run by default.
+## Configuration
 
-### Configuration
-
-By adding a `optimize.config.js` to your project root, you have granular control of how checks are run. Make sure your package.json has a "type" set to "module" and export your settings as follows:
+Your `optimize.config.js` gives you granular control of how checks are run. Make sure your `package.json` has a `type: "module"` and export your settings as follows:
 
 ```js
-{
+export default {
   "outDir": "./_site", // Directory containing your built static site
   // Add other settings as needed
 };
 ```
 
-#### Schema Validation
+See [optimize.config.js](./templates/optimize.config..js) for full configuration. 
+
+### Schema Validation
 
 You can control how schema validation works using two config arrays in your `optimize.config.js`:
 
@@ -115,7 +110,7 @@ You can control how schema validation works using two config arrays in your `opt
 
 > *Tip: This approach lets you enforce structured data requirements without writing custom scripts—just update your config!*
 
-#### Batch Size for Large Sites
+### Batch Size for Large Sites
 
 For large sites, set `batchSize` in your config to control how many files are processed at once to improve performance and memory usage. By default it is set to 50:
 
@@ -126,7 +121,7 @@ For large sites, set `batchSize` in your config to control how many files are pr
 };
 ```
 
-#### Ignore files and directories 
+### Ignore files and directories 
 You may not want to validate an entire site. To speed up processing time hide the files and folders you don't want to be validated. 
 
 ```javascript
@@ -136,8 +131,8 @@ You may not want to validate an entire site. To speed up processing time hide th
 }
 ```
 
-#### Choose Media Types 
-Right now it's built to check only `<img>`. When the feature is supported you'll be able to enable/disable by adding/removing types from the `mediaTypes` array. 
+### Choose Media Types 
+Right now optimize is built to check only `<img>`. When the feature is supported you'll be able to enable/disable by adding/removing types from the `mediaTypes` array. 
 
 ```javascript
 { 
@@ -146,8 +141,8 @@ Right now it's built to check only `<img>`. When the feature is supported you'll
 }
 ```
 
-#### Get Data in different formats
-Include `exportResultsJson` and/or `exportResultsCsv` with the the path and file name to choose the location of where to export results in your `optimize.config.js`
+### Get Data in different formats
+Include `exportResultsJson` and/or `exportResultsCsv` with the path and file name to of the location where want your results exported in your `optimize.config.js`. Note: you can also use the `--json` flag to export results at run time.
 
 ```javascript
 {
@@ -157,7 +152,7 @@ Include `exportResultsJson` and/or `exportResultsCsv` with the the path and file
 }
 ```
 
-#### Define the checks you want to run
+### Define the checks you want to run
 Once you've tested the checks you want to run using flags (see Common Flags for options), add them to the confg as enabled checks. 
 ```javascript
 { 
@@ -166,8 +161,48 @@ Once you've tested the checks you want to run using flags (see Common Flags for 
 }
 ```
 
-#### API Mode 
-If you're using optimize in an external project you'll want to disable CLI display logs. To do so enter API mode. You will also want to understand how to use Optimize programatically. See "Usage - Programmatic".
+### Extend checks
+You can add a custom validation to an existing check using `extendChecks`. Each key is named after the check (e.g. --meta is meta) and accepts and array of objects letting you define any number of custom validation checks. The `name, regex, required, isUrl` are required for each object. `message, reason` are optional. And if you use `customValidation` it ignores the default regex. 
+
+```javascript 
+// optimize.config.js
+import customOpenGraphChecks from 'extend-checks.js'
+
+export default {
+  // ... other config settings
+  extendChecks: {
+        meta: customMetaChecks,
+        links: customLinkChecks,
+        media: customMediaChecks,
+        accessibility: customAccessibilityChecks,
+        hierarchy: customHierarchyChecks,
+        openGraph: customOpenGraphChecks,
+        sources: customSourcesChecks,
+        // Schema NOT included
+    }
+}
+
+// extend-checks.js example: 
+export const customOpenGraphChecks = [
+  {
+    name: '<meta property="og:title">', // required
+    regex: /<meta property="og:title" content="(.*?)"/i, // required
+    required: true, // required
+    isUrl: false, // required
+    message: 'Open Graph title is missing or invalid',
+    reason: 'Ensure the og:title tag is present and valid'
+    // customValidation: customValidationFunction, 
+  }
+];
+```
+
+See [templates/extend-checks.js](./templates/extend-checks..js) for full example. 
+
+> Note: Schema has there own check validation customization. And is not recognized in extendedChecks, 
+
+
+### API Mode 
+If you're using optimize in an external project you'll want to disable CLI display logs. To do so enter API mode. You will also want to understand how to use Optimize programatically. See "External Tools" section.
 
 ```javascript
 { 
@@ -175,23 +210,52 @@ If you're using optimize in an external project you'll want to disable CLI displ
   "apiMode": true // or false
 }
 ```
+*Note: see "external tools" section*
+
+## Custom Checks
+Need to add more functionality beyond Optimize's 8 primary checks and extend checks isn't enough you can build your own custom check. See `templates/custom-check` folder for required files and how to work it into the Optimize flow.
 
 ## CI/CD Workflows
 You can add optimize to any CI/CD workflow. We've made it easy for you do so by adding an [optimize.yml.draft](./optimize.yml.draft) in the root of the repo. If any module fails, your workflow will return as failed helping you catch issues before you go live.
 
-## Contributing
-Times are changing and we needed something in-house that can help us work smarter not harder. This project started out as a need to solve some of our own unseen static site generator (SSG) problems and figured it might help some of you too. 
+## External Tools
+Use optimize programmatically and plug into any project by using the API. You will need to rebuild the checks for your project. The following outlines the minimum required to get started. *You can also use any `optimize-lib` or `optimize-utils` to aide you in your development.*
 
-We don't have time to manage pull requests at the moment.  However we'll do our best to regularly make updates and push changes tri-weekly. We actively use Optimize in our projects so you'll see updates regularly. 
+Import and run a single check:
+
+```js
+// Intended for local checks only
+import { checkFns } from '@novl/optimize/optimize-core/index.js';
+await checkFns.checkMeta(config, htmlFiles, startUrl);
+```
+
+Import and run all checks:
+```js
+// Full featured API can be used internally or externally with startUrl support
+import { runAllChecks } from '@novl/optimize/optimize-core/index.js';
+await runAllChecks(config, htmlFiles, startUrl);
+```
+
+So that the right settings are loaded you will also need to import the `getConfig`. Then you're ready to use optimize in your project. 
+```js
+// In your main script you will also need 
+import getConfig from "@novl/optimize-lib/set-config.js" // config
+const htmlFiles = ['_site/index.html', '_site/about.html']; // paths to html files
+const results = await runAllChecks(config, htmlFiles);
+```
+
+> Note: if you want to run multiple checks it's best to use the the runAllChecks and update `enabledChecks` unless you have a specfic use case for individual checks. 
+
+
+## Contributing
+Times are changing and we needed something in-house that can help us work smarter not harder. This project started out as a need to solve some of our own unseen static site and static site generator (SSG) problems and figured it might help some of you too. 
+
+We don't have time to manage pull requests at the moment. We actively use Optimize in our projects so you'll see updates regularly. At the very least we'll do our best to make updates and push changes tri-weekly.
  
-For features you'd like to see or if you spot any bugs, submit an issue.  Want to contribute? Yes please, let's build together and make websites better, faster, accessible and AI-ready without any dependencies other than the ones you choose to use. 
+For features you'd like to see or if you spot any bugs jump into the [discussion](https://github.com/bynovl/optimize/discussions).  Want to contribute? Yes please, let's build together and make websites better, faster, accessible and AI-ready without any dependencies other than the ones you choose to use. 
 
 Say hello at contributors@bynovl.com! 
 
 ## Power your own project
 
 You can use `@novl/optimize` as a library to build your own tools, workflows, or integrations for non-commercial distribution. For license terms and more information, see the [LICENSE](./LICENSE) file.
-
-This is an update that should get published to both the private and public branches
-
-Currently testing a version bump. 
