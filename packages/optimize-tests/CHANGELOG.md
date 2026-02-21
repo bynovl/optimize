@@ -1,5 +1,13 @@
 # @bynovl/optimize-tests
 
+## 6.0.0
+
+### Patch Changes
+
+- ca0d5f6: Improved module scalability for package detection.
+- Updated dependencies [ca0d5f6]
+  - @bynovl/optimize@2.2.0
+
 ## 5.0.2
 
 ### Patch Changes

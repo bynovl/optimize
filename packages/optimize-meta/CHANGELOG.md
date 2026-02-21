@@ -1,5 +1,17 @@
 # @bynovl/optimize-meta
 
+## 2.2.0
+
+### Minor Changes
+
+- ca0d5f6: Improved module scalability for package detection.
+
+### Patch Changes
+
+- Updated dependencies [ca0d5f6]
+  - @bynovl/optimize-lib@2.2.0
+  - @bynovl/optimize-utils@2.2.0
+
 ## 2.1.2
 
 ### Patch Changes

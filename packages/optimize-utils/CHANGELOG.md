@@ -1,5 +1,11 @@
 # @bynovl/optimize-utils
 
+## 2.2.0
+
+### Minor Changes
+
+- ca0d5f6: Improved module scalability for package detection.
+
 ## 2.1.2
 
 ### Patch Changes
