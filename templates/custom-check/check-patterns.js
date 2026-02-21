@@ -1,4 +1,8 @@
-/// Regex pattern to match
+// =====================================
+// Example Check Patterns
+// =====================================
+
+// Regex pattern to match
 export const customRegex = /your-regex-pattern/gi; // Replace with your actual regex pattern and flags
 
 // Should return true/false or an object with isValid and message 

@@ -1,31 +1,17 @@
 import { parseCliArgs, sharedHelpText } from './cli-args.js';
 import { createRequire } from 'module';
+import { getCheckModules } from './get-check-modules.js';
 
 const require = createRequire(import.meta.url);
 const pkg = require('./package.json');
 
-// Potential Extension: Possible to extend checks at this level with custom functions
-// Recommend format
-
-// Array of flag-function pairs (function names as strings)
-export const checkModules = [
-  { flag: '--meta', fn: 'checkMeta' },
-  { flag: '--open-graph', fn: 'checkOpenGraph' },
-  { flag: '--schema', fn: 'checkSchema' },
-  { flag: '--hierarchy', fn: 'checkHierarchy' },
-  { flag: '--accessibility', fn: 'checkAccessibility' },
-  { flag: '--links', fn: 'checkLinks' },
-  { flag: '--media', fn: 'checkMedia' },
-  { flag: '--sources', fn: 'checkSources' },
-  { flag: '--lang', fn: 'checkLang' },
-];
-
-// Return the requested flags, no imports or function references
-export function cliDispatch() {
+// Dynamically load module flags from getCheckModules
+export async function cliDispatch() {
   const argv = process.argv.slice(2);
   const args = parseCliArgs(argv, sharedHelpText, pkg.version);
 
-  // Determine which module flags are present
+  // Get module flags dynamically
+  const { checkModules } = await getCheckModules();
   const moduleFlags = checkModules.map(m => m.flag);
   const presentModuleFlags = Object.keys(args).filter(flag => moduleFlags.includes(flag));
   let enabledChecks;
