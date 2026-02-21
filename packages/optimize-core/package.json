@@ -1,6 +1,6 @@
 {
   "name": "@bynovl/optimize",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "Core CLI for @novl/optimize. Orchestrates all modular checks for static site optimization.",
   "author": "NOVL",
   "license": "ISC",
