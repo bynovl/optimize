@@ -34,7 +34,7 @@ export async function getCheckModules() {
 
   // Check parent directory for optimize-* packages
   const parentEntries = fs.readdirSync(parentDir, { withFileTypes: true })
-    .filter(e => (e.isDirectory() || e.isSymbolicLink()) && e.name.includes('optimize-') && e.name !== currentPkg && !e.name.includes('optimize-tests'));
+    .filter(e => (e.isDirectory() || e.isSymbolicLink()) && e.name.includes('optimize-') && e.name !== currentPkg && !e.name.includes('optimize-tests') && !e.name.includes('optimize-utils') && !e.name.includes('optimize-lib') && !e.name.includes('optimize-core'));
 
   debug(`[getCheckModules] Found ${parentEntries.length} optimize-* packages in parent`);
   pkgDirs = parentEntries.map(e => path.join(parentDir, e.name));
