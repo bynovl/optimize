@@ -2,7 +2,6 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { getPackageRoot, searchFromDir } from './resolve-packages.js';
 import { debug } from '@bynovl/optimize-utils/debug-log.js';
 
 // Get this module's directory (works for both symlinked and direct installs)
@@ -13,42 +12,23 @@ export async function getCheckModules() {
   const checkModules = [];
   const checkExports = {};
 
-  // Collect all check-props.js files from node_modules and packages/
-  const seen = new Set();
-  const checkPropsFiles = [];
+  // Get siblings of optimize-lib (the parent directory contains all optimize-* packages)
+  const parentDir = path.dirname(__dirname);
+  debug(`[getCheckModules] Parent directory: ${parentDir}`);
 
-  // 1. Search from where THIS module is located (handles external installs, symlinks)
-  debug(`[getCheckModules] Module location: ${__dirname}`);
-  searchFromDir(__dirname, seen, checkPropsFiles);
+  // List all sibling directories that have scripts/check-props.js
+  const siblings = fs.readdirSync(parentDir, { withFileTypes: true })
+    .filter(e => e.isDirectory() && e.name.startsWith('optimize-') && e.name !== 'optimize-lib' && e.name !== 'optimize-tests');
 
-  // Dedupe by package root (use realpath to avoid symlink/string duplicates)
-  debug(`[getCheckModules] Total check-props.js files found: ${checkPropsFiles.length}`);
-  const pkgRoots = new Set();
-  for (const checkPropsPath of checkPropsFiles) {
-    const pkgRoot = getPackageRoot(checkPropsPath);
-    if (!pkgRoot) continue;
-    let realPkgRoot;
-    try {
-      realPkgRoot = fs.realpathSync(pkgRoot);
-    } catch (e) {
-      realPkgRoot = path.resolve(pkgRoot);
-    }
-    if (pkgRoots.has(realPkgRoot)) {
-      debug(`[getCheckModules] Duplicate package root skipped: ${pkgRoot} -> ${realPkgRoot}`);
-      continue;
-    }
-    pkgRoots.add(realPkgRoot);
-  }
+  debug(`[getCheckModules] Found ${siblings.length} optimize-* siblings`);
 
-  // Load check modules from each package root
-  debug(`[getCheckModules] Unique package roots: ${[...pkgRoots].join(', ')}`);
-  for (const pkgRoot of pkgRoots) {
-    const pkgName = path.basename(pkgRoot);
+  for (const sibling of siblings) {
+    const pkgRoot = path.join(parentDir, sibling.name);
     const checkPropsPath = path.join(pkgRoot, 'scripts', 'check-props.js');
     const indexPath = path.join(pkgRoot, 'index.js');
 
     if (!fs.existsSync(checkPropsPath) || !fs.existsSync(indexPath)) {
-      debug(`[getCheckModules] Skipping ${pkgName}: missing check-props.js or index.js`);
+      debug(`[getCheckModules] Skipping ${sibling.name}: missing check-props.js or index.js`);
       continue;
     }
 
@@ -64,13 +44,13 @@ export async function getCheckModules() {
         fn,
         key: checkProps.key,
         label: checkProps.label,
-        module: pkgName
+        module: sibling.name
       });
       checkExports[checkProps.key] = fn;
       checkExports['check' + checkProps.label.replace(/\s+/g, '')] = fn;
-      debug(`[getCheckModules] Loaded check: ${checkProps.key} (${pkgName})`);
+      debug(`[getCheckModules] Loaded check: ${checkProps.key} (${sibling.name})`);
     } catch (e) {
-      debug(`[getCheckModules] Error loading ${pkgName}:`, e && e.message);
+      debug(`[getCheckModules] Error loading ${sibling.name}:`, e && e.message);
     }
   }
 

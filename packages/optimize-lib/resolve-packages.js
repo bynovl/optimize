@@ -40,7 +40,38 @@ export function searchFromDir(startDir, seen, checkPropsFiles) {
       if (!seen.has(realPath)) {
         const found = findAllCheckPropsFiles(nodeModulesDir);
         debug(`[getCheckModules] Searched: ${nodeModulesDir} => Found ${found.length} check-props.js`);
-        checkPropsFiles.push(...found);
+        // Add found files but dedupe by package name, preferring project 'packages/' when present
+        const projectPackages = path.resolve(process.cwd(), 'packages');
+        for (const fp of found) {
+          const pkgRoot = getPackageRoot(fp);
+          if (!pkgRoot) continue;
+          let realPkgRoot;
+          try { realPkgRoot = fs.realpathSync(pkgRoot); } catch (e) { realPkgRoot = path.resolve(pkgRoot); }
+          const name = path.basename(realPkgRoot);
+          // check if we already have this package name in checkPropsFiles
+          const existingIndex = checkPropsFiles.findIndex(ep => {
+            const er = getPackageRoot(ep);
+            if (!er) return false;
+            try { return path.basename(fs.realpathSync(er)) === name; } catch (e) { return path.basename(er) === name; }
+          });
+          if (existingIndex === -1) {
+            checkPropsFiles.push(fp);
+          } else {
+            // prefer project packages over installed ones
+            const existingEp = checkPropsFiles[existingIndex];
+            const existingRoot = getPackageRoot(existingEp);
+            let realExistingRoot;
+            try { realExistingRoot = fs.realpathSync(existingRoot); } catch (e) { realExistingRoot = path.resolve(existingRoot); }
+            const newIsProject = realPkgRoot.startsWith(projectPackages);
+            const existingIsProject = realExistingRoot.startsWith(projectPackages);
+            if (newIsProject && !existingIsProject) {
+              debug(`[resolve-packages] Replacing package ${name} with project package: ${realPkgRoot}`);
+              checkPropsFiles[existingIndex] = fp;
+            } else {
+              debug(`[resolve-packages] Skipping duplicate package ${name}: ${realPkgRoot}`);
+            }
+          }
+        }
         seen.add(realPath);
       }
     }
@@ -51,7 +82,25 @@ export function searchFromDir(startDir, seen, checkPropsFiles) {
       if (!seen.has(realPath)) {
         const found = findAllCheckPropsFiles(packagesDir);
         debug(`[getCheckModules] Searched: ${packagesDir} => Found ${found.length} check-props.js`);
-        checkPropsFiles.push(...found);
+        for (const fp of found) {
+          const pkgRoot = getPackageRoot(fp);
+          if (!pkgRoot) continue;
+          let realPkgRoot;
+          try { realPkgRoot = fs.realpathSync(pkgRoot); } catch (e) { realPkgRoot = path.resolve(pkgRoot); }
+          const name = path.basename(realPkgRoot);
+          const existingIndex = checkPropsFiles.findIndex(ep => {
+            const er = getPackageRoot(ep);
+            if (!er) return false;
+            try { return path.basename(fs.realpathSync(er)) === name; } catch (e) { return path.basename(er) === name; }
+          });
+          if (existingIndex === -1) {
+            checkPropsFiles.push(fp);
+          } else {
+            // prefer packages/ found here (project packages) — replace existing
+            debug(`[resolve-packages] Replacing package ${name} with packages/ entry: ${realPkgRoot}`);
+            checkPropsFiles[existingIndex] = fp;
+          }
+        }
         seen.add(realPath);
       }
     }
