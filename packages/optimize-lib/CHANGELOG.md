@@ -1,5 +1,11 @@
 # @bynovl/optimize-lib
 
+## 2.3.3
+
+### Patch Changes
+
+- d71c7d5: Test: cross-package manager support for different environments
+
 ## 2.3.2
 
 ### Patch Changes
