@@ -1,5 +1,11 @@
 # @bynovl/optimize-lib
 
+## 2.3.0
+
+### Minor Changes
+
+- c20301d: Fix issues with duplicates
+
 ## 2.2.1
 
 ### Patch Changes

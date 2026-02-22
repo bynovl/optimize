@@ -1,5 +1,12 @@
 # @bynovl/optimize-links
 
+## 2.2.2
+
+### Patch Changes
+
+- Updated dependencies [c20301d]
+  - @bynovl/optimize-lib@2.3.0
+
 ## 2.2.1
 
 ### Patch Changes
