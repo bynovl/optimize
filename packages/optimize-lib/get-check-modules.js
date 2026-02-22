@@ -21,14 +21,23 @@ export async function getCheckModules() {
   debug(`[getCheckModules] Module location: ${__dirname}`);
   searchFromDir(__dirname, seen, checkPropsFiles);
 
-  // Dedupe by package root
+  // Dedupe by package root (use realpath to avoid symlink/string duplicates)
   debug(`[getCheckModules] Total check-props.js files found: ${checkPropsFiles.length}`);
   const pkgRoots = new Set();
   for (const checkPropsPath of checkPropsFiles) {
     const pkgRoot = getPackageRoot(checkPropsPath);
-    if (pkgRoot && !pkgRoots.has(pkgRoot)) {
-      pkgRoots.add(pkgRoot);
+    if (!pkgRoot) continue;
+    let realPkgRoot;
+    try {
+      realPkgRoot = fs.realpathSync(pkgRoot);
+    } catch (e) {
+      realPkgRoot = path.resolve(pkgRoot);
     }
+    if (pkgRoots.has(realPkgRoot)) {
+      debug(`[getCheckModules] Duplicate package root skipped: ${pkgRoot} -> ${realPkgRoot}`);
+      continue;
+    }
+    pkgRoots.add(realPkgRoot);
   }
 
   // Load check modules from each package root
