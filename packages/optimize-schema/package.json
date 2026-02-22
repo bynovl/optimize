@@ -1,6 +1,6 @@
 {
   "name": "@bynovl/optimize-schema",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "description": "Schema.org validation submodule for the NOVL Optimize project. Checks HTML for Schema.org structured data, required properties, and best practices for SEO in static sites.",
   "main": "index.js",
   "private": false,

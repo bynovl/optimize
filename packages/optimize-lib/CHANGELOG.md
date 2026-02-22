@@ -1,5 +1,11 @@
 # @bynovl/optimize-lib
 
+## 2.2.1
+
+### Patch Changes
+
+- 09a516d: Prevent duplicates from loading
+
 ## 2.2.0
 
 ### Minor Changes
