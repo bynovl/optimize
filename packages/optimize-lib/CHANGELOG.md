@@ -1,5 +1,11 @@
 # @bynovl/optimize-lib
 
+## 2.3.4
+
+### Patch Changes
+
+- 7b77f95: Patch fix for agnostic pkg manager support
+
 ## 2.3.3
 
 ### Patch Changes
