@@ -16,11 +16,23 @@ export async function getCheckModules() {
 
   // Extract current package name from path (works for any package)
   const currentPkg = path.basename(__dirname);
-  const parentDir = path.dirname(__dirname);
   debug(`[getCheckModules] __dirname: ${__dirname}`);
   debug(`[getCheckModules] Current package: ${currentPkg}`);
 
-  // Check parent directory for optimize-* packages (works for monorepo and flat node_modules)
+  // Determine parent directory based on path structure
+  // In pnpm: .pnpm/node_modules/@bynovl/ contains the real packages
+  // In monorepo/npm: parent of current package has siblings
+  let parentDir;
+  const pnpmIndex = __dirname.indexOf('.pnpm');
+  if (pnpmIndex !== -1) {
+    // pnpm: look in .pnpm/node_modules/@bynovl/
+    parentDir = path.join(__dirname.slice(0, pnpmIndex + 5), 'node_modules', '@bynovl');
+  } else {
+    parentDir = path.dirname(__dirname);
+  }
+  debug(`[getCheckModules] Parent directory: ${parentDir}`);
+
+  // Check parent directory for optimize-* packages
   const parentEntries = fs.readdirSync(parentDir, { withFileTypes: true })
     .filter(e => (e.isDirectory() || e.isSymbolicLink()) && e.name.includes('optimize-') && e.name !== currentPkg && !e.name.includes('optimize-tests'));
 
