@@ -1,5 +1,11 @@
 # @bynovl/optimize-lib
 
+## 2.3.2
+
+### Patch Changes
+
+- 9549bc1: Patch fix. test.
+
 ## 2.3.1
 
 ### Patch Changes
