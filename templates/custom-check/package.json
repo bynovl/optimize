@@ -1,15 +1,18 @@
 {
   "name": "@bynovl/optimize-lang",
   "version": "1.0.0",
-  "description": "Language validation submodule for the NOVL Optimize project. Checks internal and external links, anchor integrity, and best practices for links in static sites.",
+  "description": "Custom check module example for optimize. Provides a template for creating custom check modules that can be used with the optimize CLI tool. This module includes a sample check that validates the presence of a specific meta tag in HTML files.",
   "main": "index.js",
-  "private": false,
+  "private": false, 
   "bin": {
     "optimize-lang": "bin/cli.js"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/bynovl/optimize"
+  },
+  "scripts": {
+    "optimize-test": "node bin/cli.js"
   },
   "author": "bynovl",
   "license": "SEE LICENSE IN ../../LICENSE",
@@ -24,18 +27,19 @@
     "novl",
     "optimize"
   ],
-  "engines": {
-    "node": ">=18"
-  },
   "files": [
     "index.js",
     "default.config.js",
+    "scripts",
     "bin/cli.js",
-    "validate-check.js",
-    "validate-patterns.js"
+    "README.md"
   ],
+  "engines": {
+    "node": ">=18"
+  },
   "dependencies": {
-    "@bynovl/optimize-utils": "workspace:*",
-    "@bynovl/optimize-lib": "workspace:*"
+    "@bynovl/optimize-lib": "^1.0.0",
+    "@bynovl/optimize-tests": "^1.0.0",
+    "@bynovl/optimize-utils": "^1.0.0"
   }
 }

@@ -1,36 +1,26 @@
 #!/usr/bin/env node
-// This is a template CLI file for a custom check. 
-// To create a new check, copy this file and replace the relevant parts (marked with comments) 
-// with your custom check's logic and flag. Make sure to also implement the 
-// actual check function in the index.js file of your custom check package.
+// Entry point for the CLI. Only modify the import block below when
+// creating a new custom check (update function name and paths).
+import { scriptHeader } from '@bynovl/optimize-lib/script-header.js';
+import { scriptFooter } from '@bynovl/optimize-lib/script-footer.js';
+import { cliDispatch } from '@bynovl/optimize-lib/cli-dispatch.js';
 
-// DO NOT REMOVE: Required for the CLI to function properly,
-import { scriptHeader } from '../optimize-lib/script-header.js';
-import { scriptFooter } from '../optimize-lib/script-footer.js';
-import { cliDispatch } from '../optimize-lib/cli-dispatch.js';
+// === CUSTOM CHECK IMPORTS ===
+import checkLang from '../index.js'; // replace with your function name
+import { checkProps } from '../scripts/check-props.js';
+// ============================
 
-// EDIT: Import your custom check function from your index.js file.
-// Replace checkCustom with the actual function name of your custom check.
-import checkFunc from '../index.js';
-import { checkProps } from '../check-props.js';
-
-// EDIT: Name of custom check flag 
-// Replace the --custom-check with the actual flag you want to use (e.g. --performance)
-const { args, enabledChecks } = cliDispatch([checkProps.flag]);
-
-// DO NOT REMOVE: This is required to prevent the script 
-// from running when --help or --version is passed, which are handled in cliDispatch
+// parse CLI args and determine which checks are enabled
+const { args, enabledChecks, checkModules } = await cliDispatch([checkProps.flag]);
 if (args._handled) {
     // Help/version was shown, exit early
     process.exit(0);
 }
 
-// DO NOT REMOVE: This is required to determine if this is the first enabled check, 
-// which affects whether the script header will be shown (e.g., spinner and summary)
-const isFirstCheck = enabledChecks[0] === checkProps.flag; // Check if the current check's flag is the first in the enabledChecks array
+// determine if this flag is the first enabled (controls header display)
+const isFirstCheck = enabledChecks[0] === checkProps.flag;
 
-// This is the main function that runs the check.
-// It follows the standard pattern of running the script header, executing the check, and then running the script footer.
+// main runner used when invoked via CLI
 export default async function runAllChecks() {
     const { config, nonIgnoredHtmlFiles } = await scriptHeader(isFirstCheck, enabledChecks, args);
     const actualChecks = Array.isArray(config.enabledChecks) ? config.enabledChecks : enabledChecks;
@@ -40,8 +30,8 @@ export default async function runAllChecks() {
 
     let results = [];
     if (actualChecks.includes(checkProps.flag)) {
-        // EDIT: This is where you would call your custom check function 
-        results = [await checkFunc(config, nonIgnoredHtmlFiles)];
+        // call the custom check function imported above
+        results = [await checkLang(config, nonIgnoredHtmlFiles)];
     }
     await scriptFooter(results, config, args, totalPagesChecked);
 }

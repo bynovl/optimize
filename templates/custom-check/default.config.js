@@ -1,16 +1,13 @@
-// This file defines the default configuration settings for the custom check example.
-// To customize the configuration for your check, you can edit the properties in the DEFAULT_CONFIG_SETTINGS object.
-// You can also add new properties as needed for your check's specific configuration options.
-// The globalConfig imported from optimize-lib/set-config.js includes common configuration settings that are shared across all checks,
-// such as input paths, ignore patterns, and other general settings. By spreading globalConfig into DEFAULT_CONFIG_SETTINGS,
-// you ensure that your custom check has access to these common settings while also allowing you to define any custom settings specific to your check.
+// Default configuration for this check. Customize values below as needed.
+// globalConfig provides shared defaults (paths, ignores, etc.).
 import globalConfig from '@bynovl/optimize-lib/set-config.js';
 
-// Change as needed or leave empty object if no custom settings are needed.
+// add custom settings below; globalConfig must remain included
 export const DEFAULT_CONFIG_SETTINGS = {
-    ...globalConfig, // required to include the global configuration settings for the check to function properly. Do not remove this line.
-    // uniqueSettingForCustomCheck: 'default value', // Example of a custom setting specific to this check. Replace with actual settings as needed.
-    // anotherCustomSetting: true // Another example setting. Add or replace with actual settings for your check.
+    ...globalConfig,
+    // uniqueSettingForCustomCheck: 'default value',
+    // anotherCustomSetting: true,
+    defaultLang: 'en' // example custom setting
 }
 
 export default DEFAULT_CONFIG_SETTINGS;
