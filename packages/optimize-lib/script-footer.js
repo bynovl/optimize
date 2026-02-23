@@ -10,6 +10,33 @@ import chalk from 'chalk';
 export async function scriptFooter(results, config, args, totalPagesChecked) {
     const jsonOutput = args['--json'] || null;
     const csvOutput = args['--csv'] || null;
+    let hasOutputPath = '';
+
+    // Only include results that are not empty/undefined and have failedItems (i.e., actual check results)
+    const filteredResults = Array.isArray(results)
+        ? results.filter(r => r && r.failedItems !== undefined)
+        : [];
+
+    // Aggregate pages and stats using only filtered results
+    const { pageMap } = aggregateStats(filteredResults);
+
+    // Optionally export results if config.exportResultsAs is set
+    if (config.exportResultsJson && config.exportResultsJson !== '' || jsonOutput) {
+        const jsonPath = config.exportResultsJson || jsonOutput;
+        hasOutputPath = jsonPath;
+        await exportResultsAsJson({ results: filteredResults }, jsonPath);
+    }
+    // export results as CSV
+    if (config.exportResultsCsv && config.exportResultsCsv !== '' || csvOutput) {
+        const csvPath = config.exportResultsCsv || csvOutput;
+        hasOutputPath = csvPath;
+        await exportResultsAsCsv(filteredResults, csvPath);
+    }
+    if (hasOutputPath !== '') {    
+        console.log(chalk.green(`\n✅ Checks completed. Results exported to: ${hasOutputPath}\n`));
+        return
+    }
+
     try {
         // Loop through each check and display results. 
         let allPassed = Array.isArray(results) && results.length > 0 && results.every(r => r && r.success);
@@ -24,30 +51,9 @@ export async function scriptFooter(results, config, args, totalPagesChecked) {
             clearSpinnerLine();
             console.log(chalk.bgGreen.black.bold(`✅ ALL CHECKS PASSED`));
         }
-        // Only include results that are not empty/undefined and have failedItems (i.e., actual check results)
-        const filteredResults = Array.isArray(results)
-            ? results.filter(r => r && r.failedItems !== undefined)
-            : [];
-
-        // Aggregate pages and stats using only filtered results
-        const { pageMap } = aggregateStats(filteredResults);
-
-        // Optionally export results if config.exportResultsAs is set
-        if (config.exportResultsJson && config.exportResultsJson !== '' || jsonOutput) {
-            const jsonPath = config.exportResultsJson || jsonOutput;
-            await exportResultsAsJson({ results: filteredResults }, jsonPath);
-        }
-        // export results as CSV
-        if (config.exportResultsCsv && config.exportResultsCsv !== '' || csvOutput) {
-            const csvPath = config.exportResultsCsv || csvOutput;
-            await exportResultsAsCsv(filteredResults, csvPath);
-        }
-
         // End timer (update for accurracy)
         startStopSpinner(false);
-
         if (!allPassed) {
-            // Print summary of failed checks
             printSummary(filteredResults, totalPagesChecked);
         }
         return { results: filteredResults, pageMap };

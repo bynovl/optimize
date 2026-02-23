@@ -34,6 +34,10 @@ export async function runAllChecks(startUrl) {
     const results = await Promise.all(
       checksToRun.map(async (mod) => mod.fn(config, nonIgnoredHtmlFiles, effectiveStartUrl))
     );
+    if(args['--json'] || args['--csv']) {
+      const fileOutputPath = args['--json'] || args['--csv'] || config.exportResultsJson || config.exportResultsCsv;
+      // console.log('\nChecks completed. File output generated:', fileOutputPath); // --- IGNORE ---
+    }
     await scriptFooter(results, config, args, totalPagesChecked);
   } catch (error) {
     console.error('Error occurred while checking optimization requirements:', error);

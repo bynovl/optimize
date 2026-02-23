@@ -11,7 +11,7 @@ const stepKeyMap = {
     'Media': 'media',
     'Accessibility': 'accessibility',
     'Hierarchy': 'hierarchy',
-    'Language': 'lang',
+    // 'Language': 'lang',
     // Add new mappings here as needed
 };
 
