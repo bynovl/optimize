@@ -1,5 +1,11 @@
 # @bynovl/optimize-lib
 
+## 2.4.2
+
+### Patch Changes
+
+- d07edb7: Small patch fix for debugging
+
 ## 2.4.1
 
 ### Patch Changes
