@@ -42,7 +42,7 @@ export async function validateCheck(item, content, config, file, startUrl) {
     }
   ];
 
-  const customTagChecks = config.customChecks?.[checkProps.key] || [];
+  const customTagChecks = config.extendChecks?.[checkProps.key] || [];
   const tagChecks = [...defaultTagChecks, ...customTagChecks];
   for (const tagCheck of tagChecks) {
     await validateItem(

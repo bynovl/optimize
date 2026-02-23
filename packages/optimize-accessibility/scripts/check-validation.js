@@ -64,7 +64,7 @@ export async function validateCheck(item, content, config, file, startUrl) {
 
   // Check if there are checks defined in the config for this check 
   // and merge them with the default checks (aavoids mutation of defaultTagChecks).
-  const customTagChecks = config.customChecks?.[checkProps.key] || [];
+  const customTagChecks = config.extendChecks?.[checkProps.key] || [];
   const tagChecks = [...defaultTagChecks, ...customTagChecks];
 
   // Process each tag check sequentially to avoid overwhelming the system 
