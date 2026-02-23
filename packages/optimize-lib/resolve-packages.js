@@ -1,111 +1,92 @@
-import fs from 'fs';
 import path from 'path';
+import fs from 'fs';
+import { fileURLToPath } from 'url';
 import { debug } from '@bynovl/optimize-utils/debug-log.js';
 
-// Recursively find all check-props.js files under a root directory
-function findAllCheckPropsFiles(rootDir) {
-  let results = [];
-  if (!fs.existsSync(rootDir)) return results;
-  // Resolve symlinks to get real path
-  const realRootDir = fs.realpathSync(rootDir);
-  const list = fs.readdirSync(realRootDir, { withFileTypes: true });
-  for (const entry of list) {
-    const fullPath = path.join(realRootDir, entry.name);
-    if (entry.isDirectory()) {
-      results = results.concat(findAllCheckPropsFiles(fullPath));
-    } else if (entry.isFile() && entry.name === 'check-props.js') {
-      results.push(fullPath);
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const PACKAGE_PREFIX = 'optimize-';
+const SKIP_BASES = ['optimize-core', 'optimize-utils', 'optimize-lib', 'optimize-tests'];
+
+let memoizedDirs = null;
+
+// Walk up to find the nearest package.json, return its directory
+function findRootDir(startDir) {
+    let dir = path.resolve(startDir);
+    while (dir !== path.dirname(dir)) {
+        if (fs.existsSync(path.join(dir, 'package.json'))) return dir;
+        dir = path.dirname(dir);
     }
-  }
-  return results;
+    return null;
 }
 
-// Derive package root from check-props.js path (assumes <pkg>/scripts/check-props.js)
-export function getPackageRoot(checkPropsPath) {
-  const scriptsDir = path.dirname(checkPropsPath);
-  if (path.basename(scriptsDir) === 'scripts') {
-    return path.dirname(scriptsDir);
-  }
-  return null;
+// Resolve a link:/file: specifier relative to rootDir
+function resolveLinkedPath(version, rootDir) {
+    if (!version || !version.match(/^(link|file):/)) return null;
+    const rel = version.replace(/^link:|^file:/, '');
+    const p = path.resolve(rootDir, rel);
+    return fs.existsSync(p) ? p : null;
 }
 
-// Search node_modules and packages/ walking up from a starting directory
-export function searchFromDir(startDir, seen, checkPropsFiles) {
-  let currentDir = startDir;
-  while (true) {
-    // Search node_modules
-    const nodeModulesDir = path.join(currentDir, 'node_modules');
-    if (fs.existsSync(nodeModulesDir)) {
-      const realPath = fs.realpathSync(nodeModulesDir);
-      if (!seen.has(realPath)) {
-        const found = findAllCheckPropsFiles(nodeModulesDir);
-        debug(`[getCheckModules] Searched: ${nodeModulesDir} => Found ${found.length} check-props.js`);
-        // Add found files but dedupe by package name, preferring project 'packages/' when present
-        const projectPackages = path.resolve(process.cwd(), 'packages');
-        for (const fp of found) {
-          const pkgRoot = getPackageRoot(fp);
-          if (!pkgRoot) continue;
-          let realPkgRoot;
-          try { realPkgRoot = fs.realpathSync(pkgRoot); } catch (e) { realPkgRoot = path.resolve(pkgRoot); }
-          const name = path.basename(realPkgRoot);
-          // check if we already have this package name in checkPropsFiles
-          const existingIndex = checkPropsFiles.findIndex(ep => {
-            const er = getPackageRoot(ep);
-            if (!er) return false;
-            try { return path.basename(fs.realpathSync(er)) === name; } catch (e) { return path.basename(er) === name; }
-          });
-          if (existingIndex === -1) {
-            checkPropsFiles.push(fp);
-          } else {
-            // prefer project packages over installed ones
-            const existingEp = checkPropsFiles[existingIndex];
-            const existingRoot = getPackageRoot(existingEp);
-            let realExistingRoot;
-            try { realExistingRoot = fs.realpathSync(existingRoot); } catch (e) { realExistingRoot = path.resolve(existingRoot); }
-            const newIsProject = realPkgRoot.startsWith(projectPackages);
-            const existingIsProject = realExistingRoot.startsWith(projectPackages);
-            if (newIsProject && !existingIsProject) {
-              debug(`[resolve-packages] Replacing package ${name} with project package: ${realPkgRoot}`);
-              checkPropsFiles[existingIndex] = fp;
-            } else {
-              debug(`[resolve-packages] Skipping duplicate package ${name}: ${realPkgRoot}`);
+// Get current package directory (handles pnpm and monorepo)
+export function getPackageRoot() {
+    const monorepoIndex = __dirname.indexOf('./packages');
+    const pnpmIndex = __dirname.indexOf('./node_modules/.pnpm');
+    // If we're in a monorepo, packages will be under .../packages/
+    if (monorepoIndex !== -1) {
+        return path.join(__dirname.slice(0, monorepoIndex + 8), path.sep);
+    // If we're in a pnpm workspace, packages will be under .../.pnpm/node_modules/@bynovl/
+    } else if (pnpmIndex !== -1) {
+        return path.join(__dirname.slice(0, pnpmIndex + 5), 'node_modules', '@bynovl');
+    }
+    // Otherwise, just return the parent directory (normal npm/yarn install)
+    return path.dirname(__dirname);
+}
+
+// Discover all optimize-* packages in the root directory + linked custom packages. Memoized.
+export function packageLoader() {
+    if (memoizedDirs) return memoizedDirs;
+    
+    const root = getPackageRoot();
+    const results = [];
+    const seen = new Set();
+    
+    if (!fs.existsSync(root)) {
+        return (memoizedDirs = []);
+    }
+    
+    // 1. Scan the package root directory
+    for (const entry of fs.readdirSync(root)) {
+        if (!entry.startsWith(PACKAGE_PREFIX)) continue;
+        if (SKIP_BASES.includes(entry)) continue;
+        const full = path.join(root, entry);
+        if (fs.existsSync(path.join(full, 'package.json'))) {
+            results.push(full);
+            seen.add(path.basename(full));
+        }
+    }
+    
+    // 2. Also check root package.json for linked/custom packages
+    const rootDir = findRootDir(process.cwd());
+    if (rootDir) {
+        let pkgJson = {};
+        try {
+            pkgJson = JSON.parse(fs.readFileSync(path.join(rootDir, 'package.json'), 'utf8'));
+        } catch (_) { /* ignore */ }
+        
+        const allDeps = Object.assign({}, pkgJson.dependencies, pkgJson.devDependencies);
+        for (const [dep, version] of Object.entries(allDeps)) {
+            if (!dep.includes(PACKAGE_PREFIX)) continue;
+            const short = dep.split('/').pop();
+            if (SKIP_BASES.includes(short) || seen.has(short)) continue;
+            
+            const linked = resolveLinkedPath(version, rootDir);
+            if (linked && fs.existsSync(path.join(linked, 'package.json'))) {
+                results.push(linked);
             }
-          }
         }
-        seen.add(realPath);
-      }
     }
-    // Search packages/ (monorepo)
-    const packagesDir = path.join(currentDir, 'packages');
-    if (fs.existsSync(packagesDir)) {
-      const realPath = fs.realpathSync(packagesDir);
-      if (!seen.has(realPath)) {
-        const found = findAllCheckPropsFiles(packagesDir);
-        debug(`[getCheckModules] Searched: ${packagesDir} => Found ${found.length} check-props.js`);
-        for (const fp of found) {
-          const pkgRoot = getPackageRoot(fp);
-          if (!pkgRoot) continue;
-          let realPkgRoot;
-          try { realPkgRoot = fs.realpathSync(pkgRoot); } catch (e) { realPkgRoot = path.resolve(pkgRoot); }
-          const name = path.basename(realPkgRoot);
-          const existingIndex = checkPropsFiles.findIndex(ep => {
-            const er = getPackageRoot(ep);
-            if (!er) return false;
-            try { return path.basename(fs.realpathSync(er)) === name; } catch (e) { return path.basename(er) === name; }
-          });
-          if (existingIndex === -1) {
-            checkPropsFiles.push(fp);
-          } else {
-            // prefer packages/ found here (project packages) — replace existing
-            debug(`[resolve-packages] Replacing package ${name} with packages/ entry: ${realPkgRoot}`);
-            checkPropsFiles[existingIndex] = fp;
-          }
-        }
-        seen.add(realPath);
-      }
-    }
-    const parent = path.dirname(currentDir);
-    if (parent === currentDir) break;
-    currentDir = parent;
-  }
+    
+    memoizedDirs = results;
+    debug(`[packageLoader] discovered ${results.length} package(s)`);
+    return memoizedDirs;
 }

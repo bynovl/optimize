@@ -1,28 +1,56 @@
-import { DEFAULT_CONFIG_SETTINGS as metaConfig } from '@bynovl/optimize-meta/default.config.js';
-import { DEFAULT_CONFIG_SETTINGS as accessibilityConfig } from '@bynovl/optimize-accessibility/default.config.js';
-import { DEFAULT_CONFIG_SETTINGS as linksConfig } from '@bynovl/optimize-links/default.config.js';
-import { DEFAULT_CONFIG_SETTINGS as mediaConfig } from '@bynovl/optimize-media/default.config.js';
-import { DEFAULT_CONFIG_SETTINGS as openGraphConfig } from '@bynovl/optimize-open-graph/default.config.js';
-import { DEFAULT_CONFIG_SETTINGS as schemaConfig } from '@bynovl/optimize-schema/default.config.js';
-import { DEFAULT_CONFIG_SETTINGS as sourcesConfig } from '@bynovl/optimize-sources/default.config.js';
-import { DEFAULT_CONFIG_SETTINGS as langConfig } from '../optimize-lang/default.config.js';
-// Custom check default configuration settings.
-// import { DEFAULT_CONFIG_SETTINGS as customCheckConfig } from 'path-to-custom-check/default.config.js'; --- IGNORE ---
+// Dynamically load and merge default config settings from all @bynovl/optimize-* dependencies
+import path from 'path';
+import fs from 'fs';
+// read our own package.json without using JSON module import assertions
+const pkg = JSON.parse(fs.readFileSync(path.resolve(new URL(import.meta.url).pathname, '../package.json'), 'utf8'));
+const rootPkgPath = path.join(process.cwd(), 'package.json');
+const rootPkg = JSON.parse(fs.readFileSync(rootPkgPath, 'utf8'));
 
-// This file defines the default configuration settings for the custom check example.
-import defaultConfig from '@bynovl/optimize-lib/set-config.js';
-import mergeConfig from '@bynovl/optimize-lib/merge-config.js';
-
-export const DEFAULT_CONFIG_SETTINGS = mergeConfig(
-    defaultConfig,
-    metaConfig,
-    accessibilityConfig,
-    linksConfig,
-    mediaConfig,
-    openGraphConfig,
-    schemaConfig,
-    sourcesConfig,
-    langConfig,
-    // customCheckConfig, 
-    // customCheckConfig2
+const optimizeDeps = [
+    ...Object.keys(pkg.dependencies || {}),
+    ...Object.keys(rootPkg.dependencies || {})
+].filter(
+    name => /^@?bynovl\/optimize-/.test(name)
+        && name !== '@bynovl/optimize-core'
+        && name !== '@bynovl/optimize-utils'
+        && name !== '@bynovl/optimize-lib'
+        && name !== '@bynovl/optimize-tests'
 );
+import { resolvePackageRoot, packageLoader } from '@bynovl/optimize-lib/resolve-packages.js';
+
+async function loadAndMergeConfigs() {
+    let merged = {};
+    for (const dep of optimizeDeps) {
+        try {
+            // attempt to locate module directory first
+            let pkgRoot = resolvePackageRoot(dep);
+            if (!pkgRoot) {
+                // fallback: check in monorepo via packageLoader results
+                const all = packageLoader();
+                const short = dep.includes('/') ? dep.split('/').pop() : dep;
+                pkgRoot = all.find(p => path.basename(p) === short);
+            }
+            if (pkgRoot) {
+                const configPath = path.join(pkgRoot, 'default.config.js');
+                if (fs.existsSync(configPath)) {
+                    const mod = await import(configPath);
+                    const config = mod.DEFAULT_CONFIG_SETTINGS || mod.default || {};
+                    merged = { ...merged, ...config };
+                    continue;
+                }
+            }
+            // last-resort try specifier (may fail)
+            const mod = await import(`${dep}/default.config.js`);
+            const config = mod.DEFAULT_CONFIG_SETTINGS || mod.default || {};
+            merged = { ...merged, ...config };
+        } catch (err) {
+            console.warn(`Could not load config for ${dep}:`, err);
+        }
+    }
+    return merged;
+}
+
+export const DEFAULT_CONFIG_SETTINGS = await loadAndMergeConfigs();
+
+
+

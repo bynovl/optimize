@@ -2,6 +2,7 @@
 import { scriptHeader } from '@bynovl/optimize-lib/script-header.js';
 import { scriptFooter } from '@bynovl/optimize-lib/script-footer.js';
 import { cliDispatch } from '@bynovl/optimize-lib/cli-dispatch.js';
+import { debug } from '@bynovl/optimize-utils/debug-log.js';
 
 // Initialize CLI options and checkModules
 const { args, enabledChecks, checkModules } = await cliDispatch();
@@ -16,7 +17,7 @@ export async function runAllChecks(startUrl) {
     const { config, nonIgnoredHtmlFiles } = await scriptHeader(isFirstCheck, enabledChecks, args);
     const actualChecks = Array.isArray(config.enabledChecks) && config.enabledChecks.length > 0 ? config.enabledChecks : enabledChecks;
     const totalPagesChecked = nonIgnoredHtmlFiles.length;
-
+    debug(config, 'Final merged config to be used for checks:');
     // If API mode, skip CLI output
     const isApiMode = config.apiMode || process.env.MODE === 'API';
     if (isApiMode) return;

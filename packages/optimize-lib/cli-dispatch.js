@@ -6,21 +6,30 @@ const require = createRequire(import.meta.url);
 const pkg = require('./package.json');
 
 // Dynamically load module flags from getCheckModules
-export async function cliDispatch() {
+export async function cliDispatch(enabledCheck = []) {
   const argv = process.argv.slice(2);
   const args = parseCliArgs(argv, sharedHelpText, pkg.version);
 
   // Get module flags dynamically
   const { checkModules } = await getCheckModules();
   const moduleFlags = checkModules.map(m => m.flag);
-  const presentModuleFlags = Object.keys(args).filter(flag => moduleFlags.includes(flag));
   let enabledChecks;
-  if (presentModuleFlags.length === 0) {
-    // No module flags present (even if --ci is present): run all checks
-    enabledChecks = moduleFlags;
+  let filteredModules = checkModules;
+
+  if (enabledCheck && enabledCheck.length > 0) {
+    // If enabledCheck is passed, filter to only that module
+    enabledChecks = enabledCheck;
+    filteredModules = checkModules.filter(m => enabledCheck.includes(m.flag));
   } else {
-    // Only run specified module flags
-    enabledChecks = presentModuleFlags;
+    const presentModuleFlags = Object.keys(args).filter(flag => moduleFlags.includes(flag));
+    if (presentModuleFlags.length === 0) {
+      // No module flags present (even if --ci is present): run all checks
+      enabledChecks = moduleFlags;
+    } else {
+      // Only run specified module flags
+      enabledChecks = presentModuleFlags;
+      filteredModules = checkModules.filter(m => enabledChecks.includes(m.flag));
+    }
   }
-  return { args, enabledChecks, checkModules };
+  return { args, enabledChecks, checkModules: filteredModules };
 }

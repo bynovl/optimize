@@ -8,6 +8,7 @@ export const DEFAULT_CONFIG_SETTINGS = {
     styleBlocks: true,
     cssFiles: true,
     htmlFiles: true,
+    someValue: 'default'
 }
 
 export default DEFAULT_CONFIG_SETTINGS;

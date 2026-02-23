@@ -8,14 +8,8 @@ import { checkProps } from './scripts/check-props.js';
 import { validateCheck } from './scripts/check-validation.js';
 import { debug, debugPath } from '@bynovl/optimize-utils/debug-log.js';
 
-/* Get current file path for debug logging */
-import { fileURLToPath } from 'url';
-const __filename = fileURLToPath(import.meta.url);
-
 export default async function checkSources(config, htmlFiles, startUrl) {
   const failedItems = [];
-  // Debug path for check
-  debugPath('SOURCES', __filename);
   const processFile = async (file) => {
     try {
       resolveFilePath(config, file);
