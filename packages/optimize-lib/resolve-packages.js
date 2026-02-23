@@ -29,17 +29,26 @@ function resolveLinkedPath(version, rootDir) {
 
 // Get current package directory (handles pnpm and monorepo)
 export function getPackageRoot() {
-    const monorepoIndex = __dirname.indexOf('./packages');
-    const pnpmIndex = __dirname.indexOf('./node_modules/.pnpm');
-    // If we're in a monorepo, packages will be under .../packages/
-    if (monorepoIndex !== -1) {
-        return path.join(__dirname.slice(0, monorepoIndex + 8), path.sep);
-    // If we're in a pnpm workspace, packages will be under .../.pnpm/node_modules/@bynovl/
-    } else if (pnpmIndex !== -1) {
-        return path.join(__dirname.slice(0, pnpmIndex + 5), 'node_modules', '@bynovl');
+    // Markers for detection
+    const pnpmMarker = '/node_modules/.pnpm';
+    const monorepoMarker = '/optimize/packages';
+    const pnpmIndex = __dirname.indexOf(pnpmMarker);
+    const monorepoIndex = __dirname.indexOf(monorepoMarker);
+
+    let result;
+
+    if (pnpmIndex !== -1) {
+        result = path.join(__dirname.slice(0, pnpmIndex + pnpmMarker.length), 'node_modules', '@bynovl');
+        console.log(`[packageLoader] Detected pnpm workspace. Using package root: ${result}`); // --- IGNORE ---
+    } else if (monorepoIndex !== -1) {
+        result = path.join(__dirname.slice(0, monorepoIndex + monorepoMarker.length));
+        console.log(`[packageLoader] Detected monorepo workspace. Using package root: ${result}`); // --- IGNORE ---
+    } else {
+        result = path.dirname(__dirname);
+        console.log(`[packageLoader] Detected npm/yarn workspace. Using package root: ${result}`); // --- IGNORE ---
     }
-    // Otherwise, just return the parent directory (normal npm/yarn install)
-    return path.dirname(__dirname);
+
+    return result;
 }
 
 // Discover all optimize-* packages in the root directory + linked custom packages. Memoized.
