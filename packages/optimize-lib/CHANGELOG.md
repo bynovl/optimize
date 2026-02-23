@@ -1,5 +1,16 @@
 # @bynovl/optimize-lib
 
+## 2.5.0
+
+### Minor Changes
+
+- 1cab28e: Updated from customChecks to extendChecks to ensure module picks up extensions
+
+### Patch Changes
+
+- Updated dependencies [1cab28e]
+  - @bynovl/optimize-utils@2.4.0
+
 ## 2.4.2
 
 ### Patch Changes
