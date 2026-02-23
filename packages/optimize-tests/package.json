@@ -1,6 +1,6 @@
 {
   "name": "@bynovl/optimize-tests",
-  "version": "6.0.6",
+  "version": "7.0.0",
   "description": "Test and demo package for optimize monorepo. Contains sample site and config for validation.",
   "main": "optimize.config.js",
   "repository": {

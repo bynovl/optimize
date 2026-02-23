@@ -1,5 +1,16 @@
 # @bynovl/optimize-tests
 
+## 7.0.0
+
+### Minor Changes
+
+- 4679222: Updated modules to use same shared package location detection, refactored code, and removed unused console statements
+
+### Patch Changes
+
+- Updated dependencies [4679222]
+  - @bynovl/optimize@2.3.0
+
 ## 6.0.6
 
 ### Patch Changes

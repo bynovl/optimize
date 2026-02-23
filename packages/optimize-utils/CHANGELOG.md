@@ -1,5 +1,11 @@
 # @bynovl/optimize-utils
 
+## 2.3.0
+
+### Minor Changes
+
+- 4679222: Updated modules to use same shared package location detection, refactored code, and removed unused console statements
+
 ## 2.2.0
 
 ### Minor Changes

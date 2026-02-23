@@ -1,5 +1,17 @@
 # @bynovl/optimize-accessibility
 
+## 2.3.0
+
+### Minor Changes
+
+- 4679222: Updated modules to use same shared package location detection, refactored code, and removed unused console statements
+
+### Patch Changes
+
+- Updated dependencies [4679222]
+  - @bynovl/optimize-lib@2.4.0
+  - @bynovl/optimize-utils@2.3.0
+
 ## 2.2.6
 
 ### Patch Changes

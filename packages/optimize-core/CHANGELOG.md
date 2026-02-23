@@ -1,5 +1,25 @@
 # @bynovl/optimize
 
+## 2.3.0
+
+### Minor Changes
+
+- 4679222: Updated modules to use same shared package location detection, refactored code, and removed unused console statements
+
+### Patch Changes
+
+- Updated dependencies [4679222]
+  - @bynovl/optimize-accessibility@2.3.0
+  - @bynovl/optimize-hierarchy@2.3.0
+  - @bynovl/optimize-lib@2.4.0
+  - @bynovl/optimize-links@2.3.0
+  - @bynovl/optimize-media@2.3.0
+  - @bynovl/optimize-meta@2.3.0
+  - @bynovl/optimize-open-graph@2.3.0
+  - @bynovl/optimize-schema@2.3.0
+  - @bynovl/optimize-sources@2.3.0
+  - @bynovl/optimize-utils@2.3.0
+
 ## 2.2.6
 
 ### Patch Changes
