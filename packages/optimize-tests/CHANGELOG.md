@@ -1,5 +1,12 @@
 # @bynovl/optimize-tests
 
+## 8.0.2
+
+### Patch Changes
+
+- Updated dependencies [82465e7]
+  - @bynovl/optimize@2.4.2
+
 ## 8.0.1
 
 ### Patch Changes

@@ -1,5 +1,21 @@
 # @bynovl/optimize
 
+## 2.4.2
+
+### Patch Changes
+
+- 82465e7: Small fix to json or CSV export to silence CLI messaging
+- Updated dependencies [82465e7]
+  - @bynovl/optimize-lib@2.5.1
+  - @bynovl/optimize-accessibility@2.4.1
+  - @bynovl/optimize-hierarchy@2.4.1
+  - @bynovl/optimize-links@2.4.1
+  - @bynovl/optimize-media@2.4.1
+  - @bynovl/optimize-meta@2.4.2
+  - @bynovl/optimize-open-graph@2.4.1
+  - @bynovl/optimize-schema@2.4.1
+  - @bynovl/optimize-sources@2.4.1
+
 ## 2.4.1
 
 ### Patch Changes
