@@ -1,21 +1,23 @@
 import chalk from 'chalk';
 import { clearSpinnerLine } from '@bynovl/optimize-utils/spinner.js';
+import { getCheckModules } from './get-check-modules.js';
 
-// Key is title used in display-logs.js
-// Value is the property name used in the result item
-const stepKeyMap = {
-    'Open Graph': 'openGraph',
-    'Meta': 'meta',
-    'Links': 'links',
-    'Sources': 'sources',
-    'Media': 'media',
-    'Accessibility': 'accessibility',
-    'Hierarchy': 'hierarchy',
-    // 'Language': 'lang',
-    // Add new mappings here as needed
-};
+// Dynamically load label and key mappings from check modules to use in displayLogs
+let stepKeyMap = null;
+async function getStepKeyMap() {
+    if (stepKeyMap) return stepKeyMap;
+    const { checkModules } = await getCheckModules();
+    // Use Map to preserve order, then convert to object
+    const orderedMap = new Map();
+    for (const mod of checkModules) {
+        if (mod.label && mod.key) {
+            orderedMap.set(mod.label, mod.key);
+        }
+    }
+    stepKeyMap = Object.fromEntries(orderedMap);
+    return stepKeyMap;
+}
 
-// Show Banner
 export async function displayLogs(input) {
     const result = typeof input === 'function' ? await input() : input;
     if (result && result.log) {
@@ -41,11 +43,13 @@ export async function displayLogs(input) {
                     ? result.failedItems
                     : [];
 
+                const keyMap = await getStepKeyMap();
+
                 failedItems.forEach((item) => {
                     // Print the file/page name as PATH: ...
                     console.log(chalk.cyan(`PATH: ${item.page || item.path}`));
                     // Use mapped key or fallback to lowercased stepName
-                    const key = stepKeyMap[stepName] || stepName.toLowerCase();
+                    const key = keyMap[stepName] || stepName.toLowerCase();
                     if (
                         Array.isArray(item[key]?.results) &&
                         item[key].results.length > 0
