@@ -7,3 +7,5 @@ site-ext/
 _temp-backup/
 env.sh
 .npmrc
+./optimize.config.js
+test-extensions.js
