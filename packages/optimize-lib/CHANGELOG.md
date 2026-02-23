@@ -1,5 +1,11 @@
 # @bynovl/optimize-lib
 
+## 2.5.1
+
+### Patch Changes
+
+- 82465e7: Small fix to json or CSV export to silence CLI messaging
+
 ## 2.5.0
 
 ### Minor Changes
