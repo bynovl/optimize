@@ -1,5 +1,11 @@
 # @bynovl/optimize-lib
 
+## 2.4.1
+
+### Patch Changes
+
+- c96c444: Fix to improve package path detection based on pkg manager'
+
 ## 2.4.0
 
 ### Minor Changes
