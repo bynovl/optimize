@@ -1,5 +1,11 @@
 # @bynovl/optimize-lib
 
+## 2.5.2
+
+### Patch Changes
+
+- 05e191a: Added dynamic functionality to generate step/key logic and remove hard-coded dependencies'
+
 ## 2.5.1
 
 ### Patch Changes

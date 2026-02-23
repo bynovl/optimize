@@ -1,5 +1,12 @@
 # @bynovl/optimize-open-graph
 
+## 2.4.2
+
+### Patch Changes
+
+- Updated dependencies [05e191a]
+  - @bynovl/optimize-lib@2.5.2
+
 ## 2.4.1
 
 ### Patch Changes
