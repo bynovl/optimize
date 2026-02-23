@@ -39,13 +39,13 @@ export function getPackageRoot() {
 
     if (pnpmIndex !== -1) {
         result = path.join(__dirname.slice(0, pnpmIndex + pnpmMarker.length), 'node_modules', '@bynovl');
-        console.log(`[packageLoader] Detected pnpm workspace. Using package root: ${result}`); // --- IGNORE ---
+        debug(`[packageLoader] Detected pnpm workspace. Using package root: ${result}`); // --- IGNORE ---
     } else if (monorepoIndex !== -1) {
         result = path.join(__dirname.slice(0, monorepoIndex + monorepoMarker.length));
-        console.log(`[packageLoader] Detected monorepo workspace. Using package root: ${result}`); // --- IGNORE ---
+        debug(`[packageLoader] Detected monorepo workspace. Using package root: ${result}`); // --- IGNORE ---
     } else {
         result = path.dirname(__dirname);
-        console.log(`[packageLoader] Detected npm/yarn workspace. Using package root: ${result}`); // --- IGNORE ---
+        debug(`[packageLoader] Detected npm/yarn workspace. Using package root: ${result}`); // --- IGNORE ---
     }
 
     return result;
