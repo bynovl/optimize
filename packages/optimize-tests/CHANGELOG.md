@@ -1,5 +1,11 @@
 # @bynovl/optimize-tests
 
+## 6.0.6
+
+### Patch Changes
+
+- @bynovl/optimize@2.2.6
+
 ## 6.0.5
 
 ### Patch Changes
