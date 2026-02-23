@@ -29,7 +29,6 @@ export async function validateCheck(item, content, config, file, startUrl) {
   ];
 
   const customTagChecks = config.extendChecks?.[checkProps.key] || [];
-  console.log('Custom Tag Checks:', customTagChecks); // --- IGNORE ---
 
   const tagChecks = [...defaultTagChecks, ...customTagChecks];
 
