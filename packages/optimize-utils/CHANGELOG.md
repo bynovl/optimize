@@ -1,5 +1,11 @@
 # @bynovl/optimize-utils
 
+## 2.4.0
+
+### Minor Changes
+
+- 1cab28e: Updated from customChecks to extendChecks to ensure module picks up extensions
+
 ## 2.3.0
 
 ### Minor Changes
