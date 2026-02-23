@@ -1,5 +1,11 @@
 # @bynovl/optimize-tests
 
+## 7.0.2
+
+### Patch Changes
+
+- @bynovl/optimize@2.3.2
+
 ## 7.0.1
 
 ### Patch Changes
