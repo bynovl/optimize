@@ -1,5 +1,11 @@
 # @bynovl/optimize-meta
 
+## 2.4.1
+
+### Patch Changes
+
+- 8c21e00: Remove testing console causing to show display log on non-debug mode
+
 ## 2.4.0
 
 ### Minor Changes
