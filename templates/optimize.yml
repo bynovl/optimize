@@ -1,0 +1,31 @@
+# Workflow script to run optimize as part of CI/CD 
+# It should return a pass/fail and shows failed checks with issues 
+# This should function similarly to Theme Check and Lighthouse
+name: NOVL Optimize
+on:
+  push:
+    branches:
+      - develop
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  optimize:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '18.x'
+      
+      - name: Install optimize
+        run: npm install -g @bynovl/optimize  
+
+      - name: Run optimize
+        run: npx optimize --ci
+        # Can run targeted checks
+        # e.g. npx optimize --ci --meta --hierarchy
+
