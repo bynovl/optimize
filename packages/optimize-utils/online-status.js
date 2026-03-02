@@ -1,4 +1,3 @@
-import https from 'https';
 import net from 'net';
 
 // Fast offline check:
