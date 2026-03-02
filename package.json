@@ -59,9 +59,6 @@
     "public": "git push public HEAD:main"
   },
   "license": "ISC",
-  "dependencies": {
-    "chalk": "^5.6.2"
-  },
   "devDependencies": {
     "@changesets/cli": "^2.29.7",
     "eslint": "^9.38.0"
