@@ -5,7 +5,7 @@ import { displayLogs } from './display-logs.js';
 import { exportResultsAsJson, exportResultsAsCsv } from '@bynovl/optimize-utils/export-as.js';
 import { startStopSpinner } from '@bynovl/optimize-utils/spinner.js';
 import { clearSpinnerLine } from '@bynovl/optimize-utils/spinner.js';
-import chalk from 'chalk';
+import { colors } from '@bynovl/optimize-utils/ansi-colors.js';
 
 export async function scriptFooter(results, config, args, totalPagesChecked) {
     const jsonOutput = args['--json'] || null;
@@ -33,7 +33,7 @@ export async function scriptFooter(results, config, args, totalPagesChecked) {
         await exportResultsAsCsv(filteredResults, csvPath);
     }
     if (hasOutputPath !== '') {    
-        console.log(chalk.green(`\n✅ Checks completed. Results exported to: ${hasOutputPath}\n`));
+        console.log(colors.boldGreen(`\n✅ Checks completed. Results exported to: ${hasOutputPath}\n`));
         return
     }
 
@@ -49,7 +49,7 @@ export async function scriptFooter(results, config, args, totalPagesChecked) {
         // Return success message if all checks passed
         if (allPassed) {
             clearSpinnerLine();
-            console.log(chalk.bgGreen.black.bold(`✅ ALL CHECKS PASSED`));
+            console.log(colors.bgGreenBlackBold(`✅ ALL CHECKS PASSED`));
         }
         // End timer (update for accurracy)
         startStopSpinner(false);

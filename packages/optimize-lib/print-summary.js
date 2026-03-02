@@ -1,5 +1,5 @@
 // Print summary of failed checks before exiting in CI
-import chalk from 'chalk';
+import { colors } from '@bynovl/optimize-utils/ansi-colors.js';
 export function printSummary(filteredResults, totalPagesChecked) {
   // if (process.argv.includes('--ci')) {
   const failedChecks = filteredResults.filter(r => r && Array.isArray(r.failedItems) && r.failedItems.length > 0);
@@ -20,24 +20,24 @@ export function printSummary(filteredResults, totalPagesChecked) {
       }
     }
   }
-  console.log(chalk.gray.bold(`\n================= SUMMARY =================\n`));
-  console.log(chalk.cyan(`⚠️  ${failedPages.size} out of ${totalPagesChecked} page(s) have issues`));
-  console.log(chalk.redBright(`❌ TOTAL CHECKS FAILED: ${failedChecks.length}`));
-  console.log(chalk.redBright(`❌ TOTAL ISSUES FOUND: ${totalIssues}\n`));
+  console.log(colors.boldGray(`\n================= SUMMARY =================\n`));
+  console.log(colors.cyan(`⚠️  ${failedPages.size} out of ${totalPagesChecked} page(s) have issues`));
+  console.log(colors.brightRed(`❌ TOTAL CHECKS FAILED: ${failedChecks.length}`));
+  console.log(colors.brightRed(`❌ TOTAL ISSUES FOUND: ${totalIssues}\n`));
 
   if (failedChecks.length > 0) {
-    console.log(chalk.gray('FAILED CHECKS:'));
+    console.log(colors.gray('FAILED CHECKS:'));
     failedChecks.forEach(r => {
-      console.log(chalk.white.bold(`- ${r.name || r.type || 'Unknown'}: `) + chalk.white(`${r.failedItems.length} failed item(s)`));
+      console.log(colors.boldWhite(`- ${r.name || r.type || 'Unknown'}: `) + colors.white(`${r.failedItems.length} failed item(s)`));
     });
   }
   if (passedChecks.length > 0) {
-    console.log(chalk.gray('\nPASSED CHECKS:'));
+    console.log(colors.gray('\nPASSED CHECKS:'));
     passedChecks.forEach(r => {
-      console.log(chalk.greenBright(`✓ ${r.name || r.type || 'Unknown'}`));
+      console.log(colors.brightGreen(`✓ ${r.name || r.type || 'Unknown'}`));
     });
   }
-  console.log(chalk.gray.bold('============================================\n'));
+  console.log(colors.boldGray('============================================\n'));
   if (failedChecks.length > 0 && process.argv.includes('--ci')) {
     process.exit(1);
   }
