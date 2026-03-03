@@ -1,6 +1,7 @@
 # @bynovl/optimize
-
 Automate accessibility, schema, meta, and other best practice checks for any static website. It's configurable, extensible, and compatible with all static site generators. Use it as a post-build package in your CI/CD workflow or contiuously while you're building and get the feedback you need to make sure your site is ready to go live. 
+
+
 
 ## How It Works (Architecture Overview)
 
@@ -13,9 +14,18 @@ Automate accessibility, schema, meta, and other best practice checks for any sta
 
 ## Getting Started
 
+### Setup (Beta)
+During beta you can quickly get started with a quick npmrc setup.
+
+
+[![GitHub Packages private package](https://img.shields.io/badge/GitHub%20Packages-private-181717?logo=github&logoColor=white)](https://github.com/orgs/bynovl/packages)
+
+
+> **🔐 Your GitHub Packages token (`read:packages`)**: [Get ot here](https://github.com/settings/tokens/new?scopes=read:packages)
+
 ### Install
 
-Install from npm or pnpm:
+Install via npm or pnpm:
 ```bash
 npm install @bynovl/optimize-core
 ```
