@@ -1,0 +1,59 @@
+name: Invite Beta Members
+on:
+  workflow_dispatch:  # Manual trigger from Actions tab
+  schedule:
+    - cron: '0 */4 * * *'  # Run every 4 hours
+  repository_dispatch:
+    types: [new-beta-signup]  # Webhook trigger (optional)
+
+jobs:
+  invite-users:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    
+    steps:
+      - name: Fetch Form Submissions
+        id: fetch
+        env:
+          FB_ID: ${{ secrets.FB_ID }}
+          FB_API_KEY: ${{ secrets.FB_API_KEY }}
+        run: |
+          echo "🔄 Fetching submissions from Form Basin..."
+          curl -sS -L -X GET "https://usebasin.com/api/v1/submissions?filter_by=All&form_id=${FB_ID}&query=&api_token=${FB_API_KEY}" \
+          -H "Content-Type: application/json" > submissions.json
+          
+          # Check if we got data
+          if ! jq empty submissions.json 2>/dev/null; then            
+            echo "❌ Invalid JSON response from Form Basin"
+            exit 1
+          fi
+          
+          SUBMISSION_COUNT=$(jq '.submissions | length' submissions.json)
+          echo "✅ Found $SUBMISSION_COUNT submissions"
+      
+      - name: Process and invite collaborators
+        env:
+          GH_TOKEN: ${{ secrets.GHA_TOKEN }}
+        run: |
+          echo "📋 Processing GitHub handles..."
+          
+          # Extract GitHub handles from submissions (username field in payload_params)
+          jq -r '.submissions[] | .payload_params.username // empty' submissions.json | while read github_handle; do
+            
+            # Skip if no GitHub handle
+            if [[ -z "$github_handle" ]]; then
+              continue
+            fi
+            
+            # Invite collaborator using GitHub CLI
+            gh api \
+              --method PUT \
+              -H "Accept: application/vnd.github+json" \
+              -H "X-GitHub-Api-Version: 2022-11-28" \
+              "/repos/${{ github.repository }}/collaborators/$github_handle" \
+              -f permission='pull' > /dev/null 2>&1
+            
+          done
+          
+          echo "✅ Sync complete"
