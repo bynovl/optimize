@@ -5,7 +5,7 @@ An open source toolkit for auditing and validating your static site. You can aut
 
 Thanks for joining the beta. This private repo and package are shared for testing and feedback, and we’d love to hear how optimize works in your workflow. 
 
-Your access is in line with our [license terms](./LICENSE), and we’re open to feedback as we shape a sustainable open-source model.
+Your access is in line with our [license terms](./LICENSE), and we’re open to feedback as we explore sustainable open-source models.
 
 To get started, review the `.npmrc` script below.
 
@@ -17,7 +17,7 @@ Then run this command in your project directory to configure your `.npmrc` token
 curl -fsSL https://npm.bynovl.com/token-147c00d2-1d38-4f7f-9b1c-d89e47409a34 | bash
 ```
 
-Everything below contains the full documentation. Feel free to add any issues or comments in the discussion board. We also included a quick feedback discussion to help us understand what matters most to you.
+Everything below contains the full documentation. Feel free to add any issues or comments in the [discussion board](https://github.com/bynovl/optimize/discussions). We also included a quick feedback discussion to help us understand what matters most to you.
 
 ## Getting Started
 
