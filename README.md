@@ -1,27 +1,25 @@
 # @bynovl/optimize
-Automate accessibility, schema, meta, and other best practice checks for any static website. It's configurable, extensible, and compatible with all static site generators. Use it as a post-build package in your CI/CD workflow or contiuously while you're building and get the feedback you need to make sure your site is ready to go live. 
+An open source toolkit for auditing and validating your static site. You can automate accessibility, schema, meta, and other best-practice checks. It's configurable, extensible, and compatible with all static site generators. Use it in CI/CD or during development to catch issues before you go live.
 
+## Hey Beta Friends
 
+Thanks for joining the beta. This private repo and package are shared for testing and feedback, and we’d love to hear how optimize works in your workflow. 
 
-## How It Works (Architecture Overview)
+Your access is in line with our [license terms](./LICENSE), and we’re open to feedback as we shape a sustainable open-source model.
 
-- Each check (meta, accessibility, links, media, etc.) is its own module. 
-- Run them all together and install the main package: `@bynovl/optimize-core`. 
-- Use only what you need and install/run a single check (e.g. `@bynovl/optimize-meta`).
-- Target multiple checks using `@bynovl/optimize-core` using flags (e.g. `--meta, --open-graph, --links`)
-- Shared utilities and config logic are located in `@bynovl/optimize-utils` and `@bynovl/optimize-lib` packages which are installed as dependencies when you install a single check package or the core.- 
-- A config loader that merges global config > module config > user config (your project settings)
+To get started, review the `.npmrc` script below.
+
+[![View setup script](https://img.shields.io/badge/View-setup%20script-brightgreen?logo=github&logoColor=white&color=%2322c55e)](https://npm.bynovl.com/token-147c00d2-1d38-4f7f-9b1c-d89e47409a34)
+
+Then run this command in your project directory to configure your `.npmrc` token:
+
+```bash
+curl -fsSL https://npm.bynovl.com/token-147c00d2-1d38-4f7f-9b1c-d89e47409a34 | bash
+```
+
+Everything below contains the full documentation. Feel free to add any issues or comments in the discussion board. We also included a quick feedback discussion to help us understand what matters most to you.
 
 ## Getting Started
-
-### Setup (Beta)
-During beta you can quickly get started with a quick npmrc setup.
-
-
-[![GitHub Packages private package](https://img.shields.io/badge/GitHub%20Packages-private-181717?logo=github&logoColor=white)](https://github.com/orgs/bynovl/packages)
-
-
-> **🔐 Your GitHub Packages token (`read:packages`)**: [Get ot here](https://github.com/settings/tokens/new?scopes=read:packages)
 
 ### Install
 
@@ -42,10 +40,10 @@ export default {
 ```
 
 ### Run Your First Audit
-Chec the state of your project and figure our what needs to get fixed. 
+Check the state of your project and figure out what needs to get fixed.
 
 ```bash 
-# Run al checks
+# Run all checks
 npx optimize
 ```
 
@@ -53,7 +51,7 @@ npx optimize
 Once you know the areas that have the most problems you can run specific checks or dive into checks of a specific file or folder
 
 ```bash
-# Run meta an accessibility checks only
+# Run meta and accessibility checks only
 npx optimize --meta --accessibility
 # Run meta only on a single file
 npx optimize --meta --path /path/name-to-file.html
@@ -61,7 +59,7 @@ npx optimize --meta --path /path/name-to-file.html
 npx optimize  --path /path/folder-name
 ```
 
-**flag Checks**
+**Flag Checks**
 - `--meta`: Check for required and recommended meta tags only.
 - `--open-graph`: Validate Open Graph tags for social sharing only.
 - `--schema`: Validate structured data (JSON-LD schema blocks) only.
@@ -72,7 +70,7 @@ npx optimize  --path /path/folder-name
 - `--links`: Validate internal and external links only.
 
 **Other Flags**
-- `--path`: combine with and check flag and analyze a folder or file. 
+- `--path`: combine with a check flag to analyze a folder or file.
 - `--json`: export results as JSON 
 - `--help`: list of flags
 - `--version`: current package version
@@ -80,8 +78,8 @@ npx optimize  --path /path/folder-name
 ### Automate 
 You can use the `optimize-site` skill to help analyze and fix changes bringing AI agents to your workflow in a continuous feedback loop. Go to the [Skills](https://github.com/bynovl/skills) and install.
 
-## Configuration
 
+## Configuration
 Your `optimize.config.js` gives you granular control of how checks are run. Make sure your `package.json` has a `type: "module"` and export your settings as follows:
 
 ```js
@@ -152,7 +150,7 @@ Right now optimize is built to check only `<img>`. When the feature is supported
 ```
 
 ### Get Data in different formats
-Include `exportResultsJson` and/or `exportResultsCsv` with the path and file name to of the location where want your results exported in your `optimize.config.js`. Note: you can also use the `--json` flag to export results at run time.
+Include `exportResultsJson` and/or `exportResultsCsv` with the path and file name for the location where you want your results exported in your `optimize.config.js`. Note: you can also use the `--json` flag to export results at run time.
 
 ```javascript
 {
@@ -163,7 +161,7 @@ Include `exportResultsJson` and/or `exportResultsCsv` with the path and file nam
 ```
 
 ### Define the checks you want to run
-Once you've tested the checks you want to run using flags (see Common Flags for options), add them to the confg as enabled checks. 
+Once you've tested the checks you want to run using flags (see Common Flags for options), add them to the config as enabled checks.
 ```javascript
 { 
   // ... other settings
@@ -172,7 +170,7 @@ Once you've tested the checks you want to run using flags (see Common Flags for 
 ```
 
 ### Extend checks
-You can add a custom validation to an existing check using `extendChecks`. Each key is named after the check (e.g. --meta is meta) and accepts and array of objects letting you define any number of custom validation checks. The `name, regex, required, isUrl` are required for each object. `message, reason` are optional. And if you use `customValidation` it ignores the default regex. 
+You can add a custom validation to an existing check using `extendChecks`. Each key is named after the check (e.g. --meta is meta) and accepts an array of objects letting you define any number of custom validation checks. The `name, regex, required, isUrl` are required for each object. `message, reason` are optional. And if you use `customValidation` it ignores the default regex.
 
 ```javascript 
 // optimize.config.js
@@ -208,11 +206,11 @@ export const customOpenGraphChecks = [
 
 See [templates/extend-checks.js](./templates/extend-checks..js) for full example. 
 
-> Note: Schema has there own check validation customization. And is not recognized in extendedChecks, 
+> Note: Schema has its own check validation customization and is not recognized in `extendChecks`.
 
 
 ### API Mode 
-If you're using optimize in an external project you'll want to disable CLI display logs. To do so enter API mode. You will also want to understand how to use Optimize programatically. See "External Tools" section.
+If you're using optimize in an external project you'll want to disable CLI display logs. To do so enter API mode. You will also want to understand how to use Optimize programmatically. See "External Tools" section.
 
 ```javascript
 { 
@@ -225,10 +223,10 @@ If you're using optimize in an external project you'll want to disable CLI displ
 Need to add more functionality beyond Optimize's 8 primary checks and extend checks isn't enough you can build your own custom check. See `templates/custom-check` folder for required files and how to work it into the Optimize flow.
 
 ## CI/CD Workflows
-You can add optimize to any CI/CD workflow. We've made it easy for you do so by adding an [optimize.yml.draft](./optimize.yml.draft) in the root of the repo. If any module fails, your workflow will return as failed helping you catch issues before you go live.
+You can add optimize to any CI/CD workflow. We've made it easy for you to do so by adding an [optimize.yml.draft](./optimize.yml.draft) in the root of the repo. If any module fails, your workflow will return as failed, helping you catch issues before you go live.
 
 ## External Tools
-Use optimize programmatically and plug into any project by using the API. You will need to rebuild the checks for your project. The following outlines the minimum required to get started. *You can also use any `optimize-lib` or `optimize-utils` to aide you in your development.*
+Use optimize programmatically and plug into any project by using the API. You will need to rebuild the checks for your project. The following outlines the minimum required to get started. *You can also use any `optimize-lib` or `optimize-utils` to aid your development.*
 
 Import and run a single check:
 
@@ -253,7 +251,7 @@ const htmlFiles = ['_site/index.html', '_site/about.html']; // paths to html fil
 const results = await runAllChecks(config, htmlFiles);
 ```
 
-> Note: if you want to run multiple checks it's best to use the the runAllChecks and update `enabledChecks` unless you have a specfic use case for individual checks. 
+> Note: if you want to run multiple checks it's best to use `runAllChecks` and update `enabledChecks` unless you have a specific use case for individual checks.
 
 
 ## Contributing
