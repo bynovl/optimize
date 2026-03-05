@@ -17,7 +17,7 @@ Then run this command in your project directory to configure your `.npmrc` token
 curl -fsSL https://npm.bynovl.com/token-147c00d2-1d38-4f7f-9b1c-d89e47409a34 | bash
 ```
 
-Everything below contains the full documentation. Feel free to add any issues or comments in the [discussion board](https://github.com/bynovl/optimize/discussions). We also included a quick feedback discussion to help us understand what matters most to you.
+Everything below contains the full documentation. Have thoughts? feeback? Found an issue? Or just want to say hello? Join the [discussion](https://github.com/bynovl/optimize/discussions). Once you've had a chance to test it optimize out, help us understand what matters most—[your feedback](https://github.com/bynovl/optimize/discussions/8) is appreciated!
 
 ## Getting Started
 
