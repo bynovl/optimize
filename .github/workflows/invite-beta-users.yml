@@ -36,24 +36,40 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GHA_TOKEN }}
         run: |
-          echo "📋 Processing GitHub handles..."
-          
-          # Extract GitHub handles from submissions (username field in payload_params)
-          jq -r '.submissions[] | .payload_params.username // empty' submissions.json | while read github_handle; do
-            
-            # Skip if no GitHub handle
-            if [[ -z "$github_handle" ]]; then
+          echo "📋 Processing GitHub usernames/emails..."
+
+          # Iterate submissions and use username first, then email as fallback
+          jq -c '.submissions[]' submissions.json | while read -r submission; do
+            github_handle=$(echo "$submission" | jq -r '.payload_params.username // empty')
+            email=$(echo "$submission" | jq -r '.payload_params.email // empty')
+
+            # Normalize common username formats like "@octocat"
+            github_handle="${github_handle#@}"
+
+            if [[ -n "$github_handle" ]]; then
+              echo "➡️ Inviting by username: $github_handle"
+              gh api \
+                --method PUT \
+                -H "Accept: application/vnd.github+json" \
+                -H "X-GitHub-Api-Version: 2022-11-28" \
+                "/repos/${{ github.repository }}/collaborators/$github_handle" \
+                -f permission='pull' > /dev/null 2>&1 || true
               continue
             fi
-            
-            # Invite collaborator using GitHub CLI
-            gh api \
-              --method PUT \
-              -H "Accept: application/vnd.github+json" \
-              -H "X-GitHub-Api-Version: 2022-11-28" \
-              "/repos/${{ github.repository }}/collaborators/$github_handle" \
-              -f permission='pull' > /dev/null 2>&1
-            
+
+            if [[ -n "$email" ]]; then
+              echo "➡️ Inviting by email: $email"
+              gh api \
+                --method POST \
+                -H "Accept: application/vnd.github+json" \
+                -H "X-GitHub-Api-Version: 2022-11-28" \
+                "/repos/${{ github.repository }}/invitations" \
+                -f email="$email" \
+                -f permissions='pull' > /dev/null 2>&1 || true
+              continue
+            fi
+
+            echo "⚠️ Skipping submission with no username/email"
           done
-          
+
           echo "✅ Sync complete"
