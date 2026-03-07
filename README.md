@@ -5,7 +5,7 @@ An open source toolkit for auditing and validating your static site. You can aut
 
 Thanks for joining the beta. This private repo and package are shared for testing and feedback, and we’d love to hear how optimize works in your workflow. 
 
-Your access is in line with our [license terms](./LICENSE), and we’re open to feedback as we explore sustainable open-source models.
+Your access is in line with our [license terms](./LICENSE). Take a look for permitted uses and restrictions before sharing or adapting the code. That said we’re open to feedback as we explore sustainable open-source models.
 
 To get started, review the `.npmrc` script below.
 
