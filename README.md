@@ -1,11 +1,17 @@
 # @bynovl/optimize
 An open source toolkit for auditing and validating your static site. You can automate accessibility, schema, meta, and other best-practice checks. It's configurable, extensible, and compatible with all static site generators. Use it in CI/CD or during development to catch issues before you go live.
 
-## Hey Beta Friends
+## Hey Everyone
 
-Thanks for joining the beta. This private repo and package are shared for testing and feedback, and we’d love to hear how optimize works in your workflow. 
+Thanks for joining the beta. While the project may be a little further along then a normal beta. Our goal is to build community-first. This private repo and package are shared for testing and feedback, and we’d love to hear how optimize works in your workflow. 
 
 Your access is in line with our [license terms](./LICENSE). Take a look for permitted uses and restrictions before sharing or adapting the code. That said we’re open to feedback as we explore sustainable open-source models.
+
+**Non-tech people**. 
+
+Never set up a dev environment? Not comfortable doing so? No worries we'll help you get started. Our goal is to make Optimize accessible to both a non-tech and tech SEO crowd. To make it easier for you to start we'll walk you through setting up your environment and analyzing any website with optimize. [Sign up for a demo](https://cal.com/bysyd/demo).
+
+**Tech people**
 
 To get started, review the `.npmrc` script below.
 
@@ -17,19 +23,17 @@ Then run this command in your project directory to configure your `.npmrc` token
 curl -fsSL https://npm.bynovl.com/token-147c00d2-1d38-4f7f-9b1c-d89e47409a34 | bash
 ```
 
-Everything below contains the full documentation. Have thoughts? feeback? Found an issue? Or just want to say hello? Join the [discussion](https://github.com/bynovl/optimize/discussions). Once you've had a chance to test it optimize out, help us understand what matters most—[your feedback](https://github.com/bynovl/optimize/discussions/8) is appreciated!
+Everything below contains the full documentation. Have thoughts? feedback? Found an issue? Or just want to say hello? Join the [discussion](https://github.com/bynovl/optimize/discussions). Once you've had a chance to test Optimize out, help us understand what matters most—[your feedback](https://github.com/bynovl/optimize/discussions/8) is appreciated!
 
 ## Getting Started
 
 ### Install
-
 Install via npm or pnpm:
 ```bash
 npm install @bynovl/optimize-core
 ```
 
 ### Configure
-
 Add `optimize.config.js` in the root of your project. An `outDir` with the location of your build folder is all that's required
 
 ```javascript
@@ -221,6 +225,19 @@ If you're using optimize in an external project you'll want to disable CLI displ
 
 ## Custom Checks
 Need to add more functionality beyond Optimize's 8 primary checks and extend checks isn't enough you can build your own custom check. See `templates/custom-check` folder for required files and how to work it into the Optimize flow.
+
+## Known Limitations
+
+Optimize works on static, pre-built HTML files for fast continuous feedback loop which comes with a few trade-offs.Keep the following in mind when scoping what it can and can't catch:
+
+- **Static analysis only.** Optimize reads built HTML, CSS, and referenced assets. It does not execute JavaScript, so content injected client-side (SPAs, hydration, JS-rendered templates) is not evaluated.
+- **No live-site validation.** Checks run against your local build output. Conditions that only exist in production—CDN headers, server-side redirects, environment-specific rendering—are outside its scope.
+- **External requests are limited.** The links check makes HTTP requests to validate external URLs, but rate-limited, authenticated, or geo-restricted URLs may return false negatives. All other checks are fully offline.
+- **Regex-based parsing.** HTML is analyzed with regular expressions, not a full DOM parser. Highly non-standard or deeply malformed markup may produce false positives or missed findings. An optional parser integration is planned—speed over perfect accuracy was an intentional tradeoff.
+- **`img` only for media.** The media check currently supports `<img>` elements. `<video>`, `<audio>`, `<iframe>`, and `<object>` validation is planned but not yet available.
+- **Schema is not `extendChecks`-compatible.** However, schema was built with a similar methodology—allowing you to define exactly what structured data should be validated on your site.
+- **Not a replacement for dedicated tools.** Optimize complements—but does not replace—full accessibility auditors (axe, pa11y), traditional crawlers (Screaming Frog), or HTML validators (W3C). This is intentional: the modular design means it can be used well beyond static site validation.
+- **Per-file errors are silent by default.** If a file fails to process (e.g. unreadable file, unexpected encoding), it is skipped and the run continues—no crash, no visible output. To surface these, run with debug logging enabled. In CI/CD, a skipped file does not cause the workflow to fail, so an unusually low result count may indicate silent skips worth investigating.
 
 ## CI/CD Workflows
 You can add optimize to any CI/CD workflow. We've made it easy for you to do so by adding an [optimize.yml.draft](./optimize.yml.draft) in the root of the repo. If any module fails, your workflow will return as failed, helping you catch issues before you go live.

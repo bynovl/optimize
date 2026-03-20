@@ -10,5 +10,6 @@ export const colors = {
   brightRed: (text) => `\x1b[91m${text}\x1b[0m`,
   boldWhite: (text) => `\x1b[1;97m${text}\x1b[0m`,
   boldGray: (text) => `\x1b[1;90m${text}\x1b[0m`,
+  boldGreen: (text) => `\x1b[1;32m${text}\x1b[0m`,
   bgRedWhiteBold: (text) => `\x1b[1;97;41m${text}\x1b[0m`,
 };

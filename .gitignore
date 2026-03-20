@@ -9,3 +9,4 @@ env.sh
 .npmrc
 ./optimize.config.js
 test-extensions.js
+notes.md

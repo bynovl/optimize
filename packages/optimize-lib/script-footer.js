@@ -3,6 +3,7 @@ import { aggregateStats } from './aggregate-stats.js';
 import { printSummary } from './print-summary.js';
 import { displayLogs } from './display-logs.js';
 import { exportResultsAsJson, exportResultsAsCsv } from '@bynovl/optimize-utils/export-as.js';
+import exportReport from './generate-report.js';
 import { startStopSpinner } from '@bynovl/optimize-utils/spinner.js';
 import { clearSpinnerLine } from '@bynovl/optimize-utils/spinner.js';
 import { colors } from '@bynovl/optimize-utils/ansi-colors.js';
@@ -10,6 +11,7 @@ import { colors } from '@bynovl/optimize-utils/ansi-colors.js';
 export async function scriptFooter(results, config, args, totalPagesChecked) {
     const jsonOutput = args['--json'] || null;
     const csvOutput = args['--csv'] || null;
+    const reportOutput = args['--report'] || null;
     let hasOutputPath = '';
 
     // Only include results that are not empty/undefined and have failedItems (i.e., actual check results)
@@ -32,11 +34,16 @@ export async function scriptFooter(results, config, args, totalPagesChecked) {
         hasOutputPath = csvPath;
         await exportResultsAsCsv(filteredResults, csvPath);
     }
+    // export report (markdown or other, LLM-driven) only if --report flag is set or llm.auto is true
+    if (config.llm && config.llm.autoRun || reportOutput) {
+        const reportPath = (config.llm && config.llm.fileOutput) || reportOutput;
+        hasOutputPath = reportPath;
+        await exportReport(config, filteredResults); // path handled by config.llm.fileOutput
+    }
     if (hasOutputPath !== '') {    
         console.log(colors.boldGreen(`\n✅ Checks completed. Results exported to: ${hasOutputPath}\n`));
         return
     }
-
     try {
         // Loop through each check and display results. 
         let allPassed = Array.isArray(results) && results.length > 0 && results.every(r => r && r.success);

@@ -32,5 +32,19 @@ export default {
     //     // and are not included in the extendChecks object. 
     //     // Use the schemaDefault and schemaCustom properties to define custom schema checks as needed.
     // }
-};
+    // llm: {
+    //     provider: 'github', // required: llm provider (e.g., 'openai', 'azure', 'github')
+    //     model: 'gpt-4.1', // required: model name or endpoint URL (e.g., 'gpt-4', 'azure-deployment-name', full URL for custom providers)
+    //     url: null, // optional: override URL for custom providers (if model is not a full URL)
+    //     options: { /* Add any model-specific options here */}, // optional: model-specific options (e.g., max_tokens, temperature)
+    //     key: process.env.MODEL_KEY, // required: environment variable containing the API key for the LLM provider
+    // }, 
+    // report: {
+    //     fileOutput: 'audit.md', // specify output file for the report
+    //     autoRun: true, // automatically generate report after every run
+    //     preparer: 'Novl Optimize', // optional string to include in the report as the preparer/author
+    //     skill: 'seo-expert.md', // optional path to markdown file with expert/system prompt (default is seo-expert.md in project root)
+    //     prompt: 'seo-audit.md' // optional path to markdown file with main audit prompt template (default is seo-audit.md in project root)
+    // }
+}
 

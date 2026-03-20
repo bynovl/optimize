@@ -22,6 +22,7 @@ Output Flags:
   --path [file or dir]   Specify a file or directory to check (defaults to current directory)
   --json [output.json]   Output results in JSON format to a file
   --csv [output.csv]     Output results in CSV format to a file
+  --report               Generate an Audit (markdown) with LLM-driven analysis. Requires LLM API key.
   --ci                   For CI/CD environments (non-interactive)
 
 General Flags:
