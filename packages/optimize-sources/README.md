@@ -97,6 +97,13 @@ Returns an array of result objects per file, with details for each source issue:
 ]
 ```
 
+## Known Limitations
+
+- **`<link rel="stylesheet">` and `<script src>` only.** `<link rel="preload">`, `<link rel="modulepreload">`, `<link rel="prefetch">` are not checked.
+- **SRI integrity attributes not validated.** Subresource Integrity (`integrity`) hashes on `<link>` and `<script>` tags are not checked for correctness.
+- **Dynamically injected sources not visible.** Scripts or stylesheets added by JavaScript at runtime are not present in static HTML and will not be detected.
+
+
 ## Automate with AI SKILLS
 We developed a global SKILL.md to help you summarize, analyze, and fix issues with AI. You can use it in the CLI or directly in the chat window—just choose your model and go!
 

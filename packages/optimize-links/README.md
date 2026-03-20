@@ -69,7 +69,6 @@ const results = await checkLinks(config, htmlFiles);
   Can be run standalone or as part of the full site check suite.
 
 ## Configuration
-
 - Inherit config from the global config or provide a local config `optimize.config.js`.
 
 Key options:
@@ -101,6 +100,12 @@ Returns an array of result objects per file, with details for each link issue:
   }
 ]
 ```
+
+## Known Limitations
+- **External link checks require network access.** Rate-limited, authenticated, or geo-restricted URLs may return false negatives. These checks will be skipped or may time out in offline or restricted CI environments.
+- **No JavaScript-generated hrefs.** Links produced by client-side routing or JS frameworks are not present in static HTML and will not be checked.
+- **Redirects are flagged, not resolved.** Redirect chains are reported as issues; Optimize does not follow and verify the final destination.
+- **Performance vs. accuracy tradeoff.** `processingType` and `processingSize` settings affect how many links are checked concurrently—aggressive settings may trigger rate limiting on external hosts.
 
 ## Automate with AI SKILLS
 We developed a global SKILL.md to help you summarize, analyze, and fix issues with AI. You can use it in the CLI or directly in the chat window—just choose your model and go!

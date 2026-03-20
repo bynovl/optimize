@@ -92,6 +92,14 @@ Returns an array of result objects per file, with details for each meta tag issu
 ]
 ```
 
+## Known Limitations
+
+- **Presence and format only.** Tags are checked for existence and non-empty values—content quality (e.g., description length, keyword relevance) is not evaluated out of the box
+- **No cross-page duplicate detection.** Duplicate `<title>` or canonical URL conflicts across multiple pages are not detected; only per-file duplicates are reported.
+- **`hreflang` not validated.** Internationalization alternate link tags are outside the scope of this check.
+- **`noindex`/`nofollow` are flagged, not contextual.** These are always reported as issues regardless of whether they are intentional (e.g., staging environments)—use `ignore` to exclude pages where these are expected.
+
+
 ## Automate with AI SKILLS
 We developed a global SKILL.md to help you summarize, analyze, and fix issues with AI. You can use it in the CLI or directly in the chat window—just choose your model and go!
 

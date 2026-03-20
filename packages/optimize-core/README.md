@@ -64,6 +64,8 @@ npx optimize  --path /path/folder-name
 **Other Flags**
 - `--path`: combine with and check flag and analyze a folder or file. 
 - `--json`: export results as JSON 
+- `--csv`: export resutls as JSON
+- `--report`: get a custom Markdown report (requires LLM API key)
 - `--help`: list of flags
 - `--version`: current package version
 
@@ -115,6 +117,34 @@ Custom checks are for creating new, independent modules/packages that run as par
 - Custom checks require their own folder, structure, and registration as a dependency.
 - Once linked and added as a dependency, Optimize will discover and run your custom check automatically.
 
+## LLM-Driven Reporting
+
+Optimize supports AI-powered, markdown-first reporting using Large Language Models (LLMs) such as OpenAI, Anthropic, or GitHub Models. This feature lets you generate professional, stakeholder-ready audit reports with actionable recommendations, summaries, and visual hierarchy—all in clean markdown for easy version control. You can convert your Markdown report to HTML and spin up a local server with your own styles.
+
+**Example config:**
+```js
+llm: {
+  provider: 'github', // or 'openai', 'anthropic', etc.
+  model: 'gpt-4.1',
+  key: process.env.MODEL_KEY,
+},
+report: {
+  fileOutput: 'audit.md',
+  autoRun: true,
+  preparer: 'Your Name or Team',
+  skill: 'seo-expert.md',
+  prompt: 'seo-audit.md'
+}
+```
+
+**To use:**
+- Set your API key in the environment (e.g., `MODEL_KEY`), `model` and `provider`.
+- Run Optimize with the `--report` flag or set `autoRun: true` in your config.
+- Find your generated markdown report in the specified output file.
+
+**Custom Skills & Prompts:**
+- You can provide your own expert skill and prompt templates for custom audits (e.g., accessibility, README quality, security).
+
 ## CI/CD Workflows
 You can add optimize to any CI/CD workflow. We've made it easy for you do so by adding an [optimize.yml.draft](./optimize.yml.draft) in the root of the repo. If any module fails, your workflow will return as failed helping you catch issues before you go live.
 
@@ -128,4 +158,4 @@ We don't have time to manage pull requests at the moment. Good news, we actively
  
 For features you'd like to see or if you spot any bugs jump into the [discussion](https://github.com/bynovl/optimize/discussions).  Want to contribute? Yes please, let's build together and make websites better, faster, accessible and AI-ready without any dependencies other than the ones you choose to use. 
 
-Say hello at contributors@bynovl.com! 
+Say hello at contributors@bynovl.com!

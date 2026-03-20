@@ -97,6 +97,11 @@ Returns an array of result objects per file, with details for each Open Graph is
 ]
 ```
 
+## Known Limitations
+- **Tag presence only—images are not fetched.** `og:image` URLs are validated, but the image is not downloaded or checked for correct dimensions, file size, or reachability.
+- **No live social preview validation.** Results reflect static HTML content only; actual platform rendering (Facebook, LinkedIn, X/Twitter) may differ based on cache, scraper behavior, or platform-specific rules.
+- **Duplicate detection is per-file only.** Cross-page `og:url` conflicts or canonical mismatches are not detected.
+
 
 ## Automate with AI SKILLS
 We developed a global SKILL.md to help you summarize, analyze, and fix issues with AI. You can use it in the CLI or directly in the chat window—just choose your model and go!

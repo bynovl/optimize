@@ -112,6 +112,11 @@ You can add or customize schema validation logic by editing your `optimize.confi
   };
 ```
 
+## Known Limitations
+- **JSON-LD only.** Microdata and RDFa structured data formats are not supported.
+- **Config-driven, not spec-driven.** Schema correctness is validated against your `schemaDataDefault` and `schemaDataCustom` rules—not the full schema.org specification. Invalid type usage or missing recommended properties outside your config will not be reported.
+- **No external schema validation.** The check does not make requests to schema.org or any validator API; it only parses and checks keys present in the HTML.
+- **Nested validation requires explicit config.** Deep or conditional schema structures must be explicitly defined in `schemaDataCustom` with dot notation; they are not inferred automatically. This is intentional by design.
 ## Automate with AI SKILLS
 We developed a global SKILL.md to help you summarize, analyze, and fix issues with AI. You can use it in the CLI or directly in the chat window—just choose your model and go!
 

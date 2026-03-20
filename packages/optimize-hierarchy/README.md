@@ -93,6 +93,11 @@ Returns an array of result objects per file, with details for each hierarchy iss
   }
 ]
 ```
+## Known Limitations
+- **Per-file analysis only.** Heading structure is evaluated within each HTML file independently. Cross-page structural relationships or site-level hierarchy are not assessed.
+- **Headings only.** Landmark regions (`<main>`, `<nav>`, `<aside>`, `<section>`) and sectioning content are not validated beyond heading placement.
+- **JS-injected headings are invisible.** Headings added by client-side frameworks after the build step are not present in the static HTML and will not be detected.
+- **Layout-driven heading misuse generates noise.** Sites that use heading tags for visual styling rather than semantics may produce a high volume of warnings; use `ignore` or `extendChecks` to tune for your project.
 
 ## Automate with AI SKILLS
 We developed a global SKILL.md to help you summarize, analyze, and fix issues with AI. You can use it in the CLI or directly in the chat window—just choose your model and go!

@@ -85,6 +85,12 @@ Returns an array of result objects per file, with details for each accessibility
 ]
 
 ```
+## Known Limitations
+- **Static analysis only.** Checks run on built HTML; dynamically injected content (client-side rendering, JS frameworks) is not visible and will not be evaluated.
+- **Presence and format, not semantic correctness.** ARIA attribute validation confirms that attributes exist and are non-empty—it does not verify that roles and properties are used semantically correctly in context.
+- **No runtime behavior.** Focus management, keyboard traps, live region announcements, and focus order cannot be detected from static HTML.
+- **No color contrast checking.** Contrast ratios between text and background are not evaluated.
+- **Complement with dedicated a11y tools.** For full WCAG compliance audits, pair with axe, pa11y, or Lighthouse in addition to running this check.
 
 ## Automate with AI SKILLS
 We developed a global SKILL.md to help you summarize, analyze, and fix issues with AI. You can use it in the CLI or directly in the chat window—just choose your model and go!

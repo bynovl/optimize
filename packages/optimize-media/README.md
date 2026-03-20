@@ -54,7 +54,7 @@ const results = await checkMedia(config, htmlFiles);
 
 ## What It Does
 
-- **Validates media tags and sources:** Checks for valid `<img>`. `<video>`, `<audio>` and `<object>` coming soon. Ensures `src` exist and are reachable. 
+- **Validates media tags and sources:** Checks for valid `<img>` tags. `<video>`, `<audio>` and `<object>` coming soon. Ensures `src` exist and are reachable. 
 - **Checks for missing alt text and attributes:** Reports missing `alt` text on images.
 - **Integrates with the NOVL Optimize CLI:** Can be run standalone or as part of the full site check suite.
 
@@ -72,6 +72,12 @@ const results = await checkMedia(config, htmlFiles);
   - `htmlFiles`: Check HTML file (default true). Note: when set to false inline styles and style blocks will not be checked
 
 See [Project README](../../README.md) for full configuration and parameter conventions.
+
+## Known Limitations
+
+- **`<img>` only.** Only `<img>` elements are currently validated. `<video>`, `<audio>`, `<iframe>`, and `<object>` are listed in `mediaTypes` config but are not yet checked—support is planned.
+- **No image optimization checks.** File size, dimensions, format (WebP, AVIF), and compression are not evaluated.
+- **CSS background images may be partially missed.** Inline styles and style blocks are parsed, but complex or minified CSS patterns in external files may not be fully detected. Data URIS are skipped.
 
 ## Output
 Returns an array of result objects per file, with details for each media issue:
