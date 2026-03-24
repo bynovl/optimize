@@ -1,5 +1,11 @@
 # @bynovl/optimize-utils
 
+## 2.5.1
+
+### Patch Changes
+
+- 1347819: Fix add missing ASCII color
+
 ## 2.5.0
 
 ### Minor Changes
