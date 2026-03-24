@@ -1,5 +1,11 @@
 # @bynovl/optimize-utils
 
+## 2.5.0
+
+### Minor Changes
+
+- 59a9d95: Added markdown report generation, edit docs to consider docs ethics documentation
+
 ## 2.4.0
 
 ### Minor Changes

@@ -1,5 +1,17 @@
 # @bynovl/optimize-meta
 
+## 2.5.0
+
+### Minor Changes
+
+- 59a9d95: Added markdown report generation, edit docs to consider docs ethics documentation
+
+### Patch Changes
+
+- Updated dependencies [59a9d95]
+  - @bynovl/optimize-lib@2.6.0
+  - @bynovl/optimize-utils@2.5.0
+
 ## 2.4.3
 
 ### Patch Changes
