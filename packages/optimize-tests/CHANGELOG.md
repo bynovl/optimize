@@ -1,5 +1,13 @@
 # @bynovl/optimize-tests
 
+## 9.0.3
+
+### Patch Changes
+
+- f312782: Update docs, fix links; AI report gerneration
+- Updated dependencies [f312782]
+  - @bynovl/optimize@2.5.3
+
 ## 9.0.2
 
 ### Patch Changes

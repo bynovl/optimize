@@ -1,5 +1,22 @@
 # @bynovl/optimize
 
+## 2.5.3
+
+### Patch Changes
+
+- f312782: Update docs, fix links; AI report gerneration
+- Updated dependencies [f312782]
+  - @bynovl/optimize-accessibility@2.5.3
+  - @bynovl/optimize-hierarchy@2.5.3
+  - @bynovl/optimize-lib@2.6.3
+  - @bynovl/optimize-links@2.5.3
+  - @bynovl/optimize-media@2.5.3
+  - @bynovl/optimize-meta@2.5.3
+  - @bynovl/optimize-open-graph@2.5.3
+  - @bynovl/optimize-schema@2.5.3
+  - @bynovl/optimize-sources@2.5.3
+  - @bynovl/optimize-utils@2.5.2
+
 ## 2.5.2
 
 ### Patch Changes
