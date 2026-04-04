@@ -12,7 +12,7 @@ npm install @bynovl/optimize-hierarchy
 Add/update an `optimize.config.js` to your project root. And define required `outDir` setting:
 
 ```js 
-export default = { 
+export default {
   outDir: "_site", // your build directory
 }
 ```
@@ -30,14 +30,16 @@ npx optimize --hierarchy
 Multiple flags:
 ```bash
 npx optimize --hierarchy --links
-#  Note: work with core package only. 
+# Note: Multiple flags require the core package (@bynovl/optimize-core).
 ```
+
+> Note: For most use cases, you’ll want to use [@bynovl/optimize-core](../optimize-core/README.md) to run multiple checks together or as a single CLI entry point.
 
 **Config:**
 If you regularly check the same things update your the `enabledChecks` in your config:
 
 ```js 
-export default = { 
+export default {
   outDir: "_site", // your build directory, 
   enabledChecks: ["--hierarchy"]
 }
@@ -47,9 +49,12 @@ export default = {
 Plug into any custom tool.
 
 ```js
+import { getConfig } from '@bynovl/optimize-lib/get-config.js';
 import checkHierarchy from '@bynovl/optimize-hierarchy/index.js';
-// config: object, htmlFiles: array of file paths
-const results = await checkHierarchy(config, htmlFiles);
+
+const { config, nonIgnoredHtmlFiles } = await getConfig();
+const results = await checkHierarchy(config, nonIgnoredHtmlFiles);
+console.log(results);
 ```
 
 ## What It Does
@@ -62,6 +67,12 @@ const results = await checkHierarchy(config, htmlFiles);
 - **Integrates with the NOVL Optimize CLI:**  
   Can be run standalone or as part of the full site check suite.
 
+## Known Limitations
+- **Per-file analysis only.** Heading structure is evaluated within each HTML file independently. Cross-page structural relationships or site-level hierarchy are not assessed.
+- **Headings only.** Landmark regions (`<main>`, `<nav>`, `<aside>`, `<section>`) and sectioning content are not validated beyond heading placement.
+- **JS-injected headings are invisible.** Headings added by client-side frameworks after the build step are not present in the static HTML and will not be detected.
+- **Layout-driven heading misuse generates noise.** Sites that use heading tags for visual styling rather than semantics may produce a high volume of warnings; use `ignore` or `extendChecks` to tune for your project.
+
 ## Configuration
 
 - Inherit config from the global config or provide a local config `optimize.config.js`.
@@ -70,7 +81,7 @@ const results = await checkHierarchy(config, htmlFiles);
   - `ignore`: Array of glob patterns or paths to exclude.
   - `batchSize`: Number of files to process in parallel.
 
-See the [project README](../../README.md) for more full configuraton. 
+See the [project README](../../README.md) for more full configuration.
 
 ## Output
 
@@ -93,11 +104,6 @@ Returns an array of result objects per file, with details for each hierarchy iss
   }
 ]
 ```
-## Known Limitations
-- **Per-file analysis only.** Heading structure is evaluated within each HTML file independently. Cross-page structural relationships or site-level hierarchy are not assessed.
-- **Headings only.** Landmark regions (`<main>`, `<nav>`, `<aside>`, `<section>`) and sectioning content are not validated beyond heading placement.
-- **JS-injected headings are invisible.** Headings added by client-side frameworks after the build step are not present in the static HTML and will not be detected.
-- **Layout-driven heading misuse generates noise.** Sites that use heading tags for visual styling rather than semantics may produce a high volume of warnings; use `ignore` or `extendChecks` to tune for your project.
 
 ## Automate with AI SKILLS
 We developed a global SKILL.md to help you summarize, analyze, and fix issues with AI. You can use it in the CLI or directly in the chat window—just choose your model and go!
@@ -112,7 +118,6 @@ We developed a global SKILL.md to help you summarize, analyze, and fix issues wi
 
 **Learn more about SKILLS**
 - [Agent SKILLS](https://agentskills.io/what-are-skills)
-
 
 ## Make it your own
 You can extend the hierarchy check with your own rules and custom validation with `extendChecks` in your `optimize.config.js`. To get started, see [`extend-checks.js`](../../templates/extend-checks..js) and the sample config.
@@ -135,8 +140,10 @@ export default {
 ## CI/CD Workflows
 You can add optimize to any CI/CD workflow. We've made it easy for you do so by adding an [optimize.yml.draft](./optimize.yml.draft) in the root of the repo. If any module fails, your workflow will return as failed helping you catch issues before you go live.
 
+> For advanced usage, configuration, and API docs, see the main [Optimize README](../../README.md).
+
 ## Power your own project
-You can use `@bynovl/optimize` as a library to build your own tools, workflows, or integrations for non-commercial distribution. For license terms and more information, see the [LICENSE](./LICENSE) file.
+You can use `@bynovl/optimize-hierarchy` as a library to build your own tools, workflows, or integrations for non-commercial distribution. For license terms and more information, see the [LICENSE](../../LICENSE) file.
 
 ## Contributing
 Times are changing and we needed something in-house that can help us work smarter not harder. This project started out as a need to solve some of our own unseen static site and static site generator (SSG) problems and figured it might help some of you too. 
@@ -145,4 +152,4 @@ We don't have time to manage pull requests at the moment. Good news, we actively
  
 For features you'd like to see or if you spot any bugs jump into the [discussion](https://github.com/bynovl/optimize/discussions).  Want to contribute? Yes please, let's build together and make websites better, faster, accessible and AI-ready without any dependencies other than the ones you choose to use. 
 
-Say hello at contributors@bynovl.com! 
+Say hello at contributors@bynovl.com!

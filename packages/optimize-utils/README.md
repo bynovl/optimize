@@ -23,7 +23,7 @@ debugLog('Batch processing complete!');
 See the source for available utilities and their parameters.
 
 ## Power your project
-We love building and seeing other builds! Go ahead and use `@bynovl/optimize-utils` to build your own static site QA tools, or as a reference for best-practice utility logic for non-commercial use. *For full license terms see the [LICENSE](./LICENSE) file.*
+We love building and seeing other builds! Go ahead and use `@bynovl/optimize-utils` to build your own static site QA tools, or as a reference for best-practice utility logic for non-commercial use. *For full license terms see the [LICENSE](../../LICENSE) file.*
 
 ## Contributing
 We don't have time to manage pull requests at the moment but we welcome new ideas and improvements. We do actively use Optimize in our projects so you'll see fresh updates regularly. 

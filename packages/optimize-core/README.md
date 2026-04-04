@@ -13,6 +13,8 @@ Automate accessibility, Schema, Meta, and other best practice checks for any sta
 
 ## Getting Started
 
+> For advanced usage, configuration, and API docs, see the main [Optimize repo README](../../README.md).
+
 ### Install
 
 Install from npm or pnpm:
@@ -149,7 +151,10 @@ report: {
 You can add optimize to any CI/CD workflow. We've made it easy for you do so by adding an [optimize.yml.draft](./optimize.yml.draft) in the root of the repo. If any module fails, your workflow will return as failed helping you catch issues before you go live.
 
 ## Power your own project
+
 You can use `@bynovl/optimize` as a library to build your own tools, workflows, or integrations for non-commercial distribution. For license terms and more information, see the [LICENSE](./LICENSE) file.
+
+> For advanced API and integration details, see the main [Optimize repo README](../../README.md).
 
 ## Contributing
 Times are changing and we needed something in-house that can help us work smarter not harder. This project started out as a need to solve some of our own unseen static site and static site generator (SSG) problems and figured it might help some of you too. 

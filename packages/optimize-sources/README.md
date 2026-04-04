@@ -11,7 +11,7 @@ npm install @bynovl/optimize-sources
 Add/update an `optimize.config.js` to your project root. And define required `outDir` setting:
 
 ```js 
-export default = { 
+export default { 
   outDir: "_site", // your build directory
 }
 ```
@@ -28,14 +28,16 @@ npx optimize --sources
 Multiple flags:
 ```bash
 npx optimize --sources --hierarchy
-#  Note: work with core package only. 
 ```
+> Note: Multiple flags require the core package (@bynovl/optimize-core).
+
+> Note: For most use cases, use @bynovl/optimize-core to run and combine multiple checks in one command.
 
 **Config:**
 If you regularly check the same things update your the `enabledChecks` in your config:
 
 ```js 
-export default = { 
+export default { 
   outDir: "_site", // your build directory, 
   enabledChecks: ["--sources"]
 }
@@ -45,9 +47,11 @@ export default = {
 Plug into any custom tool.
 
 ```js
+import { getConfig } from '@bynovl/optimize-lib/get-config.js';
 import checkSources from '@bynovl/optimize-sources/index.js';
-// config: object, htmlFiles: array of file paths
-const results = await checkSources(config, htmlFiles);
+
+const { config, nonIgnoredHtmlFiles } = await getConfig();
+const results = await checkSources(config, nonIgnoredHtmlFiles);
 ```
 
 ## What It Does
@@ -58,6 +62,11 @@ const results = await checkSources(config, htmlFiles);
   Reports missing or empty `href`/`src` attributes and unreachable files.
 - **Integrates with the NOVL Optimize CLI:**  
   Can be run standalone or as part of the full site check suite.
+
+### Known Limitations
+- **`<link rel="stylesheet">` and `<script src>` only.** `<link rel="preload">`, `<link rel="modulepreload">`, `<link rel="prefetch">` are not checked.
+- **SRI integrity attributes not validated.** Subresource Integrity (`integrity`) hashes on `<link>` and `<script>` tags are not checked for correctness.
+- **Dynamically injected sources not visible.** Scripts or stylesheets added by JavaScript at runtime are not present in static HTML and will not be detected.
 
 ## Configuration
 
@@ -97,13 +106,6 @@ Returns an array of result objects per file, with details for each source issue:
 ]
 ```
 
-## Known Limitations
-
-- **`<link rel="stylesheet">` and `<script src>` only.** `<link rel="preload">`, `<link rel="modulepreload">`, `<link rel="prefetch">` are not checked.
-- **SRI integrity attributes not validated.** Subresource Integrity (`integrity`) hashes on `<link>` and `<script>` tags are not checked for correctness.
-- **Dynamically injected sources not visible.** Scripts or stylesheets added by JavaScript at runtime are not present in static HTML and will not be detected.
-
-
 ## Automate with AI SKILLS
 We developed a global SKILL.md to help you summarize, analyze, and fix issues with AI. You can use it in the CLI or directly in the chat window—just choose your model and go!
 
@@ -141,7 +143,7 @@ export default {
 You can add optimize to any CI/CD workflow. We've made it easy for you do so by adding an [optimize.yml.draft](./optimize.yml.draft) in the root of the repo. If any module fails, your workflow will return as failed helping you catch issues before you go live.
 
 ## Power your own project
-You can use `@bynovl/optimize` as a library to build your own tools, workflows, or integrations for non-commercial distribution. For license terms and more information, see the [LICENSE](./LICENSE) file.
+You can use `@bynovl/optimize-sources` as a library to build your own tools, workflows, or integrations for non-commercial distribution. For license terms and more information, see the [LICENSE](../../LICENSE) file.
 
 ## Contributing
 Times are changing and we needed something in-house that can help us work smarter not harder. This project started out as a need to solve some of our own unseen static site and static site generator (SSG) problems and figured it might help some of you too. 

@@ -12,7 +12,7 @@ npm install @bynovl/optimize-schema
 Add/update an `optimize.config.js` to your project root. And define required `outDir` setting:
 
 ```js 
-export default = { 
+export default { 
   outDir: "_site", // your build directory
 }
 ```
@@ -29,14 +29,16 @@ npx optimize --schema
 Multiple flags:
 ```bash
 npx optimize --schema --hierarchy
-#  Note: work with core package only. 
+# Multiple flags require the core package (@bynovl/optimize-core).
 ```
+
+> Note: For most use cases, use @bynovl/optimize-core to run and combine multiple checks in one command.
 
 **Config:**
 If you regularly check the same things update your the `enabledChecks` in your config:
 
 ```js 
-export default = { 
+export default { 
   outDir: "_site", // your build directory, 
   enabledChecks: ["--schema"]
 }
@@ -46,9 +48,11 @@ export default = {
 Plug into any custom tool.
 
 ```js
+import { getConfig } from '@bynovl/optimize-lib/get-config.js';
 import checkSchema from '@bynovl/optimize-schema/index.js';
-// config: object, htmlFiles: array of file paths
-const results = await checkSchema(config, htmlFiles);
+
+const { config, nonIgnoredHtmlFiles } = await getConfig();
+const results = await checkSchema(config, nonIgnoredHtmlFiles);
 ```
 
 ## What It Does
@@ -61,6 +65,13 @@ const results = await checkSchema(config, htmlFiles);
   Supports custom and nested key validation via config arrays.
 - **Integrates with the NOVL Optimize CLI:**  
   Can be run standalone or as part of the full site check suite.
+
+
+### Known Limitations
+- **JSON-LD only.** Microdata and RDFa structured data formats are not supported.
+- **Config-driven, not spec-driven.** Schema correctness is validated against your `schemaDataDefault` and `schemaDataCustom` rules—not the full schema.org specification. Invalid type usage or missing recommended properties outside your config will not be reported.
+- **No external schema validation.** The check does not make requests to schema.org or any validator API; it only parses and checks keys present in the HTML.
+- **Nested validation requires explicit config.** Deep or conditional schema structures must be explicitly defined in `schemaDataCustom` with dot notation; they are not inferred automatically. This is intentional by design.
 
 ## Configuration
 
@@ -95,28 +106,6 @@ Returns an array of result objects per file, with details for each schema issue:
 ]
 ```
 
-## Make it your own
-You can add or customize schema validation logic by editing your `optimize.config.js`:
--`schemaDataDefault`: to require keys on every schema block (e.g., `@context`, `@type`, `name`).
-- `schemaDataCustom`: for context-specific or nested keys. Use dot notation for nested keys and `:required` for strict presence.
-
-
-```js
-  export default {
-    schemaDataDefault: ['@context', '@type', 'name'],
-    schemaDataCustom: [
-      'image', // optional: warning if missing/empty
-      'offers.price:required',
-      'offers.priceCurrency:required',
-    ]
-  };
-```
-
-## Known Limitations
-- **JSON-LD only.** Microdata and RDFa structured data formats are not supported.
-- **Config-driven, not spec-driven.** Schema correctness is validated against your `schemaDataDefault` and `schemaDataCustom` rules—not the full schema.org specification. Invalid type usage or missing recommended properties outside your config will not be reported.
-- **No external schema validation.** The check does not make requests to schema.org or any validator API; it only parses and checks keys present in the HTML.
-- **Nested validation requires explicit config.** Deep or conditional schema structures must be explicitly defined in `schemaDataCustom` with dot notation; they are not inferred automatically. This is intentional by design.
 ## Automate with AI SKILLS
 We developed a global SKILL.md to help you summarize, analyze, and fix issues with AI. You can use it in the CLI or directly in the chat window—just choose your model and go!
 
@@ -131,12 +120,27 @@ We developed a global SKILL.md to help you summarize, analyze, and fix issues wi
 **Learn more about SKILLS**
 - [Agent SKILLS](https://agentskills.io/what-are-skills)
 
+## Make it your own
+You can add or customize schema validation logic by editing your `optimize.config.js`:
+- `schemaDataDefault`: to require keys on every schema block (e.g., `@context`, `@type`, `name`).
+- `schemaDataCustom`: for context-specific or nested keys. Use dot notation for nested keys and `:required` for strict presence.
+
+```js
+export default {
+  schemaDataDefault: ['@context', '@type', 'name'],
+  schemaDataCustom: [
+    'image', // optional: warning if missing/empty
+    'offers.price:required',
+    'offers.priceCurrency:required',
+  ]
+};
+```
 
 ## CI/CD Workflows
 You can add optimize to any CI/CD workflow. We've made it easy for you do so by adding an [optimize.yml.draft](./optimize.yml.draft) in the root of the repo. If any module fails, your workflow will return as failed helping you catch issues before you go live.
 
 ## Power your own project
-You can use `@bynovl/optimize` as a library to build your own tools, workflows, or integrations for non-commercial distribution. For license terms and more information, see the [LICENSE](./LICENSE) file.
+You can use `@bynovl/optimize-schema` as a library to build your own tools, workflows, or integrations for non-commercial distribution. For license terms and more information, see the [LICENSE](../../LICENSE) file.
 
 ## Contributing
 Times are changing and we needed something in-house that can help us work smarter not harder. This project started out as a need to solve some of our own unseen static site and static site generator (SSG) problems and figured it might help some of you too. 

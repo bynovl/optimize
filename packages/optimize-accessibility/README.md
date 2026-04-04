@@ -9,10 +9,11 @@ npm install @bynovl/optimize-accessibility
 ```
 
 ### 2. Configure `optimize.config.js`
-Add/update an `optimize.config.js` in your project root. And define required `outDir` setting:
+
+Add/update an `optimize.config.js` to your project root. And define required `outDir` setting:
 
 ```js 
-export default = { 
+export default {
   outDir: "_site", // your build directory
 }
 ```
@@ -20,6 +21,7 @@ export default = {
 > Note: you can quickly add the `optimize.config.js` to your project using the [install script](../../scripts/install-examples.sh)
 
 ### 3. Choose how you want to use it and optimize
+
 **CLI:**
 Single check
 ```bash
@@ -29,14 +31,16 @@ npx optimize --accessibility
 Multiple flags:
 ```bash
 npx optimize --accessibility --hierarchy
-#  Note: work with core package only. 
+# Note: Multiple flags require the core package (@bynovl/optimize-core).
 ```
+
+> Note: For most use cases, you’ll want to use [@bynovl/optimize-core](../optimize-core/README.md) to run multiple checks together or as a single CLI entry point.
 
 **Config:**
 If you regularly check the same things update your the `enabledChecks` in your config:
 
 ```js 
-export default = { 
+export default {
   outDir: "_site", // your build directory, 
   enabledChecks: ["--accessibility"]
 }
@@ -46,9 +50,12 @@ export default = {
 Plug into any custom tool.
 
 ```js
-import { checkFns }  from '@bynovl/optimize-accessibility/index.js';
-// config: object, htmlFiles: array of file paths
-const results = await checkFn.checkAccessibility(config, htmlFiles);
+import { getConfig } from '@bynovl/optimize-lib/get-config.js';
+import checkAccessibility from '@bynovl/optimize-accessibility/index.js';
+
+const { config, nonIgnoredHtmlFiles } = await getConfig();
+const results = await checkAccessibility(config, nonIgnoredHtmlFiles);
+console.log(results);
 ```
 
 ## What It Does
@@ -59,6 +66,13 @@ const results = await checkFn.checkAccessibility(config, htmlFiles);
   Reports missing `alt` text, unlabeled form fields, and other aria attributess
 - **Integrates with the NOVL Optimize CLI:**  
   Can be run standalone or as part of the full site check suite.
+
+### Known Limitations
+- **Static analysis only.** Checks run on built HTML; dynamically injected content (client-side rendering, JS frameworks) is not visible and will not be evaluated.
+- **Presence and format, not semantic correctness.** ARIA attribute validation confirms that attributes exist and are non-empty—it does not verify that roles and properties are used semantically correctly in context.
+- **No runtime behavior.** Focus management, keyboard traps, live region announcements, and focus order cannot be detected from static HTML.
+- **No color contrast checking.** Contrast ratios between text and background are not evaluated.
+- **Complement with dedicated a11y tools.** For full WCAG compliance audits, pair with axe, pa11y, or Lighthouse in addition to running this check.
 
 ## Configuration
 
@@ -85,12 +99,6 @@ Returns an array of result objects per file, with details for each accessibility
 ]
 
 ```
-## Known Limitations
-- **Static analysis only.** Checks run on built HTML; dynamically injected content (client-side rendering, JS frameworks) is not visible and will not be evaluated.
-- **Presence and format, not semantic correctness.** ARIA attribute validation confirms that attributes exist and are non-empty—it does not verify that roles and properties are used semantically correctly in context.
-- **No runtime behavior.** Focus management, keyboard traps, live region announcements, and focus order cannot be detected from static HTML.
-- **No color contrast checking.** Contrast ratios between text and background are not evaluated.
-- **Complement with dedicated a11y tools.** For full WCAG compliance audits, pair with axe, pa11y, or Lighthouse in addition to running this check.
 
 ## Automate with AI SKILLS
 We developed a global SKILL.md to help you summarize, analyze, and fix issues with AI. You can use it in the CLI or directly in the chat window—just choose your model and go!
@@ -129,7 +137,7 @@ export default {
 You can add optimize to any CI/CD workflow. We've made it easy for you do so by adding an [optimize.yml.draft](./optimize.yml.draft) in the root of the repo. If any module fails, your workflow will return as failed helping you catch issues before you go live.
 
 ## Power your own project
-You can use `@bynovl/optimize` as a library to build your own tools, workflows, or integrations for non-commercial distribution. For license terms and more information, see the [LICENSE](./LICENSE) file.
+You can use `@bynovl/optimize-accessibility` as a library to build your own tools, workflows, or integrations for non-commercial distribution. For license terms and more information, see the [LICENSE](../../LICENSE) file.
 
 ## Contributing
 Times are changing and we needed something in-house that can help us work smarter not harder. This project started out as a need to solve some of our own unseen static site and static site generator (SSG) problems and figured it might help some of you too. 
@@ -138,4 +146,4 @@ We don't have time to manage pull requests at the moment. Good news, we actively
  
 For features you'd like to see or if you spot any bugs jump into the [discussion](https://github.com/bynovl/optimize/discussions).  Want to contribute? Yes please, let's build together and make websites better, faster, accessible and AI-ready without any dependencies other than the ones you choose to use. 
 
-Say hello at contributors@bynovl.com! 
+Say hello at contributors@bynovl.com!

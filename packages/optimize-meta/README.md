@@ -13,7 +13,7 @@ npm install @bynovl/optimize-meta
 Add/update an `optimize.config.js` to your project root. And define required `outDir` setting:
 
 ```js 
-export default = { 
+export default { 
   outDir: "_site", // your build directory
 }
 ```
@@ -31,14 +31,16 @@ npx optimize --meta
 Multiple flags:
 ```bash
 npx optimize --meta --hierarchy
-#  Note: work with core package only. 
 ```
+> Note: Multiple flags require the core package (@bynovl/optimize-core).
+
+> Note: For most use cases, use @bynovl/optimize-core to run and combine multiple checks in one command.
 
 **Config:**
 If you regularly check the same things update your the `enabledChecks` in your config:
 
 ```js 
-export default = { 
+export default { 
   outDir: "_site", // your build directory, 
   enabledChecks: ["--meta"]
 }
@@ -48,9 +50,11 @@ export default = {
 Plug into any custom tool.
 
 ```js
+import { getConfig } from '@bynovl/optimize-lib/get-config.js';
 import checkMeta from '@bynovl/optimize-meta/index.js';
-// config: object, htmlFiles: array of file paths
-const results = await checkMeta(config, htmlFiles);
+
+const { config, nonIgnoredHtmlFiles } = await getConfig();
+const results = await checkMeta(config, nonIgnoredHtmlFiles);
 ```
 
 ## What It Does
@@ -62,6 +66,13 @@ const results = await checkMeta(config, htmlFiles);
   Detects `noindex`/`nofollow` in robots meta tags.
 - **Integrates with the NOVL Optimize CLI:**  
   Can be run standalone or as part of the full site check suite.
+
+### Known Limitations
+- **Presence and format only.** Tags are checked for existence and non-empty values—content quality (e.g., description length, keyword relevance) is not evaluated out of the box
+- **No cross-page duplicate detection.** Duplicate `<title>` or canonical URL conflicts across multiple pages are not detected; only per-file duplicates are reported.
+- **`hreflang` not validated.** Internationalization alternate link tags are outside the scope of this check.
+- **`noindex`/`nofollow` are flagged, not contextual.** These are always reported as issues regardless of whether they are intentional (e.g., staging environments)—use `ignore` to exclude pages where these are expected.
+
 
 ## Configuration
 - Inherit config from the main `default.config.js` or provide a local config `optimize.config.js`.
@@ -91,14 +102,6 @@ Returns an array of result objects per file, with details for each meta tag issu
   }
 ]
 ```
-
-## Known Limitations
-
-- **Presence and format only.** Tags are checked for existence and non-empty values—content quality (e.g., description length, keyword relevance) is not evaluated out of the box
-- **No cross-page duplicate detection.** Duplicate `<title>` or canonical URL conflicts across multiple pages are not detected; only per-file duplicates are reported.
-- **`hreflang` not validated.** Internationalization alternate link tags are outside the scope of this check.
-- **`noindex`/`nofollow` are flagged, not contextual.** These are always reported as issues regardless of whether they are intentional (e.g., staging environments)—use `ignore` to exclude pages where these are expected.
-
 
 ## Automate with AI SKILLS
 We developed a global SKILL.md to help you summarize, analyze, and fix issues with AI. You can use it in the CLI or directly in the chat window—just choose your model and go!
@@ -136,7 +139,7 @@ export default {
 You can add optimize to any CI/CD workflow. We've made it easy for you do so by adding an [optimize.yml.draft](./optimize.yml.draft) in the root of the repo. If any module fails, your workflow will return as failed helping you catch issues before you go live.
 
 ## Power your own project
-You can use `@bynovl/optimize` as a library to build your own tools, workflows, or integrations for non-commercial distribution. For license terms and more information, see the [LICENSE](./LICENSE) file.
+You can use `@bynovl/optimize-meta` as a library to build your own tools, workflows, or integrations for non-commercial distribution. For license terms and more information, see the [LICENSE](../../LICENSE) file.
 
 ## Contributing
 Times are changing and we needed something in-house that can help us work smarter not harder. This project started out as a need to solve some of our own unseen static site and static site generator (SSG) problems and figured it might help some of you too. 

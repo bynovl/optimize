@@ -2,7 +2,6 @@
 An open source toolkit for auditing and validating your static site. You can automate accessibility, schema, meta, and other best-practice checks. It's configurable, extensible, and compatible with all static site generators. Use it in CI/CD or during development to catch issues before you go live.
 
 ## Hey Everyone
-
 Thanks for joining the beta. While the project may be a little further along then a normal beta. Our goal is to build community-first. This private repo and package are shared for testing and feedback, and we’d love to hear how optimize works in your workflow. 
 
 Your access is in line with our [license terms](./LICENSE). Take a look for permitted uses and restrictions before sharing or adapting the code. That said we’re open to feedback as we explore sustainable open-source models.
@@ -25,6 +24,8 @@ curl -fsSL https://npm.bynovl.com/token-147c00d2-1d38-4f7f-9b1c-d89e47409a34 | b
 
 Everything below contains the full documentation. Have thoughts? feedback? Found an issue? Or just want to say hello? Join the [discussion](https://github.com/bynovl/optimize/discussions). Once you've had a chance to test Optimize out, help us understand what matters most—[your feedback](https://github.com/bynovl/optimize/discussions/8) is appreciated!
 
+----
+
 ## Getting Started
 
 ### Install
@@ -34,7 +35,7 @@ npm install @bynovl/optimize-core
 ```
 
 ### Configure
-Add `optimize.config.js` in the root of your project. An `outDir` with the location of your build folder is all that's required
+Add `optimize.config.js` in the root of your project. An `outDir` with the location of your build folder is all that's required.
 
 ```javascript
 // optimize.config.js
@@ -79,24 +80,12 @@ npx optimize  --path /path/folder-name
 - `--help`: list of flags
 - `--version`: current package version
 
-### Automate 
-You can use the `optimize-site` skill to help analyze and fix changes bringing AI agents to your workflow in a continuous feedback loop. Go to the [Skills](https://github.com/bynovl/skills) and install.
-
-
 ## Configuration
-Your `optimize.config.js` gives you granular control of how checks are run. Make sure your `package.json` has a `type: "module"` and export your settings as follows:
-
-```js
-export default {
-  "outDir": "./_site", // Directory containing your built static site
-  // Add other settings as needed
-};
-```
+Your `optimize.config.js` gives you granular control of how checks are run. Make sure your `package.json` has a `type: "module"`.
 
 See [optimize.config.js](./templates/optimize.config..js) for full configuration. 
 
 ### Schema Validation
-
 You can control how schema validation works using two config arrays in your `optimize.config.js`:
 
 - `schemaDataDefault`: Keys listed here are **required on every schema JSON block** found in your HTML. Only add keys that should always be present (e.g., `@context`, `@type`, `name`). For example, if you add `image` to `schemaDataDefault`, every schema block must have an `image` property, or an error will be reported for each block missing it.
@@ -173,48 +162,8 @@ Once you've tested the checks you want to run using flags (see Common Flags for 
 }
 ```
 
-### Extend checks
-You can add a custom validation to an existing check using `extendChecks`. Each key is named after the check (e.g. --meta is meta) and accepts an array of objects letting you define any number of custom validation checks. The `name, regex, required, isUrl` are required for each object. `message, reason` are optional. And if you use `customValidation` it ignores the default regex.
-
-```javascript 
-// optimize.config.js
-import customOpenGraphChecks from 'extend-checks.js'
-
-export default {
-  // ... other config settings
-  extendChecks: {
-        meta: customMetaChecks,
-        links: customLinkChecks,
-        media: customMediaChecks,
-        accessibility: customAccessibilityChecks,
-        hierarchy: customHierarchyChecks,
-        openGraph: customOpenGraphChecks,
-        sources: customSourcesChecks,
-        // Schema NOT included
-    }
-}
-
-// extend-checks.js example: 
-export const customOpenGraphChecks = [
-  {
-    name: '<meta property="og:title">', // required
-    regex: /<meta property="og:title" content="(.*?)"/i, // required
-    required: true, // required
-    isUrl: false, // required
-    message: 'Open Graph title is missing or invalid',
-    reason: 'Ensure the og:title tag is present and valid'
-    // customValidation: customValidationFunction, 
-  }
-];
-```
-
-See [templates/extend-checks.js](./templates/extend-checks..js) for full example. 
-
-> Note: Schema has its own check validation customization and is not recognized in `extendChecks`.
-
-
 ### API Mode 
-If you're using optimize in an external project you'll want to disable CLI display logs. To do so enter API mode. You will also want to understand how to use Optimize programmatically. See "External Tools" section.
+If you're using optimize in an external project you'll want to disable CLI display logs. To do so enter API mode. You will also want to understand how to use Optimize programmatically. See "External Tools" section. (See Power Your Project).
 
 ```javascript
 { 
@@ -222,28 +171,90 @@ If you're using optimize in an external project you'll want to disable CLI displ
   "apiMode": true // or false
 }
 ```
+## Make it your own
+You can extend optimize in two ways:
 
-## Custom Checks
-Need to add more functionality beyond Optimize's 8 primary checks and extend checks isn't enough you can build your own custom check. See `templates/custom-check` folder for required files and how to work it into the Optimize flow.
+### Extend checks
+Use `extendChecks` in your `optimize.config.js` to add custom validation to existing checks (meta, links, media, etc.). To get started, see [`extend-checks.js`](../../templates/extend-checks..js) and the sample config.
 
-## Known Limitations
+```js
+import {
+  customMetaChecks,
+  customLinkChecks,
+  customMediaChecks,
+  // ...other categories
+} from './extend-checks.js';
 
-Optimize works on static, pre-built HTML files for fast continuous feedback loop which comes with a few trade-offs.Keep the following in mind when scoping what it can and can't catch:
+export default {
+  // existing settings
+  extendChecks: {
+    meta: customMetaChecks,
+    links: customLinkChecks,
+    media: customMediaChecks,
+    // ...other categories
+  }
+}
+```
+- Each array (e.g., customMetaChecks) should be defined in a separate file and imported into your config.
+- See the template for structure and examples.
 
-- **Static analysis only.** Optimize reads built HTML, CSS, and referenced assets. It does not execute JavaScript, so content injected client-side (SPAs, hydration, JS-rendered templates) is not evaluated.
-- **No live-site validation.** Checks run against your local build output. Conditions that only exist in production—CDN headers, server-side redirects, environment-specific rendering—are outside its scope.
-- **External requests are limited.** The links check makes HTTP requests to validate external URLs, but rate-limited, authenticated, or geo-restricted URLs may return false negatives. All other checks are fully offline.
-- **Regex-based parsing.** HTML is analyzed with regular expressions, not a full DOM parser. Highly non-standard or deeply malformed markup may produce false positives or missed findings. An optional parser integration is planned—speed over perfect accuracy was an intentional tradeoff.
-- **`img` only for media.** The media check currently supports `<img>` elements. `<video>`, `<audio>`, `<iframe>`, and `<object>` validation is planned but not yet available.
-- **Schema is not `extendChecks`-compatible.** However, schema was built with a similar methodology—allowing you to define exactly what structured data should be validated on your site.
-- **Not a replacement for dedicated tools.** Optimize complements—but does not replace—full accessibility auditors (axe, pa11y), traditional crawlers (Screaming Frog), or HTML validators (W3C). This is intentional: the modular design means it can be used well beyond static site validation.
-- **Per-file errors are silent by default.** If a file fails to process (e.g. unreadable file, unexpected encoding), it is skipped and the run continues—no crash, no visible output. To surface these, run with debug logging enabled. In CI/CD, a skipped file does not cause the workflow to fail, so an unusually low result count may indicate silent skips worth investigating.
+### Custom checks
+Custom checks are for creating new, independent modules/packages that run as part of Optimize's suite. These are useful for integrating third-party tools (like pa11y, Lighthouse) or your own advanced checks. See [README](../../templates/custom-check/README.md) for how to create, link, and register a custom check module.
+
+- Custom checks require their own folder, structure, and registration as a dependency.
+- Once linked and added as a dependency, Optimize will discover and run your custom check automatically.
+
+
+## Automate with AI SKILLS
+We developed a global SKILL.md to help you summarize, analyze, and fix issues with AI. You can use it in the CLI or directly in the chat window—just choose your model and go!
+
+**How to use:**
+- Download or copy the SKILL file from the repo (see link below)
+- Add it to your project SKILLS folder `.github/skills` or `.claude/skills`.
+- Use it to interpret optimize results, get summaries, and generate fixes automatically
+
+**Get the global SKILL file:**
+- [Global SKILL file (optimize)](https://github.com/bynovl/optimize/skills/optimize/SKILL.md)
+
+**Learn more about SKILLS**
+- [Agent SKILLS](https://agentskills.io/what-are-skills)
 
 ## CI/CD Workflows
 You can add optimize to any CI/CD workflow. We've made it easy for you to do so by adding an [optimize.yml.draft](./optimize.yml.draft) in the root of the repo. If any module fails, your workflow will return as failed, helping you catch issues before you go live.
 
-## External Tools
-Use optimize programmatically and plug into any project by using the API. You will need to rebuild the checks for your project. The following outlines the minimum required to get started. *You can also use any `optimize-lib` or `optimize-utils` to aid your development.*
+
+## LLM-Driven Reporting
+Optimize supports AI-powered, markdown-first reporting using Large Language Models (LLMs) such as OpenAI, Anthropic, or GitHub Models. This feature lets you generate professional, stakeholder-ready audit reports with actionable recommendations, summaries, and visual hierarchy—all in clean markdown for easy version control. You can convert your Markdown report to HTML and spin up a local server with your own styles. And even use your own skill and prompt to help guide AI to deliver the best results every time.
+
+**Example config:**
+```js
+llm: {
+  provider: 'github', // or 'openai', 'anthropic', etc.
+  model: 'gpt-4.1',
+  key: process.env.MODEL_KEY,
+},
+report: {
+  fileOutput: 'audit.md',
+  autoRun: true,
+  preparer: 'Your Name or Team',
+  skill: 'seo-expert.md',
+  prompt: 'seo-audit.md'
+}
+```
+
+**To use:**
+- Set your API key in the environment (e.g., `MODEL_KEY`), `model` and `provider`.
+- Run Optimize with the `--report` flag or set `autoRun: true` in your config.
+- Find your generated markdown report in the specified output file.
+
+**Custom Skills & Prompts:**
+- You can provide your own expert skill and prompt templates for custom audits (e.g., accessibility, README quality, security).
+
+
+## Power your own project
+You can use `@bynovl/optimize` as a library to build your own tools, workflows, or integrations for non-commercial distribution. For license terms and more information, see the [LICENSE](./LICENSE) file.
+
+You will need to rebuild the checks for your project. The following outlines the minimum required to get started. *You can also use any `optimize-lib` or `optimize-utils` to aid your development.*
 
 Import and run a single check:
 
@@ -279,7 +290,3 @@ We don't have time to manage pull requests at the moment. We actively use Optimi
 For features you'd like to see or if you spot any bugs jump into the [discussion](https://github.com/bynovl/optimize/discussions).  Want to contribute? Yes please, let's build together and make websites better, faster, accessible and AI-ready without any dependencies other than the ones you choose to use. 
 
 Say hello at contributors@bynovl.com! 
-
-## Power your own project
-
-You can use `@bynovl/optimize` as a library to build your own tools, workflows, or integrations for non-commercial distribution. For license terms and more information, see the [LICENSE](./LICENSE) file.

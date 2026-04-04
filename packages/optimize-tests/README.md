@@ -11,7 +11,7 @@ You can use this out of the box or create new scripts and validate against this 
 
 ## Usage
 
-Add the `optmize-tests` package to an existing project to validate modules against sample data. You can use an empty directory or include it in an existing project without interference. To do so create or update your project’s `optimize.config.js` in your root directory. Import the `defaultConfig` and `dir` from package:
+Add the `optimize-tests` package to an existing project to validate modules against sample data. You can use an empty directory or include it in an existing project without interference. To do so create or update your project’s `optimize.config.js` in your root directory. Import the `defaultConfig` and `dir` from package:
 
 ```javascript
 import defaultConfig, { dir } from '@bynovl/optimize-tests/optimize.config.js';
@@ -52,7 +52,7 @@ If you want to make permanent changes, always copy the relevant files or code to
 
 ## Power Your Project
 
-We love building and seeing other builds! Use this package in your project to build your own tools or as a reference for best-practice utility logic (for non-commercial use). For full license terms, see the [LICENSE](./LICENSE) file.
+We love building and seeing other builds! Use this package in your project to build your own tools or as a reference for best-practice utility logic (for non-commercial use). For full license terms, see the [LICENSE](../../LICENSE) file.
 
 ## Contributing
 
