@@ -1,5 +1,14 @@
 # @bynovl/optimize-media
 
+## 2.5.4
+
+### Patch Changes
+
+- 04c49dd: Updated docs for consistent formatting; Add support for file with --report arg. Also work without and with config.
+- Updated dependencies [04c49dd]
+  - @bynovl/optimize-lib@2.6.4
+  - @bynovl/optimize-utils@2.5.3
+
 ## 2.5.3
 
 ### Patch Changes

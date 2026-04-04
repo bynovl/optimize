@@ -1,5 +1,13 @@
 # @bynovl/optimize-tests
 
+## 9.0.4
+
+### Patch Changes
+
+- 04c49dd: Updated docs for consistent formatting; Add support for file with --report arg. Also work without and with config.
+- Updated dependencies [04c49dd]
+  - @bynovl/optimize@2.5.4
+
 ## 9.0.3
 
 ### Patch Changes
