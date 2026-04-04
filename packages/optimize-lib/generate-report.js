@@ -6,28 +6,13 @@ import { debug } from '@bynovl/optimize-utils/debug-log.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-// Find project root (directory containing optimize.config.js)
-function findProjectRoot() {
-  let dir = __dirname;
-  while (!fs.existsSync(path.join(dir, 'optimize.config.js'))) {
-    const parent = path.dirname(dir);
-    if (parent === dir) break;
-    dir = parent;
-  }
-  return dir;
-}
-const projectRoot = findProjectRoot();
-
-function resolvePath(p) {
-  if (path.isAbsolute(p)) return p;
-  return path.resolve(projectRoot, p);
-}
 
 function readFileContent(filePath, defaultFilePath) {
-  let file = ''
-  if (fs.existsSync(resolvePath(filePath))) {
-    file = resolvePath(filePath);
-  } else { 
+  let file = '';
+  const absPath = path.isAbsolute(filePath) ? filePath : path.resolve(process.cwd(), filePath);
+  if (fs.existsSync(absPath)) {
+    file = absPath;
+  } else {
     file = path.resolve(__dirname, defaultFilePath);
   }
   try {
@@ -37,11 +22,15 @@ function readFileContent(filePath, defaultFilePath) {
   }
 }
 
-export default async function exportReport(config, results) {
-
+export default async function exportReport(config, results, reportPathOverride) {
   const { llm = {} } = config;
   const { report = {} } = config;
-  let fileOutput = report.fileOutput;
+  let fileOutput;
+  if (typeof reportPathOverride === 'string') {
+    fileOutput = reportPathOverride;
+  } else {
+    fileOutput = report.fileOutput;
+  }
 
   // DRY: Use readFileContent for both expert and skill, with fallback
   const auditExpert = readFileContent(report.skill || 'seo-expert.md', 'seo-expert.md');
@@ -50,7 +39,7 @@ export default async function exportReport(config, results) {
   // Insert date and preparer from config.report
   const now = new Date();
   const dateString = now.toLocaleString('en-US', { year: 'numeric', month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' });
-  const preparer = (config.report && config.report.preparer) || 'Unknown';
+  const preparer = (config.report && config.report.preparer) || 'Optimize Audit Tool';
   auditPrompt = auditPrompt.replace('[insert date]', dateString).replace('[preparer]', preparer);
 
   // Only pass the actual audit results, never the config or llm object
@@ -79,15 +68,16 @@ export default async function exportReport(config, results) {
     fileOutput = 'report.md';
     debug('[exportReport] No fileOutput specified, defaulting to report.md at project root');
   }
-  // Always resolve output path relative to project root
+  // Always resolve output path relative to the actual project root (process.cwd())
   const outputPath = path.isAbsolute(fileOutput)
     ? fileOutput
-    : path.join(projectRoot, fileOutput);
+    : path.join(process.cwd(), fileOutput);
+  console.log(outputPath);
+
   try {
     // Ensure directory exists
     fs.mkdirSync(path.dirname(outputPath), { recursive: true });
     fs.writeFileSync(outputPath, reportContent, 'utf8');
-    console.log('[exportReport] Successfully wrote report to:', outputPath);
   } catch (err) {
     console.error('[exportReport] Failed to write report:', err.message);
     throw err;

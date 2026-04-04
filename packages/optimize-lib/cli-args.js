@@ -32,6 +32,10 @@ export function parseCliArgs(argv = process.argv.slice(2), helpText = sharedHelp
   if (opts['--csv'] && argv.indexOf('--csv') + 1 < argv.length) {
     opts['--csv'] = argv[argv.indexOf('--csv') + 1];
   }
+  // Report output option
+  if (opts['--report'] && argv.indexOf('--report') + 1 < argv.length) {
+    opts['--report'] = argv[argv.indexOf('--report') + 1];
+  }
 
   return opts
 }

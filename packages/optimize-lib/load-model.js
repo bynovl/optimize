@@ -44,7 +44,6 @@ async function callModel({ prompt, modelOptions }) {
   const model = modelOptions?.model;
   const key = modelOptions?.key || process.env.MODEL_KEY;
   const urlOverride = modelOptions?.url;
-  console.log(`[callModel] provider: ${provider}, model: ${model}, apiKey: ${key ? '***' : 'MISSING'}`);
   provider = provider.toLowerCase();
   validateProvider(provider, model, modelOptions, key);
 
