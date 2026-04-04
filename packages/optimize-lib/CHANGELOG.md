@@ -1,5 +1,12 @@
 # @bynovl/optimize-lib
 
+## 2.6.1
+
+### Patch Changes
+
+- Updated dependencies [1347819]
+  - @bynovl/optimize-utils@2.5.1
+
 ## 2.6.0
 
 ### Minor Changes
