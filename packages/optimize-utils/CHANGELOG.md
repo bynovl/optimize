@@ -1,5 +1,11 @@
 # @bynovl/optimize-utils
 
+## 2.5.2
+
+### Patch Changes
+
+- f312782: Update docs, fix links; AI report gerneration
+
 ## 2.5.1
 
 ### Patch Changes

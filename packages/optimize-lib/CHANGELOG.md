@@ -1,5 +1,13 @@
 # @bynovl/optimize-lib
 
+## 2.6.3
+
+### Patch Changes
+
+- f312782: Update docs, fix links; AI report gerneration
+- Updated dependencies [f312782]
+  - @bynovl/optimize-utils@2.5.2
+
 ## 2.6.2
 
 ### Patch Changes
