@@ -11,6 +11,17 @@ export async function scriptHeader(isFirstCheck = true, enabledChecks = [], args
     // Load configuration and checksOverride
     const { config } = await getConfig(enabledChecks);
 
+    // Exit early if LLM report is configured but no API key is available
+    if ( args['--report']) {
+        const llmConfig = config.llm || {};
+        const apiKey = llmConfig.key || process.env.MODEL_KEY;
+        if(llmConfig.model && !apiKey) {
+            console.error('[novl optimize] Error: An LLM model is configured for report generation but no API key was found.');
+            console.error('Set the MODEL_KEY environment variable or add llm.key to your optimize.config.js.');
+            process.exit(1);
+        }
+    }
+
     if (!config.apiMode) {
         // Start timer (update for accuracy)
         startStopSpinner(true);

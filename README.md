@@ -1,4 +1,4 @@
-# @bynovl/optimize
+# Optimize
 An open source toolkit for auditing and validating your static site. You can automate accessibility, schema, meta, and other best-practice checks. It's configurable, extensible, and compatible with all static site generators. Use it in CI/CD or during development to catch issues before you go live.
 
 ## Hey Everyone
@@ -9,7 +9,7 @@ Your access is in line with our [license terms](./LICENSE). Take a look for perm
 
 **Non-tech people**. 
 
-Never set up a dev environment? Not comfortable doing so? No worries we'll help you get started. Our goal is to make Optimize accessible to both a non-tech and tech SEO crowd. To make it easier for you to start we'll walk you through setting up your environment and analyzing any website with optimize. [Sign up for a demo](https://cal.com/bysyd/demo).
+Never set up a dev environment? Not comfortable doing so? No worries we'll help you get started. Our goal is to make Optimize accessible to both non-tech and tech SEO people. To make it easier for you to start we'll walk you through setting up your environment and analyzing any website with Optimize. [Sign up for a demo](https://cal.com/bysyd/optimize-demo).
 
 **Tech people**
 

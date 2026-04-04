@@ -79,7 +79,10 @@ export default async function exportReport(config, results) {
     fileOutput = 'report.md';
     debug('[exportReport] No fileOutput specified, defaulting to report.md at project root');
   }
-  const outputPath = resolvePath(fileOutput);
+  // Always resolve output path relative to project root
+  const outputPath = path.isAbsolute(fileOutput)
+    ? fileOutput
+    : path.join(projectRoot, fileOutput);
   try {
     // Ensure directory exists
     fs.mkdirSync(path.dirname(outputPath), { recursive: true });
