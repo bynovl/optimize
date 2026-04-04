@@ -1,5 +1,11 @@
 # @bynovl/optimize-lib
 
+## 2.6.2
+
+### Patch Changes
+
+- 1a6acea: Fix path location of report export and early execution; updated docs'
+
 ## 2.6.1
 
 ### Patch Changes
