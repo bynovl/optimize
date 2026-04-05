@@ -1,0 +1,57 @@
+#!/bin/bash
+
+# Always copy from the directory where this script resides
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &> /dev/null && pwd)"
+NODE_SCRIPT="./install-examples.mjs"
+REPO_URL="https://github.com/bynovl/optimize.git"
+RAW_BASE="https://raw.githubusercontent.com/bynovl/optimize/main"
+BRANCH="main"
+
+# Check for node
+if ! command -v node >/dev/null 2>&1; then
+  echo "Error: Node.js is required but not found in PATH."
+  exit 1
+fi
+
+OPTIMIZE_TMPDIR=$(mktemp -d)
+trap 'rm -rf "$OPTIMIZE_TMPDIR"' EXIT
+
+# Quick check: can we reach the repo via curl? (public repo = fast path)
+USE_CURL=false
+if curl -fsSL -o /dev/null -w '' "$RAW_BASE/README.md" 2>/dev/null; then
+  USE_CURL=true
+fi
+
+fetch_curl() {
+  # Fetch installer script (unless local)
+  [ ! -f "$NODE_SCRIPT" ] && curl -fsSL "$RAW_BASE/scripts/install-examples.mjs" -o "$NODE_SCRIPT"
+  # Fetch templates and skills
+  for f in optimize.config.js extend-checks.js optimize.yml; do
+    curl -fsSL "$RAW_BASE/templates/$f" -o "$OPTIMIZE_TMPDIR/templates/$f" --create-dirs 2>/dev/null
+  done
+  curl -fsSL "$RAW_BASE/templates/custom-check/index.js" -o "$OPTIMIZE_TMPDIR/templates/custom-check/index.js" --create-dirs 2>/dev/null
+  curl -fsSL "$RAW_BASE/skills/optimize-site/SKILL.md" -o "$OPTIMIZE_TMPDIR/skills/optimize-site/SKILL.md" --create-dirs 2>/dev/null
+}
+
+fetch_git() {
+  git clone --depth 1 --filter=blob:none --sparse --branch "$BRANCH" "$REPO_URL" "$OPTIMIZE_TMPDIR" 2>/dev/null
+  cd "$OPTIMIZE_TMPDIR" && git sparse-checkout set scripts/install-examples.mjs templates skills 2>/dev/null && cd - > /dev/null
+  [ ! -f "$NODE_SCRIPT" ] && cp "$OPTIMIZE_TMPDIR/scripts/install-examples.mjs" "$NODE_SCRIPT"
+}
+
+# Use local script if available
+[ -f "$SCRIPT_DIR/install-examples.mjs" ] && cp "$SCRIPT_DIR/install-examples.mjs" "$NODE_SCRIPT"
+
+# Fetch assets: curl (fast) or sparse-checkout (private repo fallback)
+if [ "$USE_CURL" = true ]; then
+  fetch_curl
+else
+  fetch_git
+fi
+
+# Run the Node.js installer, passing the temp dir so it doesn't clone again
+export OPTIMIZE_TMPDIR
+node "$NODE_SCRIPT"
+
+# Clean up installer script (temp dir cleaned by trap)
+rm -f "$NODE_SCRIPT"

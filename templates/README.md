@@ -1,5 +1,5 @@
 # Templates
-Copy any template to your local workspace and start building using the [install examples](/scripts/install-examples.sh) script. 
+Copy any template to your local workspace and start building using the [install-init](../scripts/install-init) script.
 
 You can choose to install any of the following at run time: 
 - **optimize.config.js**: configuration file

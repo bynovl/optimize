@@ -17,7 +17,7 @@ export default {
 }
 ```
 
-> Note: you can quickly add the `optimize.config.js` to your project using the [install script](../../scripts/install-examples.sh)
+> Note: you can quickly add the `optimize.config.js` to your project using the [install-init](../../scripts/install-init) script
 
 ### 3. Choose how you want to use it and optimize
 
