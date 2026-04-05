@@ -10,3 +10,4 @@ env.sh
 ./optimize.config.js
 test-extensions.js
 notes.md
+info/
