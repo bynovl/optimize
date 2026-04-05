@@ -137,7 +137,7 @@ export default {
 ```
 
 ## CI/CD Workflows
-You can add optimize to any CI/CD workflow. We've made it easy for you do so by adding an [optimize.yml.draft](./optimize.yml.draft) in the root of the repo. If any module fails, your workflow will return as failed helping you catch issues before you go live.
+You can add optimize to any CI/CD workflow. We've made it easy for you do so by adding an [optimize.yml](../../templates/optimize.yml) in the root of the repo. If any module fails, your workflow will return as failed helping you catch issues before you go live.
 
 ## Power your own project
 You can use `@bynovl/optimize-schema` as a library to build your own tools, workflows, or integrations for non-commercial distribution. For license terms and more information, see the [LICENSE](../../LICENSE) file.

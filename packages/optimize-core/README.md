@@ -90,7 +90,7 @@ We developed a global SKILL.md to help you summarize, analyze, and fix issues wi
 You can extend optimize in two ways:
 
 ### Extend checks
-Use `extendChecks` in your `optimize.config.js` to add custom validation to existing checks (meta, links, media, etc.). To get started, see [`extend-checks.js`](../../templates/extend-checks..js) and the sample config.
+Use `extendChecks` in your `optimize.config.js` to add custom validation to existing checks (meta, links, media, etc.). To get started, see [`extend-checks.js`](../../templates/extend-checks.js) and the sample config.
 
 ```js
 import {
@@ -148,7 +148,7 @@ report: {
 - You can provide your own expert skill and prompt templates for custom audits (e.g., accessibility, README quality, security).
 
 ## CI/CD Workflows
-You can add optimize to any CI/CD workflow. We've made it easy for you do so by adding an [optimize.yml.draft](./optimize.yml.draft) in the root of the repo. If any module fails, your workflow will return as failed helping you catch issues before you go live.
+You can add optimize to any CI/CD workflow. We've made it easy for you do so by adding an [optimize.yml](../../templates/optimize.yml) in the root of the repo. If any module fails, your workflow will return as failed helping you catch issues before you go live.
 
 ## Power your own project
 

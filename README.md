@@ -83,7 +83,7 @@ npx optimize  --path /path/folder-name
 ## Configuration
 Your `optimize.config.js` gives you granular control of how checks are run. Make sure your `package.json` has a `type: "module"`.
 
-See [optimize.config.js](./templates/optimize.config..js) for full configuration. 
+See [optimize.config.js](./templates/optimize.config.js) for full configuration. 
 
 ### Schema Validation
 You can control how schema validation works using two config arrays in your `optimize.config.js`:
@@ -175,7 +175,7 @@ If you're using optimize in an external project you'll want to disable CLI displ
 You can extend optimize in two ways:
 
 ### Extend checks
-Use `extendChecks` in your `optimize.config.js` to add custom validation to existing checks (meta, links, media, etc.). To get started, see [`extend-checks.js`](../../templates/extend-checks..js) and the sample config.
+Use `extendChecks` in your `optimize.config.js` to add custom validation to existing checks (meta, links, media, etc.). To get started, see [`extend-checks.js`](../../templates/extend-checks.js) and the sample config.
 
 ```js
 import {
@@ -199,7 +199,7 @@ export default {
 - See the template for structure and examples.
 
 ### Custom checks
-Custom checks are for creating new, independent modules/packages that run as part of Optimize's suite. These are useful for integrating third-party tools (like pa11y, Lighthouse) or your own advanced checks. See [README](../../templates/custom-check/README.md) for how to create, link, and register a custom check module.
+Custom checks are for creating new, independent modules/packages that run as part of Optimize's suite. These are useful for integrating third-party tools (like pa11y, Lighthouse) or your own advanced checks. See [README](./templates/custom-check/README.md) for how to create, link, and register a custom check module.
 
 - Custom checks require their own folder, structure, and registration as a dependency.
 - Once linked and added as a dependency, Optimize will discover and run your custom check automatically.
@@ -220,7 +220,7 @@ We developed a global SKILL.md to help you summarize, analyze, and fix issues wi
 - [Agent SKILLS](https://agentskills.io/what-are-skills)
 
 ## CI/CD Workflows
-You can add optimize to any CI/CD workflow. We've made it easy for you to do so by adding an [optimize.yml.draft](./optimize.yml.draft) in the root of the repo. If any module fails, your workflow will return as failed, helping you catch issues before you go live.
+You can add optimize to any CI/CD workflow. We've made it easy for you to do so by adding an [optimize.yml](./templates/optimize.yml) in the root of the repo. If any module fails, your workflow will return as failed, helping you catch issues before you go live.
 
 
 ## LLM-Driven Reporting

@@ -120,7 +120,7 @@ We developed a global SKILL.md to help you summarize, analyze, and fix issues wi
 
 
 ## Make it your own
-You can extend the media check with your own rules and custom validation with `extendChecks` in your `optimize.config.js`. To get started, see [`extend-checks.js`](../../templates/extend-checks..js) and the sample config.
+You can extend the media check with your own rules and custom validation with `extendChecks` in your `optimize.config.js`. To get started, see [`extend-checks.js`](../../templates/extend-checks.js) and the sample config.
 
 ```js
 import {
@@ -138,7 +138,7 @@ export default {
 ```
 
 ## CI/CD Workflows
-You can add optimize to any CI/CD workflow. We've made it easy for you do so by adding an [optimize.yml.draft](./optimize.yml.draft) in the root of the repo. If any module fails, your workflow will return as failed helping you catch issues before you go live.
+You can add optimize to any CI/CD workflow. We've made it easy for you do so by adding an [optimize.yml](../../templates/optimize.yml) in the root of the repo. If any module fails, your workflow will return as failed helping you catch issues before you go live.
 
 > For advanced usage, configuration, and API docs, see the main [Optimize README](../../README.md).
 
