@@ -13,30 +13,42 @@ jobs:
       contents: read
     
     steps:
-      - name: Fetch Form Submissions
-        id: fetch
-        env:
-          FB_ID: ${{ secrets.FB_ID }}
-          FB_API_KEY: ${{ secrets.FB_API_KEY }}
+      # - name: Fetch Form Submissions
+      #   id: fetch
+      #   env:
+      #     FB_ID: ${{ secrets.FB_ID }}
+      #     FB_API_KEY: ${{ secrets.FB_API_KEY }}
+      #   run: |
+      #     echo "🔄 Fetching submissions from Form Basin..."
+      #     curl -sS -L -X GET "https://usebasin.com/api/v1/submissions?filter_by=All&form_id=${FB_ID}&query=&api_token=${FB_API_KEY}" \
+      #     -H "Content-Type: application/json" > submissions.json
+      #
+      #     # Check if we got data
+      #     if ! jq empty submissions.json 2>/dev/null; then
+      #       echo "❌ Invalid JSON response from Form Basin"
+      #       exit 1
+      #     fi
+      #
+      #     SUBMISSION_COUNT=$(jq '.submissions | length' submissions.json)
+      #     echo "✅ Found $SUBMISSION_COUNT submissions"
+
+      - name: Mock Form Submissions (TEST)
         run: |
-          echo "🔄 Fetching submissions from Form Basin..."
-          curl -sS -L -X GET "https://usebasin.com/api/v1/submissions?filter_by=All&form_id=${FB_ID}&query=&api_token=${FB_API_KEY}" \
-          -H "Content-Type: application/json" > submissions.json
-          
-          # Check if we got data
-          if ! jq empty submissions.json 2>/dev/null; then            
-            echo "❌ Invalid JSON response from Form Basin"
-            exit 1
-          fi
-          
-          SUBMISSION_COUNT=$(jq '.submissions | length' submissions.json)
-          echo "✅ Found $SUBMISSION_COUNT submissions"
+          echo "🧪 Using mock submissions for testing..."
+          cat > submissions.json << 'EOF'
+          {"submissions": [{"payload_params": {"username": "bysydharris"}}]}
+          EOF
+          echo "✅ Mock submissions written"
       
       - name: Process and invite collaborators
         env:
           GH_TOKEN: ${{ secrets.GHA_TOKEN }}
         run: |
           echo "📋 Processing GitHub usernames/emails..."
+
+          INVITED=0
+          SKIPPED=0
+          FAILED=0
 
           # Iterate submissions and use username first, then email as fallback
           jq -c '.submissions[]' submissions.json | while read -r submission; do
@@ -48,28 +60,46 @@ jobs:
 
             if [[ -n "$github_handle" ]]; then
               echo "➡️ Inviting by username: $github_handle"
-              gh api \
+              response=$(gh api \
                 --method PUT \
                 -H "Accept: application/vnd.github+json" \
                 -H "X-GitHub-Api-Version: 2022-11-28" \
                 "/repos/${{ github.repository }}/collaborators/$github_handle" \
-                -f permission='pull' > /dev/null 2>&1 || true
+                -f permission='pull' 2>&1)
+              exit_code=$?
+              if [[ $exit_code -ne 0 ]]; then
+                echo "❌ Failed to invite $github_handle: $response"
+                FAILED=$((FAILED + 1))
+              else
+                invitee_state=$(echo "$response" | jq -r '.invitee.login // .repository.full_name // "invited"' 2>/dev/null || echo "invited")
+                echo "✅ Invited $github_handle (state: $invitee_state)"
+                INVITED=$((INVITED + 1))
+              fi
               continue
             fi
 
             if [[ -n "$email" ]]; then
-              echo "➡️ Inviting by email: $email"
-              gh api \
-                --method POST \
-                -H "Accept: application/vnd.github+json" \
-                -H "X-GitHub-Api-Version: 2022-11-28" \
-                "/repos/${{ github.repository }}/invitations" \
-                -f email="$email" \
-                -f permissions='pull' > /dev/null 2>&1 || true
+              # GitHub REST API does not support repo invitations by email — only org invitations do.
+              # Log the email so the user can invite manually or via org-level API.
+              echo "⚠️ Cannot invite by email via repo API: $email (GitHub only supports username-based repo invitations)"
+              SKIPPED=$((SKIPPED + 1))
               continue
             fi
 
-            echo "⚠️ Skipping submission with no username/email"
+            echo "⚠️ Skipping submission with no username or email"
+            SKIPPED=$((SKIPPED + 1))
           done
 
+          echo ""
           echo "✅ Sync complete"
+
+      - name: List pending invitations
+        env:
+          GH_TOKEN: ${{ secrets.GHA_TOKEN }}
+        run: |
+          echo "📬 Pending collaborator invitations:"
+          gh api \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "/repos/${{ github.repository }}/invitations" \
+            | jq -r '.[] | "  - \(.invitee.login) (invited: \(.created_at), expires: \(.expires_at))"'
