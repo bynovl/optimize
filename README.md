@@ -1,7 +1,9 @@
 # Optimize <img src="https://img.shields.io/badge/beta-4ade80" alt="Beta">
 An open source toolkit for auditing and validating your static site. You can automate accessibility, schema, meta, and other best-practice checks. It's configurable, extensible, and compatible with all static site generators. Use it in CI/CD or during development to catch issues before you go live.
 
-## Hey Everyone
+<div style="background: #ccc; padding: 1em; color: rgb(31, 35, 40); border-radius: 8px;">
+
+<h2>Hey Everyone</h2>
 Thanks for joining the beta. While the project may be a little further along then a normal beta. Our goal is to build community-first. This private repo and package are shared for testing and feedback, and we’d love to hear how optimize works in your workflow. 
 
 Your access is in line with our [license terms](./LICENSE). Take a look for permitted uses and restrictions before sharing or adapting the code. That said we’re open to feedback as we explore sustainable open-source models.
@@ -33,7 +35,8 @@ npx optimize
 
 Everything below contains the full documentation. Have thoughts? feedback? Found an issue? Or just want to say hello? Join the [discussion](https://github.com/bynovl/optimize/discussions/categories/beta). Once you've had a chance to test Optimize out, help us understand what matters most—[your feedback](https://github.com/bynovl/optimize/discussions/8) is appreciated!
 
-----
+<em>- Syd</em>
+</div>
 
 ## Getting Started
 
