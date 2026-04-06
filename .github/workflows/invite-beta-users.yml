@@ -36,7 +36,7 @@ jobs:
         run: |
           echo "🧪 Using mock submissions for testing..."
           cat > submissions.json << 'EOF'
-          {"submissions": [{"payload_params": {"username": "bysydharris"}}]}
+          {"submissions": [{"payload_params": {"username": "sydharris"}}]}
           EOF
           echo "✅ Mock submissions written"
       
