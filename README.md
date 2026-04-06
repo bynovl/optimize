@@ -1,5 +1,3 @@
-<img src="https://optimize.bynovl.com/assets/o-logo-med.png" width="50" height="auto" style="border-radius:8px;"> 
-
 # Optimize <img src="https://img.shields.io/badge/beta-4ade80" alt="Beta">
 An open source toolkit for auditing and validating your static site. You can automate accessibility, schema, meta, and other best-practice checks. It's configurable, extensible, and compatible with all static site generators. Use it in CI/CD or during development to catch issues before you go live.
 
