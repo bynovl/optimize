@@ -48,12 +48,17 @@ jobs:
 
             if [[ -n "$github_handle" ]]; then
               echo "➡️ Inviting by username: $github_handle"
-              gh api \
+              if response=$(gh api \
                 --method PUT \
                 -H "Accept: application/vnd.github+json" \
                 -H "X-GitHub-Api-Version: 2022-11-28" \
                 "/repos/${{ github.repository }}/collaborators/$github_handle" \
-                -f permission='pull' > /dev/null 2>&1 || true
+                -f permission='pull' 2>&1); then
+                echo "✅ Invited $github_handle"
+              else
+                error=$(echo "$response" | jq -r '.message // "Unknown error"' 2>/dev/null || echo "$response")
+                echo "⚠️ Skipped $github_handle: $error"
+              fi
               continue
             fi
 
