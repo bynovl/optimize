@@ -13,31 +13,25 @@ jobs:
       contents: read
     
     steps:
-     # - name: Fetch Form Submissions
-     #   id: fetch
-     #   env:
-     #     FB_ID: ${{ secrets.FB_ID }}
-     #     FB_API_KEY: ${{ secrets.FB_API_KEY }}
-     #   run: |
-     #     echo "🔄 Fetching submissions from Form Basin..."
-     #     curl -sS -L -X GET "https://usebasin.com/api/v1/submissions?filter_by=All&form_id=${FB_ID}&query=&api_token=${FB_API_KEY}" \
-     #     -H "Content-Type: application/json" > submissions.json
+      - name: Fetch Form Submissions
+        id: fetch
+        env:
+          FB_ID: ${{ secrets.FB_ID }}
+          FB_API_KEY: ${{ secrets.FB_API_KEY }}
+        run: |
+          echo "🔄 Fetching submissions from Form Basin..."
+          curl -sS -L -X GET "https://usebasin.com/api/v1/submissions?filter_by=All&form_id=${FB_ID}&query=&api_token=${FB_API_KEY}" \
+          -H "Content-Type: application/json" > submissions.json
           
           # Check if we got data
-     #     if ! jq empty submissions.json 2>/dev/null; then            
-     #       echo "❌ Invalid JSON response from Form Basin"
-     #       exit 1
-     #     fi
+          if ! jq empty submissions.json 2>/dev/null; then            
+            echo "❌ Invalid JSON response from Form Basin"
+            exit 1
+          fi
           
-     #     SUBMISSION_COUNT=$(jq '.submissions | length' submissions.json)
-     #     echo "✅ Found $SUBMISSION_COUNT submissions"
+          SUBMISSION_COUNT=$(jq '.submissions | length' submissions.json)
+          echo "✅ Found $SUBMISSION_COUNT submissions"
       
-      - name: Mock Form Submissions (TEST)
-        run: |
-          echo "🧪 Using mock submissions for testing..."
-          echo '{"submissions": [{"payload_params": {"username": "sydharris"}}]}' > submissions.json
-          echo "✅ Mock submissions written"
-          cat submissions.json
       - name: Process and invite collaborators
         env:
           GH_TOKEN: ${{ secrets.GHA_TOKEN }}
@@ -59,7 +53,7 @@ jobs:
                 -H "Accept: application/vnd.github+json" \
                 -H "X-GitHub-Api-Version: 2022-11-28" \
                 "/repos/${{ github.repository }}/collaborators/$github_handle" \
-                -f permission='pull'
+                -f permission='pull' > /dev/null 2>&1 || true
               continue
             fi
 
