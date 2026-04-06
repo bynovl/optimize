@@ -5,7 +5,7 @@ import { cliDispatch } from '@bynovl/optimize-lib/cli-dispatch.js';
 import checkSources from '../index.js';
 import { checkProps } from '../scripts/check-props.js';
 
-const { args, enabledChecks } = cliDispatch([checkProps.flag]);
+const { args, enabledChecks } = await cliDispatch([checkProps.flag]);
 
 if (args._handled) {
     // Help/version was shown, exit early
