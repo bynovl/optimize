@@ -213,7 +213,7 @@ export default {
 - See the template for structure and examples.
 
 ### Custom checks
-Custom checks are for creating new, independent modules/packages that run as part of Optimize's suite. These are useful for integrating third-party tools (like pa11y, Lighthouse) or your own advanced checks. Grab the starter template using the [installer](#2-configure) or see the [source](./templates/custom-check/README.md).
+Custom checks are for creating new, independent modules/packages that run as part of Optimize's suite. These are useful for integrating third-party tools (like pa11y, Lighthouse) or your own advanced checks. Grab the starter template using the [custom installer]() or see the [README](./templates/custom-check/README.md).
 
 - Custom checks require their own folder, structure, and registration as a dependency.
 - Once linked and added as a dependency, Optimize will discover and run your custom check automatically.
@@ -223,7 +223,7 @@ Custom checks are for creating new, independent modules/packages that run as par
 We developed a global SKILL.md to help you summarize, analyze, and fix issues with AI. You can use it in the CLI or directly in the chat window—just choose your model and go!
 
 **How to use:**
-- Grab the skill using the [installer](#2-configure), or download it directly from the [repo](https://github.com/bynovl/optimize/skills/optimize-site/SKILL.md)
+- Grab the skill using the [custom installer](https://optimize.bynovl.com/1c98b4b4), or [view th source](https://github.com/bynovl/optimize/skills/optimize-site/SKILL.md) and downlaod
 - Add it to your project skills folder `.github/skills` or `.claude/skills`
 - Use it to interpret optimize results, get summaries, and generate fixes automatically
 
@@ -231,7 +231,7 @@ We developed a global SKILL.md to help you summarize, analyze, and fix issues wi
 - [Agent SKILLS](https://agentskills.io/what-are-skills)
 
 ## CI/CD Workflows
-You can add optimize to any CI/CD workflow. Grab the workflow file using the [installer](#2-configure), or see the [source](./templates/optimize.yml). If any module fails, your workflow will return as failed, helping you catch issues before you go live.
+You can add optimize to any CI/CD workflow. Grab the workflow file using the [custom installer](https://optimize.bynovl.com/1c98b4b4), or [view the source](./templates/optimize.yml) and download. If any module fails, your workflow will return as failed, helping you catch issues before you go live.
 
 
 ## LLM-Driven Reporting
