@@ -1,5 +1,11 @@
 # @bynovl/optimize-utils
 
+## 2.5.4
+
+### Patch Changes
+
+- 9fb0ecb: Fix missing import; added error handling for ourDir check before execution
+
 ## 2.5.3
 
 ### Patch Changes

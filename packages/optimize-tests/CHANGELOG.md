@@ -1,5 +1,13 @@
 # @bynovl/optimize-tests
 
+## 9.0.5
+
+### Patch Changes
+
+- 9fb0ecb: Fix missing import; added error handling for ourDir check before execution
+- Updated dependencies [9fb0ecb]
+  - @bynovl/optimize@2.5.5
+
 ## 9.0.4
 
 ### Patch Changes
