@@ -1,6 +1,6 @@
 {
   "name": "@bynovl/optimize-lib",
-  "version": "2.6.5",
+  "version": "2.6.6",
   "description": "Core utilities and shared functions for NOVL Optimize submodules. Provides reusable logic for validation, configuration, and data processing.",
   "main": "aggregate-stats.js",
   "type": "module",
