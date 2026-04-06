@@ -1,5 +1,22 @@
 # @bynovl/optimize
 
+## 2.5.6
+
+### Patch Changes
+
+- d7d331b: Fix standalone issue with module not running
+- Updated dependencies [d7d331b]
+  - @bynovl/optimize-accessibility@2.5.6
+  - @bynovl/optimize-hierarchy@2.5.6
+  - @bynovl/optimize-lib@2.6.6
+  - @bynovl/optimize-links@2.5.6
+  - @bynovl/optimize-media@2.5.6
+  - @bynovl/optimize-meta@2.5.6
+  - @bynovl/optimize-open-graph@2.5.6
+  - @bynovl/optimize-schema@2.5.6
+  - @bynovl/optimize-sources@2.5.6
+  - @bynovl/optimize-utils@2.5.5
+
 ## 2.5.5
 
 ### Patch Changes

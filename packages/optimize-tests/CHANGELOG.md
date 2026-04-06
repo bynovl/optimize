@@ -1,5 +1,13 @@
 # @bynovl/optimize-tests
 
+## 9.0.6
+
+### Patch Changes
+
+- d7d331b: Fix standalone issue with module not running
+- Updated dependencies [d7d331b]
+  - @bynovl/optimize@2.5.6
+
 ## 9.0.5
 
 ### Patch Changes

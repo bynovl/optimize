@@ -1,5 +1,11 @@
 # @bynovl/optimize-utils
 
+## 2.5.5
+
+### Patch Changes
+
+- d7d331b: Fix standalone issue with module not running
+
 ## 2.5.4
 
 ### Patch Changes

@@ -1,5 +1,13 @@
 # @bynovl/optimize-lib
 
+## 2.6.6
+
+### Patch Changes
+
+- d7d331b: Fix standalone issue with module not running
+- Updated dependencies [d7d331b]
+  - @bynovl/optimize-utils@2.5.5
+
 ## 2.6.5
 
 ### Patch Changes
