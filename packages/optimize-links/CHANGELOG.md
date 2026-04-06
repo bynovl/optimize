@@ -1,5 +1,14 @@
 # @bynovl/optimize-links
 
+## 2.5.5
+
+### Patch Changes
+
+- 9fb0ecb: Fix missing import; added error handling for ourDir check before execution
+- Updated dependencies [9fb0ecb]
+  - @bynovl/optimize-lib@2.6.5
+  - @bynovl/optimize-utils@2.5.4
+
 ## 2.5.4
 
 ### Patch Changes
