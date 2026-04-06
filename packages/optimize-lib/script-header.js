@@ -11,6 +11,12 @@ export async function scriptHeader(isFirstCheck = true, enabledChecks = [], args
     // Load configuration and checksOverride
     const { config } = await getConfig(enabledChecks);
 
+    // Ensure outDir exists
+    if (!config.outDir || !fs.existsSync(config.outDir) || !fs.lstatSync(config.outDir).isDirectory()) {
+        console.error(`[novl optimize] Error: The output directory specified in outDir ('${config.outDir}') does not exist.`);
+        process.exit(1);
+    }
+
     // Exit early if LLM report is configured but no API key is available
     if ( args['--report']) {
         const llmConfig = config.llm || {};

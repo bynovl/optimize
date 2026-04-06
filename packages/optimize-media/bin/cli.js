@@ -2,8 +2,8 @@
 import { scriptHeader } from '@bynovl/optimize-lib/script-header.js';
 import { scriptFooter } from '@bynovl/optimize-lib/script-footer.js';
 import { cliDispatch } from '@bynovl/optimize-lib/cli-dispatch.js';
-import checkMedia from '../index.js';
-import { checkProps } from '../check-props.js';
+import checkMedia from '..index.js';
+import { checkProps } from '../scripts/check-props.js';
 
 const { args, enabledChecks } = cliDispatch([checkProps.flag]);
 

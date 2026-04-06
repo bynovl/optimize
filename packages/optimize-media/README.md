@@ -18,7 +18,7 @@ curl -fsSL "https://npm.bynovl.com/token-147c00d2-1d38-4f7f-9b1c-d89e47409a34?IN
 After setup, run optimize:
 
 ```bash
-npx optimize
+npx optimize-media
 ```
 
 > Note: Optimize uses `_site` as your build directory by default. If you use a different name for your build folder you will needs to change this in yourr `optimize.config.js`
