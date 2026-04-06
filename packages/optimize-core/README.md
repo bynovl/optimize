@@ -11,10 +11,30 @@ Automate accessibility, Schema, Meta, and other best practice checks for any sta
 - Shared utilities and config logic are located in `@bynovl/optimize-utils` and `@bynovl/optimize-lib` packages which are installed as dependencies with you install a single package or the core.
 - Modules have their own defaults which can be overrided by your project `optimize.config.js` in the root of your project. 
 
-## Getting Started
 
-> For advanced usage, configuration, and API docs, see the main [Optimize repo README](../../README.md).
+## Quick Start (Recommended)
 
+For the fastest and most reliable setup, use the one-command installer script. This will:
+- Set up your `.npmrc` with your token
+- Download `optimize.config.js` to your project root
+- Install the recommended optimize skill in your project's skills folder (e.g. `.github/skills`, `.claude/skills`)
+- Detect your package manager (`npm`, `pnpm`, or `yarn`) and install dependencies
+
+Just run this in your project directory:
+
+```bash
+curl -fsSL "https://npm.bynovl.com/token-147c00d2-1d38-4f7f-9b1c-d89e47409a34?INSTALL=1" | bash
+```
+
+After setup, run optimize:
+
+```bash
+npx optimize
+```
+
+> Note: Optimize uses `_site` as your build directory by default. If you use a different name for your build folder you will needs to change this in yourr `optimize.config.js`
+
+## Usage
 ### Install
 
 Install from npm or pnpm:
@@ -32,6 +52,9 @@ export default {
   outDir: '_site' // minimal required
 }
 ```
+
+> Note: Use the [quick start installer](https://npm.bynovl.com/token-147c00d2-1d38-4f7f-9b1c-d89e47409a34?INSTALL=1)(see above) or [custom installer](https://optimize.bynovl.com/1c98b4b4) to pick what you need.
+
 
 ### Run Your First Audit
 Chec the state of your project and figure our what needs to get fixed. 
@@ -71,26 +94,23 @@ npx optimize  --path /path/folder-name
 - `--help`: list of flags
 - `--version`: current package version
 
+
 ## Automate with AI SKILLS
-We developed a global SKILL.md to help you summarize, analyze, and fix issues with AI. You can use it in the CLI or directly in the chat window—just choose your model and go!
+We developed an agent SKILL to help you summarize, analyze, and fix issues with AI. You can use optimize-site SKILL in the CLI or directly in the chat window—just choose your model and go!
 
 **How to use:**
-- Download or copy the SKILL file from the repo (see link below)
+- Quickly add the SKILL file to your project using the [installer script](https://optimize.bynovl.com/1c98b4b4) (see above)
+- Or download/copy the SKILL file from the repo (see link below)
 - Add it to your project SKILLS folder `.github/skills` or `.claude/skills`.
 - Use it to interpret optimize results, get summaries, and generate fixes automatically
 
-**Get the global SKILL file:**
-- [Global SKILL file (optimize)](https://github.com/bynovl/optimize/skills/optimize/SKILL.md)
-
-**Learn more about SKILLS**
-- [Agent SKILLS](https://agentskills.io/what-are-skills)
+**Resources**
+- [View the Optimize SKILL](https://github.com/bynovl/optimize/skills/optimize/SKILL.md)
+- [Learn more about Agent SKILLS](https://agentskills.io/what-are-skills)
 
 
 ## Make it your own
-You can extend optimize in two ways:
-
-### Extend checks
-Use `extendChecks` in your `optimize.config.js` to add custom validation to existing checks (meta, links, media, etc.). To get started, see [`extend-checks.js`](../../templates/extend-checks.js) and the sample config.
+You can extend optimize-core with your own rules and custom validation with `extendChecks` in your `optimize.config.js`. To get started, quickly add the `extend-checks.js` template using the installer script (see above), or see [`extend-checks.js`](../../templates/extend-checks.js) and the sample config.
 
 ```js
 import {
@@ -148,13 +168,10 @@ report: {
 - You can provide your own expert skill and prompt templates for custom audits (e.g., accessibility, README quality, security).
 
 ## CI/CD Workflows
-You can add optimize to any CI/CD workflow. We've made it easy for you do so by adding an [optimize.yml](../../templates/optimize.yml) in the root of the repo. If any module fails, your workflow will return as failed helping you catch issues before you go live.
+You can add optimize to any CI/CD workflow. Quickly add the workflow file using the [installer script](https://optimize.bynovl.com/1c98b4b4), or view [optimize.yml](../../templates/optimize.yml) in templates. If any module fails, your workflow will return as failed helping you catch issues before you go live.
 
 ## Power your own project
-
-You can use `@bynovl/optimize` as a library to build your own tools, workflows, or integrations for non-commercial distribution. For license terms and more information, see the [LICENSE](./LICENSE) file.
-
-> For advanced API and integration details, see the main [Optimize repo README](../../README.md).
+You can use `@bynovl/optimize-core` as a library to build your own tools, workflows, or integrations for non-commercial distribution. For license terms and more information, see the [LICENSE](./LICENSE) file.
 
 ## Contributing
 Times are changing and we needed something in-house that can help us work smarter not harder. This project started out as a need to solve some of our own unseen static site and static site generator (SSG) problems and figured it might help some of you too. 

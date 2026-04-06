@@ -1,3 +1,5 @@
+<img src="https://optimize.bynovl.com/assets/o-logo-med.png" width="50" height="auto" style="border-radius:8px;"> 
+
 # Optimize <img src="https://img.shields.io/badge/beta-4ade80" alt="Beta">
 An open source toolkit for auditing and validating your static site. You can automate accessibility, schema, meta, and other best-practice checks. It's configurable, extensible, and compatible with all static site generators. Use it in CI/CD or during development to catch issues before you go live.
 
@@ -8,18 +10,27 @@ Your access is in line with our [license terms](./LICENSE). Take a look for perm
 
 **Non-tech people**. 
 
-Never set up a dev environment? Not comfortable doing so? No worries we'll help you get started. Our goal is to make Optimize accessible to both non-tech and tech SEO people. To make it easier for you to start we'll walk you through setting up your environment and analyzing any website with Optimize. [Sign up for a demo](https://cal.com/bysyd/optimize-demo).
+Never set up a dev environment? Not comfortable doing so? No worries we'll help you get started. Our goal is to make Optimize accessible to both non-tech and tech people. To make it easier for you to start we'll walk you through setting up your environment and analyzing any website with Optimize. [Sign up for a demo](https://cal.com/bysyd/optimize-demo).
 
 **Tech people**
 
-To get started, review the `.npmrc` script below.
+Get started using a [single command script](https://npm.bynovl.com/token-147c00d2-1d38-4f7f-9b1c-d89e47409a34?INSTALL=1)—no need to clone the repo or configure anything manually. This script will:
+- Set up your `.npmrc` with your token
+- Download `optimize.config.js` to your project root
+- Install the recommended optimize skill in your projects skills folder (e.g. .github/skills, .claude/skills)
+- Detect your package manager (`npm`, `pnpm`, or `yarn`) and install dependencies
 
-[![View setup script](https://img.shields.io/badge/View-setup%20script-brightgreen?logo=github&logoColor=white&color=%2322c55e)](https://npm.bynovl.com/token-147c00d2-1d38-4f7f-9b1c-d89e47409a34)
-
-Then run this command in your project directory to configure your `.npmrc` token:
+Just run this in your project directory:
 
 ```bash
-curl -fsSL https://npm.bynovl.com/token-147c00d2-1d38-4f7f-9b1c-d89e47409a34 | bash
+curl -fsSL https://npm.bynovl.com/token-147c00d2-1d38-4f7f-9b1c-d89e47409a34?INSTALL=1 | bash
+```
+
+After setup, you’re ready to run:
+
+```bash
+npx optimize
+# make sure it's got a build folder to check
 ```
 
 Everything below contains the full documentation. Have thoughts? feedback? Found an issue? Or just want to say hello? Join the [discussion](https://github.com/bynovl/optimize/discussions). Once you've had a chance to test Optimize out, help us understand what matters most—[your feedback](https://github.com/bynovl/optimize/discussions/8) is appreciated!
@@ -28,14 +39,13 @@ Everything below contains the full documentation. Have thoughts? feedback? Found
 
 ## Getting Started
 
-### Install
-Install via npm or pnpm:
+### 1. Install
 ```bash
 npm install @bynovl/optimize-core
 ```
 
-### Configure
-Add `optimize.config.js` in the root of your project. An `outDir` with the location of your build folder is all that's required.
+### 2. Configure
+Add `optimize.config.js` in the root of your project. An `outDir` with the location of your build folder is all that's required:
 
 ```javascript
 // optimize.config.js
@@ -44,7 +54,13 @@ export default {
 }
 ```
 
-### Run Your First Audit
+To grab a starter config, templates, skills, or CI/CD workflows, run the installer and pick only what you need:
+
+```bash
+curl -fsSL https://optimize.bynovl.com/1c98b4b4 | bash
+```
+
+### 3. Run Your First Audit
 Check the state of your project and figure out what needs to get fixed.
 
 ```bash 
@@ -175,7 +191,7 @@ If you're using optimize in an external project you'll want to disable CLI displ
 You can extend optimize in two ways:
 
 ### Extend checks
-Use `extendChecks` in your `optimize.config.js` to add custom validation to existing checks (meta, links, media, etc.). To get started, see [`extend-checks.js`](../../templates/extend-checks.js) and the sample config.
+Use `extendChecks` in your `optimize.config.js` to add custom validation to existing checks (meta, links, media, etc.). To get started, grab the `extend-checks.js` template using the [installer](#2-configure) or see the [source](./templates/extend-checks.js).
 
 ```js
 import {
@@ -199,7 +215,7 @@ export default {
 - See the template for structure and examples.
 
 ### Custom checks
-Custom checks are for creating new, independent modules/packages that run as part of Optimize's suite. These are useful for integrating third-party tools (like pa11y, Lighthouse) or your own advanced checks. See [README](./templates/custom-check/README.md) for how to create, link, and register a custom check module.
+Custom checks are for creating new, independent modules/packages that run as part of Optimize's suite. These are useful for integrating third-party tools (like pa11y, Lighthouse) or your own advanced checks. Grab the starter template using the [installer](#2-configure) or see the [source](./templates/custom-check/README.md).
 
 - Custom checks require their own folder, structure, and registration as a dependency.
 - Once linked and added as a dependency, Optimize will discover and run your custom check automatically.
@@ -209,18 +225,15 @@ Custom checks are for creating new, independent modules/packages that run as par
 We developed a global SKILL.md to help you summarize, analyze, and fix issues with AI. You can use it in the CLI or directly in the chat window—just choose your model and go!
 
 **How to use:**
-- Download or copy the SKILL file from the repo (see link below)
-- Add it to your project SKILLS folder `.github/skills` or `.claude/skills`.
+- Grab the skill using the [installer](#2-configure), or download it directly from the [repo](https://github.com/bynovl/optimize/skills/optimize-site/SKILL.md)
+- Add it to your project skills folder `.github/skills` or `.claude/skills`
 - Use it to interpret optimize results, get summaries, and generate fixes automatically
-
-**Get the global SKILL file:**
-- [Global SKILL file (optimize)](https://github.com/bynovl/optimize/skills/optimize/SKILL.md)
 
 **Learn more about SKILLS**
 - [Agent SKILLS](https://agentskills.io/what-are-skills)
 
 ## CI/CD Workflows
-You can add optimize to any CI/CD workflow. We've made it easy for you to do so by adding an [optimize.yml](./templates/optimize.yml) in the root of the repo. If any module fails, your workflow will return as failed, helping you catch issues before you go live.
+You can add optimize to any CI/CD workflow. Grab the workflow file using the [installer](#2-configure), or see the [source](./templates/optimize.yml). If any module fails, your workflow will return as failed, helping you catch issues before you go live.
 
 
 ## LLM-Driven Reporting
@@ -289,4 +302,4 @@ We don't have time to manage pull requests at the moment. We actively use Optimi
  
 For features you'd like to see or if you spot any bugs jump into the [discussion](https://github.com/bynovl/optimize/discussions).  Want to contribute? Yes please, let's build together and make websites better, faster, accessible and AI-ready without any dependencies other than the ones you choose to use. 
 
-Say hello at contributors@bynovl.com! 
+Say hello at contributors@bynovl.com!

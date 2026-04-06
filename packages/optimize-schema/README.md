@@ -2,22 +2,44 @@
 Schema (structured data) validation submodule for NOVL Optimize.  
 Checks HTML files for valid, complete, and best-practice JSON-LD schema blocks to ensure rich search results and SEO for static sites.
 
-## Quick Start
+
+## Quick Start (Recommended)
+
+For the fastest and most reliable setup, use the one-command installer script. This will:
+- Set up your `.npmrc` with your token
+- Download `optimize.config.js` to your project root
+- Install the recommended optimize skill in your project's skills folder (e.g. `.github/skills`, `.claude/skills`)
+- Detect your package manager (`npm`, `pnpm`, or `yarn`) and install dependencies
+
+Just run this in your project directory:
+
+```bash
+curl -fsSL "https://npm.bynovl.com/token-147c00d2-1d38-4f7f-9b1c-d89e47409a34?INSTALL=1&check=schema" | bash
+```
+
+After setup, run optimize:
+
+```bash
+npx optimize
+```
+
+> Note: Optimize uses `_site` as your build directory by default. If you use a different name for your build folder you will needs to change this in yourr `optimize.config.js`
+
+## Usage
 ### 1. Install package
 ```bash 
 npm install @bynovl/optimize-schema
 ```
 
 ### 2. Configure `optimize.config.js`
-Add/update an `optimize.config.js` to your project root. And define required `outDir` setting:
+Add or update an `optimize.config.js` in your project root and define the required `outDir` setting:
 
-```js 
-export default { 
+```js
+export default {
   outDir: "_site", // your build directory
 }
 ```
-
-> Note: you can quickly add the optimize.config.js to your project using the [install-init](../../scripts/install-init) script
+> Note: Use the [quick start installer](https://npm.bynovl.com/token-147c00d2-1d38-4f7f-9b1c-d89e47409a34?INSTALL=1&check=schema)(see above) or [custom installer](https://optimize.bynovl.com/1c98b4b4) to pick what you need.
 
 ### 3. Choose how you want to use it and optimize
 **CLI:**
@@ -107,18 +129,17 @@ Returns an array of result objects per file, with details for each schema issue:
 ```
 
 ## Automate with AI SKILLS
-We developed a global SKILL.md to help you summarize, analyze, and fix issues with AI. You can use it in the CLI or directly in the chat window—just choose your model and go!
+We developed an agent SKILL to help you summarize, analyze, and fix issues with AI. You can use optimize-site SKILL in the CLI or directly in the chat window—just choose your model and go!
 
 **How to use:**
-- Download or copy the SKILL file from the repo (see link below)
+- Quickly add the SKILL file to your project using the [installer script](https://optimize.bynovl.com/1c98b4b4) (see above)
+- Or download/copy the SKILL file from the repo (see link below)
 - Add it to your project SKILLS folder `.github/skills` or `.claude/skills`.
 - Use it to interpret optimize results, get summaries, and generate fixes automatically
 
-**Get the global SKILL file:**
-- [Global SKILL file (optimize)](https://github.com/bynovl/optimize/skills/optimize/SKILL.md)
-
-**Learn more about SKILLS**
-- [Agent SKILLS](https://agentskills.io/what-are-skills)
+**Resources**
+- [View the Optimize SKILL](https://github.com/bynovl/optimize/skills/optimize/SKILL.md)
+- [Learn more about Agent SKILLS](https://agentskills.io/what-are-skills)
 
 ## Make it your own
 You can add or customize schema validation logic by editing your `optimize.config.js`:
@@ -135,9 +156,10 @@ export default {
   ]
 };
 ```
+> Note: schema works as a custom check and is not extend checks compatible. 
 
 ## CI/CD Workflows
-You can add optimize to any CI/CD workflow. We've made it easy for you do so by adding an [optimize.yml](../../templates/optimize.yml) in the root of the repo. If any module fails, your workflow will return as failed helping you catch issues before you go live.
+You can add optimize to any CI/CD workflow. Quickly add the workflow file using the [installer script](https://optimize.bynovl.com/1c98b4b4), or view [optimize.yml](../../templates/optimize.yml) in templates. If any module fails, your workflow will return as failed helping you catch issues before you go live.
 
 ## Power your own project
 You can use `@bynovl/optimize-schema` as a library to build your own tools, workflows, or integrations for non-commercial distribution. For license terms and more information, see the [LICENSE](../../LICENSE) file.
@@ -149,4 +171,4 @@ We don't have time to manage pull requests at the moment. Good news, we actively
  
 For features you'd like to see or if you spot any bugs jump into the [discussion](https://github.com/bynovl/optimize/discussions).  Want to contribute? Yes please, let's build together and make websites better, faster, accessible and AI-ready without any dependencies other than the ones you choose to use. 
 
-Say hello at contributors@bynovl.com! 
+Say hello at contributors@bynovl.com!
