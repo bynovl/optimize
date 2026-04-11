@@ -57,11 +57,22 @@ jobs:
       - name: Filter new users for invite/newsletter
         run: |
           echo "🔍 Filtering new users not yet invited..."
+          echo "ORG: $ORG"
+          echo "TEAM_SLUG: $TEAM_SLUG"
+          echo "API: orgs/$ORG/teams/$TEAM_SLUG/members"
           # Extract all team member usernames (normalized, no @)
-          gh api orgs/${ORG}/teams/${TEAM_SLUG}/members --paginate --jq '.[].login' > team_members.txt
-          # Filter submissions to only those with new usernames
-          jq --argfile members team_members.txt '{submissions: [.submissions[] | select((.payload_params.username // empty | ltrimstr("@")) as $u | ($members | index($u) | not))]}' submissions.json > new_users.json
-          echo "✅ New users to invite/newsletter: $(jq '.submissions | length' new_users.json)"
+          if gh api orgs/${ORG}/teams/${TEAM_SLUG}/members --paginate --jq '.[].login' > team_members.txt; then
+            if [ -s team_members.txt ]; then
+              jq --argfile members team_members.txt '{submissions: [.submissions[] | select((.payload_params.username // empty | ltrimstr("@")) as $u | ($members | index($u) | not))]}' submissions.json > new_users.json
+              echo "✅ New users to invite/newsletter: $(jq '.submissions | length' new_users.json)"
+            else
+              echo "⚠️ Team exists but has no members. Treating all as new."
+              cp submissions.json new_users.json
+            fi
+          else
+            echo "⚠️ Could not fetch team members (team may not exist or token lacks access). Using all submissions as new users."
+            cp submissions.json new_users.json
+          fi
 
       #- name: Send newsletter to all new users
       #  run: |
