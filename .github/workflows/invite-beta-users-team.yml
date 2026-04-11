@@ -63,10 +63,10 @@ jobs:
           jq --argfile members team_members.txt '{submissions: [.submissions[] | select((.payload_params.username // empty | ltrimstr("@")) as $u | ($members | index($u) | not))]}' submissions.json > new_users.json
           echo "✅ New users to invite/newsletter: $(jq '.submissions | length' new_users.json)"
 
-      - name: Send newsletter to all new users
-        run: |
-          echo "📧 Sending newsletter to all new users in new_users.json..."
-          socializer --publish welcome.md --force --list=new_users.json
+      #- name: Send newsletter to all new users
+      #  run: |
+      #    echo "📧 Sending newsletter to all new users in new_users.json..."
+      #    socializer --publish welcome.md --force --list=new_users.json
       
       - name: Process and invite new team members
         run: |
