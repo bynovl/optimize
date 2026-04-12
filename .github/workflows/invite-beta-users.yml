@@ -55,7 +55,7 @@ jobs:
           # Extract all collaborator usernames (normalized, no @)
           gh api repos/${{ github.repository }}/collaborators --paginate --jq '.[].login' > collaborators.txt
           # Filter submissions to only those with new usernames
-          jq '{submissions: [.submissions[] | select((.payload_params.username // empty | ltrimstr("@")) as $u | (input_filename | gsub(".*";"collaborators.txt")) | (open($u) | not))]}' submissions.json collaborators.txt > new_users.json
+          jq --argfile collaborators collaborators.txt '{submissions: [.submissions[] | select((.payload_params.username // empty | ltrimstr("@")) as $u | ($collaborators | index($u) | not))]}' submissions.json > new_users.json
           echo "✅ New users to invite/newsletter: $(jq '.submissions | length' new_users.json)"
 
       #- name: Send newsletter to all new users
