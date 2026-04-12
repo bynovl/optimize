@@ -52,7 +52,7 @@ jobs:
           echo "🔍 Filtering new users not yet invited..."
           # Extract all collaborator usernames as a JSON array
           gh api repos/${{ github.repository }}/collaborators --paginate --jq '.[].login' > collaborators.json
-          jq --argfile collaborators collaborators.json '{submissions: [.submissions[] | select((.payload_params.username // empty | ltrimstr("@")) as $u | ($collaborators | index($u) | not))]}' submissions.json > new_users.json
+          jq --slurpfile collaborators collaborators.json '{submissions: [.submissions[] | select((.payload_params.username // empty | ltrimstr("@")) as $u | ($collaborators[0] | index($u) | not))]}' submissions.json > new_users.json
           echo "✅ New users to invite/newsletter: $(jq '.submissions | length' new_users.json)"
 
       - name: Process and invite new collaborators
