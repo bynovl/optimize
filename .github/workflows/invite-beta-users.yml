@@ -32,6 +32,21 @@ jobs:
           
       #    SUBMISSION_COUNT=$(jq '.submissions | length' submissions.json)
       #    echo "✅ Found $SUBMISSION_COUNT submissions"
+      - name: Testing sample users
+        run: |
+          echo "🔍 Testing with sample users..."
+          echo '{
+            "submissions": [
+              {
+                "payload_params": {
+                  "username": "sydharris", 
+                  "email": "syd@bynovl.com"
+                }
+              }
+            ]
+          }' > submissions.json
+          echo "✅ Sample submissions created"
+
       - name: Filter new users for invite/newsletter
         run: |
           echo "🔍 Filtering new users not yet invited..."
