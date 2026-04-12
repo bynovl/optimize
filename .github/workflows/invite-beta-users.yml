@@ -50,8 +50,9 @@ jobs:
       - name: Filter new users for invite/newsletter
         run: |
           echo "🔍 Filtering new users not yet invited..."
-          # Extract all collaborator usernames as a JSON array
-          gh api repos/${{ github.repository }}/collaborators --paginate --jq '.[].login' > collaborators.json
+          echo "--- Collaborators API raw output ---"
+          gh api repos/${{ github.repository }}/collaborators --paginate --jq '.[].login'
+          gh api repos/${{ github.repository }}/collaborators --paginate --jq '.[].login' | jq -R . | jq -s . > collaborators.json
           jq --slurpfile collaborators collaborators.json '{submissions: [.submissions[] | select((.payload_params.username // empty | ltrimstr("@")) as $u | ($collaborators[0] | index($u) | not))]}' submissions.json > new_users.json
           echo "✅ New users to invite/newsletter: $(jq '.submissions | length' new_users.json)"
 
