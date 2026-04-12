@@ -13,14 +13,14 @@ jobs:
       contents: read
     env:
       GH_TOKEN: ${{ secrets.GHA_TOKEN }}
+      FB_ID: ${{ secrets.FB_ID }}
+      FB_API_KEY: ${{ secrets.FB_API_KEY }}
+    
     steps:
       #- name: Fetch Form Submissions
-      #  id: fetch
-      #  env:
-      #    FB_ID: ${{ secrets.FB_ID }}
-      #    FB_API_KEY: ${{ secrets.FB_API_KEY }}
+      #  id: fetch       
       #  run: |
-      #    echo "🔄 Fetching submissions from Form Basin..."
+      #   echo "🔄 Fetching submissions from Form Basin..."
       #    curl -sS -L -X GET "https://usebasin.com/api/v1/submissions?filter_by=All&form_id=${FB_ID}&query=&api_token=${FB_API_KEY}" \
       #    -H "Content-Type: application/json" > submissions.json
           
@@ -32,36 +32,14 @@ jobs:
           
       #    SUBMISSION_COUNT=$(jq '.submissions | length' submissions.json)
       #    echo "✅ Found $SUBMISSION_COUNT submissions"
-      - name: Generate test submissions (testing only)
-        run: |
-          echo "🧪 Using hardcoded test submissions..."
-          cat <<'EOF' > submissions.json
-          {
-            "submissions": [
-              {
-                "payload_params": {
-                  "username": "sydharris",
-                  "email": "syd@bynovl.com"
-                }
-              }
-            ]
-          }
-          EOF
-          SUBMISSION_COUNT=$(jq '.submissions | length' submissions.json)
-          echo "✅ Loaded $SUBMISSION_COUNT test submissions"
       - name: Filter new users for invite/newsletter
         run: |
           echo "🔍 Filtering new users not yet invited..."
           # Extract all collaborator usernames (normalized, no @)
           gh api repos/${{ github.repository }}/collaborators --paginate --jq '.[].login' > collaborators.txt
           # Filter submissions to only those with new usernames
-          jq --argfile collaborators collaborators.txt '{submissions: [.submissions[] | select((.payload_params.username // empty | ltrimstr("@")) as $u | ($collaborators | index($u) | not))]}' submissions.json > new_users.json
+          jq '{submissions: [.submissions[] | select((.payload_params.username // empty | ltrimstr("@")) as $u | (input_filename | gsub(".*";"collaborators.txt")) | (open($u) | not))]}' submissions.json collaborators.txt > new_users.json
           echo "✅ New users to invite/newsletter: $(jq '.submissions | length' new_users.json)"
-
-      #- name: Send newsletter to all new users
-      #  run: |
-      #    echo "📧 Sending newsletter to all new users in new_users.json..."
-      #    socializer --publish welcome.md --force --list=new_users.json
 
       - name: Process and invite new collaborators
         run: |
@@ -84,3 +62,4 @@ jobs:
             fi
           done
           echo "✅ Sync complete"
+
