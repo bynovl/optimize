@@ -11,7 +11,8 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-    
+    env:
+      GH_TOKEN: ${{ secrets.GHA_TOKEN }}
     steps:
       #- name: Fetch Form Submissions
       #  id: fetch
@@ -63,8 +64,6 @@ jobs:
       #    socializer --publish welcome.md --force --list=new_users.json
 
       - name: Process and invite new collaborators
-        env:
-          GH_TOKEN: ${{ secrets.GHA_TOKEN }}
         run: |
           echo "📋 Inviting new GitHub usernames..."
           jq -r '.submissions[].payload_params.username // empty | ltrimstr("@")' new_users.json | while read -r github_handle; do
