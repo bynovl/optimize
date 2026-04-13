@@ -22,12 +22,14 @@ jobs:
       - name: Install pnpm
         run: npm install -g pnpm
         shell: bash
-        
-      - name: Install dependencies with pnpm
+
+      - name: Install package dependencies
         run: |
           echo "//${NPM_REGISTRY}/:_authToken=${NPM_TOKEN}" > .npmrc
           pnpm install
           rm .npmrc
+        working-directory: ../..
+        
       #- name: Fetch Form Submissions
       #  id: fetch       
       #  run: |
