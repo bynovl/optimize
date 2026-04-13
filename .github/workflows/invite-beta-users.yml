@@ -15,8 +15,15 @@ jobs:
       GH_TOKEN: ${{ secrets.GHA_TOKEN }}
       FB_ID: ${{ secrets.FB_ID }}
       FB_API_KEY: ${{ secrets.FB_API_KEY }}
+      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      NPM_REGISTRY: ${{ secrets.NPM_REGISTRY }}
     
     steps:
+      - name: Install dependencies with pnpm
+        run: |
+          echo "//${NPM_REGISTRY}/:_authToken=${NPM_TOKEN}" > .npmrc
+          pnpm install
+          rm .npmrc
       #- name: Fetch Form Submissions
       #  id: fetch       
       #  run: |
@@ -54,7 +61,7 @@ jobs:
           jq --slurpfile collaborators collaborators.json '{submissions: [.submissions[] | select((.payload_params.username // empty | ltrimstr("@")) as $u | ($collaborators[0] | index($u) | not))]}' submissions.json > new_users.json
           echo "✅ New users to invite/newsletter: $(jq '.submissions | length' new_users.json)"
 
-      - name: Send newsletter to all new users
+      - name: Send invites to new users
         run: |
           echo "📧 Sending newsletter to all new users in new_users.json..."
           socializer --publish welcome.md --force --list=new_users.json 
