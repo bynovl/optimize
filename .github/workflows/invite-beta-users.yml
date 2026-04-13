@@ -18,7 +18,12 @@ jobs:
       NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
       NPM_REGISTRY: ${{ secrets.NPM_REGISTRY }}
       PRIV_PACKAGES: ${{ secrets.PRIV_PACKAGES }}
-    
+      EMAIL_HOST: ${{ secrets.EMAIL_HOST }}
+      EMAIL_PORT: ${{ secrets.EMAIL_PORT }}
+      EMAIL_USER: ${{ secrets.EMAIL_USER }}
+      EMAIL_PASS: ${{ secrets.EMAIL_PASS }}
+      EMAIL_UNSUBSCRIBE: ${{ secrets.EMAIL_UNSUBSCRIBE }}
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
