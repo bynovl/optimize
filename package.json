@@ -47,15 +47,11 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "optimize": "node ./packages/optimize-core/bin/cli.js",
     "optimize:debug": "DEBUG=true node ./packages/optimize-core/bin/cli.js",
-    "lint": "eslint . --ext .js",
     "changeset": "changeset",
     "version": "changeset version",
-    "release": ". ./automate/version-bump.sh",
     "publish": "changeset publish",
-    "serve": "node server.js",
     "public": "git push public HEAD:main"
   },
   "license": "ISC",

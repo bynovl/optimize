@@ -50,12 +50,15 @@ jobs:
       - name: Filter new users for invite/newsletter
         run: |
           echo "🔍 Filtering new users not yet invited..."
-          echo "--- Collaborators API raw output ---"
-          gh api repos/${{ github.repository }}/collaborators --paginate --jq '.[].login'
           gh api repos/${{ github.repository }}/collaborators --paginate --jq '.[].login' | jq -R . | jq -s . > collaborators.json
           jq --slurpfile collaborators collaborators.json '{submissions: [.submissions[] | select((.payload_params.username // empty | ltrimstr("@")) as $u | ($collaborators[0] | index($u) | not))]}' submissions.json > new_users.json
           echo "✅ New users to invite/newsletter: $(jq '.submissions | length' new_users.json)"
 
+      - name: Send newsletter to all new users
+        run: |
+          echo "📧 Sending newsletter to all new users in new_users.json..."
+          socializer --publish welcome.md --force --list=new_users.json 
+          
       - name: Process and invite new collaborators
         run: |
           echo "📋 Inviting new GitHub usernames..."
