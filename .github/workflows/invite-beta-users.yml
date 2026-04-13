@@ -36,35 +36,21 @@ jobs:
           rm .npmrc
         working-directory: ${{ github.workspace }}
         
-      #- name: Fetch Form Submissions
-      #  id: fetch       
-      #  run: |
-      #   echo "🔄 Fetching submissions from Form Basin..."
-      #    curl -sS -L -X GET "https://usebasin.com/api/v1/submissions?filter_by=All&form_id=${FB_ID}&query=&api_token=${FB_API_KEY}" \
-      #    -H "Content-Type: application/json" > submissions.json
+      - name: Fetch Form Submissions
+        id: fetch       
+        run: |
+          echo "🔄 Fetching submissions from Form Basin..."
+          curl -sS -L -X GET "https://usebasin.com/api/v1/submissions?filter_by=All&form_id=${FB_ID}&query=&api_token=${FB_API_KEY}" \
+          -H "Content-Type: application/json" > submissions.json
           
           # Check if we got data
-      #    if ! jq empty submissions.json 2>/dev/null; then            
-      #      echo "❌ Invalid JSON response from Form Basin"
-      #      exit 1
-      #    fi
+          if ! jq empty submissions.json 2>/dev/null; then            
+            echo "❌ Invalid JSON response from Form Basin"
+            exit 1
+          fi
           
-      #    SUBMISSION_COUNT=$(jq '.submissions | length' submissions.json)
-      #    echo "✅ Found $SUBMISSION_COUNT submissions"
-      - name: Testing sample users
-        run: |
-          echo "🔍 Testing with sample users..."
-          echo '{
-            "submissions": [
-              {
-                "payload_params": {
-                  "username": "sydharris", 
-                  "email": "syd@bynovl.com"
-                }
-              }
-            ]
-          }' > submissions.json
-          echo "✅ Sample submissions created"
+          SUBMISSION_COUNT=$(jq '.submissions | length' submissions.json)
+          echo "✅ Found $SUBMISSION_COUNT submissions"
 
       - name: Filter new users for invite/newsletter
         run: |
@@ -76,7 +62,7 @@ jobs:
       - name: Send invites to new users
         run: |
           echo "📧 Sending newsletter to all new users in new_users.json..."
-          pnpm exec socializer --publish invite.md --force --list=new_users.json"
+          pnpm exec socializer --publish invite.md --force --list=new_users.json
           
       - name: Process and invite new collaborators
         run: |
