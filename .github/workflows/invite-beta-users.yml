@@ -19,6 +19,9 @@ jobs:
       NPM_REGISTRY: ${{ secrets.NPM_REGISTRY }}
     
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
       - name: Install pnpm
         run: npm install -g pnpm
         shell: bash
