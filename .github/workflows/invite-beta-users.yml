@@ -28,7 +28,7 @@ jobs:
           echo "//${NPM_REGISTRY}/:_authToken=${NPM_TOKEN}" > .npmrc
           pnpm install
           rm .npmrc
-        working-directory: ../..
+        working-directory: ${{ github.workspace }}
         
       #- name: Fetch Form Submissions
       #  id: fetch       
