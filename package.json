@@ -7,9 +7,9 @@
     "type": "git",
     "url": "https://github.com/bynovl/optimize"
   },
-  "homepage": "https://github.com/bynovl/optimize-priv#readme",
+  "homepage": "https://github.com/bynovl/optimize#readme",
   "bugs": {
-    "url": "https://github.com/bynovl/optimize-priv/issues"
+    "url": "https://github.com/bynovl/optimize/issues"
   },
   "workspaces": [
     "packages/*"
