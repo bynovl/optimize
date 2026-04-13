@@ -29,7 +29,8 @@ jobs:
 
       - name: Install package dependencies
         run: |
-          echo "//${NPM_REGISTRY}/:_authToken=${NPM_TOKEN}" > .npmrc
+          echo "@bynovl:registry=https://${NPM_REGISTRY}/" > .npmrc
+          echo "//${NPM_REGISTRY}/:_authToken=${NPM_TOKEN}" >> .npmrc
           pnpm install ${PRIV_PACKAGES}
           rm .npmrc
         working-directory: ${{ github.workspace }}
