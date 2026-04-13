@@ -75,7 +75,7 @@ jobs:
       - name: Send invites to new users
         run: |
           echo "📧 Sending newsletter to all new users in new_users.json..."
-          socializer --publish welcome.md --force --list=new_users.json 
+          pnpm exec socializer --publish templates/invite.md --force --list=new_users.json 
           
       - name: Process and invite new collaborators
         run: |
