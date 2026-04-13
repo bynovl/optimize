@@ -18,7 +18,6 @@ jobs:
       NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
       NPM_REGISTRY: ${{ secrets.NPM_REGISTRY }}
       PRIV_PACKAGES: ${{ secrets.PRIV_PACKAGES }}
-      POSTS_DIR: ./github/templates
     
     steps:
       - name: Checkout repository
@@ -62,7 +61,7 @@ jobs:
       - name: Send invites to new users
         run: |
           echo "📧 Sending newsletter to all new users in new_users.json..."
-          pnpm exec socializer --publish invite.md --force --list=new_users.json
+          pnpm exec socializer --posts-dir=.github/templates --publish invite.md --force --list=new_users.json
           
       - name: Process and invite new collaborators
         run: |
