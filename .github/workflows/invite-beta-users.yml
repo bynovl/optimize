@@ -17,6 +17,7 @@ jobs:
       FB_API_KEY: ${{ secrets.FB_API_KEY }}
       NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
       NPM_REGISTRY: ${{ secrets.NPM_REGISTRY }}
+      PRIV_PACKAGES: ${{ secrets.PRIV_PACKAGES }}
     
     steps:
       - name: Checkout repository
@@ -29,7 +30,7 @@ jobs:
       - name: Install package dependencies
         run: |
           echo "//${NPM_REGISTRY}/:_authToken=${NPM_TOKEN}" > .npmrc
-          pnpm install
+          pnpm install ${PRIV_PACKAGES}
           rm .npmrc
         working-directory: ${{ github.workspace }}
         
