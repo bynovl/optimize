@@ -19,6 +19,10 @@ jobs:
       NPM_REGISTRY: ${{ secrets.NPM_REGISTRY }}
     
     steps:
+      - name: Install pnpm
+        run: npm install -g pnpm
+        shell: bash
+        
       - name: Install dependencies with pnpm
         run: |
           echo "//${NPM_REGISTRY}/:_authToken=${NPM_TOKEN}" > .npmrc
