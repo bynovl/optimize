@@ -75,7 +75,7 @@ jobs:
       - name: Send invites to new users
         run: |
           echo "📧 Sending newsletter to all new users in new_users.json..."
-          pnpm exec socializer --publish templates/invite.md --force --list=new_users.json 
+          pnpm exec socializer --publish invite.md --force --list=new_users.json --posts-dir=./github/templates
           
       - name: Process and invite new collaborators
         run: |
