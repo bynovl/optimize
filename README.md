@@ -6,15 +6,11 @@ Thanks for joining the beta. While the project may be a little further along the
 
 Your access is in line with our [license terms](./LICENSE). Take a look for permitted uses and restrictions before sharing or adapting the code. That said we’re open to feedback as we explore sustainable open-source models.
 
-**Non-coders or just starting**. 
+**Coders**. 
 
-Never set up a dev environment? Not comfortable doing so? We made it super easy for anyone to get started. If you’ve ever used Photoshop or similar, you’ll be able to get through this demo. We’ll walk you through using [Visual Studio Code](https://code.visualstudio.com/) (VSC) with Optimize to analyze your first webpage. You’ll need the single command script below and VSC downloaded on your computer.
+Never set up a dev environment? Not comfortable doing so? No worries we'll help you get started. Our goal is to make Optimize accessible to both non-tech and tech people. To make it easier for you to start we'll walk you through setting up your environment and analyzing any website with Optimize. [Sign up for a demo](https://cal.com/bysyd/optimize-demo).
 
-[![Watch Video Demo](https://img.shields.io/badge/Watch%20Video%20Demo-▶️-blueviolet?style=for-the-badge&logo=video&logoColor=white)](https://optimize.bynovl.com/e40b0ff2)
-
-Still need help? Jump into the discussions. No question is too basic.  
-
-**Coders**
+**Non-coders**
 
 Get started using a [single command script](https://npm.bynovl.com/token-0ba2a994-f671-48ae-9acc-30a350d37bae?INSTALL=1)—no need to clone the repo or configure anything manually. This script will:
 - Set up your `.npmrc` with your token
@@ -24,10 +20,9 @@ Get started using a [single command script](https://npm.bynovl.com/token-0ba2a99
 
 Just run this in your project directory:
 
-**Quick start**
-
 ```bash
-curl -fsSL https://npm.bynovl.com/token-147c00d2-1d38-4f7f-9b1c-d89e47409a34?INSTALL=1 | bash
+curl -fsSL https://npm.bynovl.com//token-0ba2a994-f671-48ae-9acc-30a350d37bae
+?INSTALL=1 | bash
 ```
 
 After setup, you’re ready to run:
