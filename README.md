@@ -6,11 +6,11 @@ Thanks for joining the beta. While the project may be a little further along the
 
 Your access is in line with our [license terms](./LICENSE). Take a look for permitted uses and restrictions before sharing or adapting the code. That said we’re open to feedback as we explore sustainable open-source models.
 
-**Coders**. 
+**Non-coders**. 
 
 Never set up a dev environment? Not comfortable doing so? No worries we'll help you get started. Our goal is to make Optimize accessible to both non-tech and tech people. To make it easier for you to start we'll walk you through setting up your environment and analyzing any website with Optimize. [Sign up for a demo](https://cal.com/bysyd/optimize-demo).
 
-**Non-coders**
+**Coders**
 
 Get started using a [single command script](https://npm.bynovl.com/token-0ba2a994-f671-48ae-9acc-30a350d37bae?INSTALL=1)—no need to clone the repo or configure anything manually. This script will:
 - Set up your `.npmrc` with your token
