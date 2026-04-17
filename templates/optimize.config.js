@@ -46,5 +46,15 @@ export default {
     //     skill: 'seo-expert.md', // optional path to markdown file with expert/system prompt (default is seo-expert.md in project root)
     //     prompt: 'seo-audit.md' // optional path to markdown file with main audit prompt template (default is seo-audit.md in project root)
     // }
+    // crawl: {
+    //     provider: 'cloudflare', // currently only supports 'cloudflare' 
+    //     apiToken: jjdscjjqwodj, // required: API token for the crawl provider
+    //     accountId: cdsccs, // required: Account ID for the crawl provider
+    //     // options: { // optional: provider-specific crawl options (e.g., for Cloudflare, you could specify crawl limits, depth, etc.)
+    //     //   limit: 15, // Max number of pages to crawl
+    //     //   depth: 3   // Max link depth to crawl
+    //     //   // Add other provider-specific options here
+    //     // }
+    // }
 }
 
