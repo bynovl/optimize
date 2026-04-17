@@ -4,14 +4,13 @@ import { scriptFooter } from '@bynovl/optimize-lib/script-footer.js';
 import { cliDispatch } from '@bynovl/optimize-lib/cli-dispatch.js';
 import { debug } from '@bynovl/optimize-utils/debug-log.js';
 
-// Initialize CLI options and checkModules
+// Initialize CLI options and checkModules (pass filtered argv)
 const { args, enabledChecks, checkModules } = await cliDispatch();
 if (args._handled) {
   process.exit(0);
 }
-
+// Determine if the first enabled check is the first in the list (controls header display)
 const isFirstCheck = enabledChecks[0];
-
 export async function runAllChecks(startUrl) {
   try {
     const { config, nonIgnoredHtmlFiles } = await scriptHeader(isFirstCheck, enabledChecks, args);
@@ -22,7 +21,7 @@ export async function runAllChecks(startUrl) {
     const isApiMode = config.apiMode || process.env.MODE === 'API';
     if (isApiMode) return;
 
-    // Allow startUrl from config or env if not passed
+    // Allow startUrl from cliDispatch, config, or env
     const effectiveStartUrl = startUrl || config.startUrl || process.env.START_URL;
 
     // Use checkModules from cliDispatch
@@ -39,7 +38,7 @@ export async function runAllChecks(startUrl) {
     console.error('Error occurred while checking optimization requirements:', error);
   }
 }
-
+// Run if executed from CLI
 runAllChecks().then(() => {
   const isApiMode = process.env.MODE === 'API';
   if (!isApiMode) process.exit(0);

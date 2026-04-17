@@ -1,4 +1,4 @@
-// Shared CLI argument parsing and helpers for NOVL Optimize
+import { isValidHttpUrl } from '@bynovl/optimize-utils/crawl-utils.js';
 import { showHelp } from './get-help.js';
 
 export const sharedHelpText = showHelp();
@@ -10,6 +10,15 @@ export function parseCliArgs(argv = process.argv.slice(2), helpText = sharedHelp
       opts[arg] = true;
     }
   });
+
+  if (opts['--crawl'] && argv.indexOf('--crawl') + 1 < argv.length) {
+    const crawlUrl = argv[argv.indexOf('--crawl') + 1];
+    if (!isValidHttpUrl(crawlUrl)) {
+      console.error('Error: --crawl flag must be followed by a valid URL (http/https).');
+      process.exit(1);
+    }
+    opts['--crawl'] = crawlUrl;
+  }
 
   if (opts['--version'] || argv.includes('-v')) {
     if (version) console.log(version);

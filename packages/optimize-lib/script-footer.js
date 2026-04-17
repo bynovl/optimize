@@ -47,6 +47,9 @@ export async function scriptFooter(results, config, args, totalPagesChecked) {
     try {
         // Loop through each check and display results. 
         let allPassed = Array.isArray(results) && results.length > 0 && results.every(r => r && r.success);
+        
+        // Site Audit
+        // console.log(colors.boldGray('===========================================\nSITE AUDIT\n===========================================\n'));
         for (const result of results) {
             if (result) await displayLogs(result);
             if (!result.success) {
