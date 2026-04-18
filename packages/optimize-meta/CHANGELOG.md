@@ -1,5 +1,13 @@
 # @bynovl/optimize-meta
 
+## 2.5.7
+
+### Patch Changes
+
+- Updated dependencies [969bf83]
+  - @bynovl/optimize-lib@2.7.0
+  - @bynovl/optimize-utils@2.6.0
+
 ## 2.5.6
 
 ### Patch Changes

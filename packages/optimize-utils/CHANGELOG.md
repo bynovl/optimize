@@ -1,5 +1,11 @@
 # @bynovl/optimize-utils
 
+## 2.6.0
+
+### Minor Changes
+
+- 969bf83: Added support for simple single page crawl and dynamic crawl and ccreated a cloud crawler API wrapper (support for Cloudflare only right now)
+
 ## 2.5.5
 
 ### Patch Changes
