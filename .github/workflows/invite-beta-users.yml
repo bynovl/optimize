@@ -66,34 +66,30 @@ jobs:
           jq --slurpfile all_invited all_invited.json '{submissions: [.submissions[] | select((.payload_params.username // empty | ltrimstr("@")) as $u | ($all_invited[0] | index($u) | not))]}' submissions.json > new_users.json
           echo "✅ New users to invite/newsletter: $(jq '.submissions | length' new_users.json)"
 
-      - name: Debug new users
+      - name: Send invites to new users
         run: |
-          echo "Total new users: $(jq '.submissions | length' new_users.json)"
-        
-      # - name: Send invites to new users
-      #   run: |
-      #     echo "📧 Sending newsletter to all new users in new_users.json..."
-      #     pnpm exec socializer --posts-dir=.github/templates --publish invite.md --force --list=new_users.json
+          echo "📧 Sending newsletter to all new users in new_users.json..."
+          pnpm exec socializer --posts-dir=.github/templates --publish invite.md --force --list=new_users.json
           
-      # - name: Process and invite new collaborators
-      #   run: |
-      #     echo "📋 Inviting new GitHub usernames..."
-      #     jq -r '.submissions[].payload_params.username // empty | ltrimstr("@")' new_users.json | while read -r github_handle; do
-      #       if [[ -z "$github_handle" ]]; then
-      #         continue
-      #       fi
-      #       echo "➡️ Inviting by username: $github_handle"
-      #       if response=$(gh api \
-      #         --method PUT \
-      #         -H "Accept: application/vnd.github+json" \
-      #         -H "X-GitHub-Api-Version: 2022-11-28" \
-      #         "/repos/${{ github.repository }}/collaborators/$github_handle" \
-      #         -f permission='pull' 2>&1); then
-      #         echo "✅ Invited $github_handle"
-      #       else
-      #         error=$(echo "$response" | jq -r '.message // "Unknown error"' 2>/dev/null || echo "$response")
-      #         echo "⚠️ Skipped $github_handle: $error"
-      #       fi
-      #     done
-      #     echo "✅ Sync complete"
+      - name: Process and invite new collaborators
+        run: |
+          echo "📋 Inviting new GitHub usernames..."
+          jq -r '.submissions[].payload_params.username // empty | ltrimstr("@")' new_users.json | while read -r github_handle; do
+            if [[ -z "$github_handle" ]]; then
+              continue
+            fi
+            echo "➡️ Inviting by username: $github_handle"
+            if response=$(gh api \
+              --method PUT \
+              -H "Accept: application/vnd.github+json" \
+              -H "X-GitHub-Api-Version: 2022-11-28" \
+              "/repos/${{ github.repository }}/collaborators/$github_handle" \
+              -f permission='pull' 2>&1); then
+              echo "✅ Invited $github_handle"
+            else
+              error=$(echo "$response" | jq -r '.message // "Unknown error"' 2>/dev/null || echo "$response")
+              echo "⚠️ Skipped $github_handle: $error"
+            fi
+          done
+          echo "✅ Sync complete"
 
