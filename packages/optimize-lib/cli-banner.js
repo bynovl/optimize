@@ -1,6 +1,6 @@
-import fs from 'fs';
-const pkg = JSON.parse(fs.readFileSync(new URL('./package.json', import.meta.url)));
-export async function cliBanner() {
+import { resolveVersion } from '@bynovl/optimize-utils/resolve-version.js';
+export function cliBanner() {   
+  const version = resolveVersion();
   console.log(`
   █████    ███     ███████     ███     ███   ███      
  ▒██████  ▒███   ███▒▒▒▒▒███  ▒███    ▒███  ▒███       
@@ -10,7 +10,7 @@ export async function cliBanner() {
  ▒███  ▒▒█████ ▒▒███     ███   ▒▒▒█████▒    ▒███      
  ▒███   ▒▒████  ▒▒▒███████▒      ▒▒███      ▒█████████
  ▒▒▒▒    ▒▒▒▒▒    ▒▒▒▒▒▒▒         ▒▒▒       ▒▒▒▒▒▒▒▒▒▒\n
- .think .do .be // optimize - v${pkg.version}
+ .think .do .be // optimize - v${version}
  https://github.com/bynovl/optimize
  built with ❤\n
 `);

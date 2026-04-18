@@ -6,7 +6,9 @@ import { resolveVersion } from '@bynovl/optimize-utils/resolve-version.js';
 export async function cliDispatch(enabledCheck = []) {
   // Get CLI args
   const argv = process.argv.slice(2);
-  const args = parseCliArgs(argv, sharedHelpText, resolveVersion(argv, enabledCheck));
+  // Always resolve version from CLI/core, not per enabledCheck
+  const version = resolveVersion(argv);
+  const args = parseCliArgs(argv, sharedHelpText, version);
 
   // Get module flags dynamically
   const { checkModules } = await getCheckModules();

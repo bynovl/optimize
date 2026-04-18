@@ -6,11 +6,11 @@ import { dirname, join, resolve } from 'path';
 const require = createRequire(import.meta.url);
 
 export function resolveVersion(argv = [], enabledCheck = []) {
-  const hasModuleFlag = enabledCheck.length > 0 || argv.some(a => a.startsWith('--') && a !== '--version' && a !== '--help' && a !== '--report' && a !== '--json' && a !== '--csv' && a !== '--path' && a !== '--ci');
-  // No module-specific flag — default to core
-  if (!hasModuleFlag) {
-    try { return require('@bynovl/optimize-core/package.json').version; } catch {}
-  }
+  // Always prioritize the CLI/core version
+  try {
+    return require('@bynovl/optimize-core/package.json').version;
+  } catch {}
+
   // Walk up from the running CLI file (max 3 levels: bin/ → package/ → scoped-org/)
   try {
     let dir = dirname(resolve(process.argv[1]));
@@ -24,6 +24,10 @@ export function resolveVersion(argv = [], enabledCheck = []) {
       dir = parent;
     }
   } catch {}
-  try { return require('./package.json').version; } catch {}
+
+  // Fallback to local package.json (should rarely be needed)
+  try {
+    return require('./package.json').version;
+  } catch {}
   return null;
 }
