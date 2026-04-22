@@ -41,4 +41,19 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GH_PUBLISH_TOKEN }}
 
+      - name: Tag core version and push
+        run: |
+          CORE_PKG=packages/optimize-core/package.json
+          VERSION=$(jq -r .version "$CORE_PKG")
+          TAG="core@$VERSION-beta"
+          # Only create tag if it doesn't exist
+          if ! git rev-parse "$TAG" >/dev/null 2>&1; then
+            git tag "$TAG"
+            git push origin "$TAG"
+          else
+            echo "Tag $TAG already exists. Skipping."
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.GH_PUBLISH_TOKEN }}
+
 # Manage public package releases with Githhub
