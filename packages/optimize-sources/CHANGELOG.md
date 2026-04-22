@@ -1,5 +1,11 @@
 # @bynovl/optimize-sources
 
+## 2.6.0
+
+### Minor Changes
+
+- 95d876b: Version bump
+
 ## 2.5.7
 
 ### Patch Changes
