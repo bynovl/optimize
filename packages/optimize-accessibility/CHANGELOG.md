@@ -1,5 +1,11 @@
 # @bynovl/optimize-accessibility
 
+## 2.7.0
+
+### Minor Changes
+
+- 5ac2575: Set same version for all depedendcies of core packaage
+
 ## 2.6.0
 
 ### Minor Changes
