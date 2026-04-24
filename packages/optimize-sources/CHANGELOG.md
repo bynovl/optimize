@@ -1,5 +1,16 @@
 # @bynovl/optimize-sources
 
+## 2.8.0
+
+### Minor Changes
+
+- e3ca743: Update main link orchestration; Fix issues with external link validation; add edge case for internal link check
+
+### Patch Changes
+
+- Updated dependencies [e3ca743]
+  - @bynovl/optimize-lib@2.8.0
+
 ## 2.7.0
 
 ### Minor Changes

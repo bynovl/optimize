@@ -1,6 +1,6 @@
 {
   "name": "@bynovl/optimize-links",
-  "version": "2.7.0",
+  "version": "2.8.0",
   "description": "Link validation submodule for the NOVL Optimize project. Checks internal and external links, anchor integrity, and best practices for links in static sites.",
   "main": "index.js",
   "private": false,

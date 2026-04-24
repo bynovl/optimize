@@ -1,6 +1,6 @@
 {
   "name": "@bynovl/optimize-media",
-  "version": "2.7.0",
+  "version": "2.7.1",
   "description": "Media validation submodule for the NOVL Optimize project. Checks images, video, audio, and media accessibility and best practices in static sites.",
   "main": "index.js",
   "private": false,
