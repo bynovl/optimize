@@ -30,11 +30,18 @@ jobs:
         run: pnpm changeset version
 
       - name: Commit version bumps
+        id: commit_version
         run: |
           git pull origin main
           git add .
-          git commit -m "chore: version bump [skip ci]" || echo "No changes to commit"
-          git push origin main
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+            echo "committed=false" >> $GITHUB_OUTPUT
+          else
+            git commit -m "chore: version bump [skip ci]"
+            git push origin main
+            echo "committed=true" >> $GITHUB_OUTPUT
+          fi
 
       - name: Publish packages
         run: pnpm changeset publish
@@ -42,6 +49,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.GH_PUBLISH_TOKEN }}
 
       - name: Tag core version and push
+        if: steps.commit_version.outputs.committed == 'true'
         run: |
           CORE_PKG=packages/optimize-core/package.json
           VERSION=$(jq -r .version "$CORE_PKG")
