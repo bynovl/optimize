@@ -1,7 +1,6 @@
 import https from 'https';
 import http from 'http';
 import { externalUrlRegexStrict } from './regex-links.js';
-
 /**
  * Checks if an external link is reachable (status 200-399).
  * Uses a HEAD request for fast header-only validation.
@@ -29,17 +28,17 @@ const defaultOptions = {
         'Pragma': 'no-cache',
     }
 };
-export function checkExternalLink(url, config) {
+export function checkExternalLink(url) {
     return new Promise((resolve) => {
         if (!isValidUrl(url)) {
             return resolve({
+                ok: false,
+                status: null,
+                type: 'invalidExtLink',
                 isError: true,
                 isWarning: false,
-                type: 'invalidExtLink',
-                message: 'Not an external URL',
-                reason: `Invalid external URL: ${url}`,
-                status: null,
-                errorType: 'invalid',
+                message: `The provided link does not match external URL patterns: ${url}`,
+                reason: `Not a valid external URL`,
                 target: url
             });
         }
@@ -65,97 +64,84 @@ export function checkExternalLink(url, config) {
                         } catch (e) {
                             res.resume();
                             return resolve({
+                                ok: false,
+                                status,
+                                type: 'invalidExtLink',
                                 isError: true,
                                 isWarning: false,
-                                type: 'invalidExtLink',
-                                message: `Malformed redirect location header: ${currentUrl}`,
-                                reason: `Malformed redirect location header: ${currentUrl}`,
-                                status,
-                                errorType: 'invalid',
+                                message: `Redirect location header could not be parsed for: ${currentUrl}`,
+                                reason: `Malformed redirect location header`,
                                 target: currentUrl
                             });
                         }
                         res.resume();
                         return requestHeaders(nextUrl, redirectsLeft - 1);
                     }
-
-                    // Error Handling based on status code
-                    let isError = false, isWarning = false, type, msg, reason;
-                    if (typeof status === 'number') {
-                        if (status === 403) {
-                            isWarning = true;
-                            isError = false;
-                        } else if (status === 404) {
-                            isError = true;
-                            isWarning = false;
-                        } else if (status >= 400 && status < 500) {
-                            isWarning = true;
-                            isError = false;
-                        } else if (status >= 200 && status < 400) {
-                            isError = false;
-                            isWarning = false;
-                        } else {
-                            isError = true;
-                            isWarning = false;
-                        }
-                        type = (status >= 400) ? 'invalidExtLink' : undefined;
-                        msg = `External link returned HTTP status ${status}: ${currentUrl}`;
-                        reason = msg;
-                    } else {
+                    let type = undefined, isError = false, isWarning = false, message, reason;
+                    if (status === 404 || (status >= 400 && status < 600)) {
+                        type = 'invalidExtLink';
                         isError = true;
-                        isWarning = false;
-                        type = 'unreachableExtLink';
-                        msg = `External link could not be reached or may be blocked: ${currentUrl}`;
-                        reason = 'Unreachable or blocked external link';
+                        message = `HTTP status ${status} for external link: ${currentUrl}`;
+                        reason = `External link returned error status`;
                     }
                     res.resume();
                     resolve({
+                        ok: status >= 200 && status < 400,
+                        status,
+                        type,
                         isError,
                         isWarning,
-                        type,
-                        message: msg,
+                        message,
                         reason,
-                        status,
-                        errorType: isError ? 'invalid' : null,
                         target: currentUrl
                     });
                 });
 
-                req.on('error', () => {
+                req.on('error', (err) => {
+                    // Node.js DNS errors have code 'ENOTFOUND' or 'EAI_AGAIN'
+                    let type = 'unreachableExtLink', message, reason;
+                    if (err && (err.code === 'ENOTFOUND' || err.code === 'EAI_AGAIN')) {
+                        type = 'notfoundExtLink';
+                        message = `Domain does not exist or cannot be resolved: ${url}`;
+                        reason = `DNS lookup failed for: ${url}`;
+                    } else {
+                        message = `The link may be blocked, offline, or the server did not respond: ${url}`;
+                        reason = `External link could not be reached`;
+                    }
                     resolve({
+                        ok: false,
+                        status: null,
+                        type,
                         isError: true,
                         isWarning: false,
-                        type: 'unreachableExtLink',
-                        message: `External link could not be reached or may be blocked: ${url}`,
-                        reason: 'Unreachable or blocked external link',
-                        status: null,
-                        errorType: 'unreachable',
+                        message,
+                        reason,
                         target: url
                     });
                 });
                 req.setTimeout(timeout, () => {
                     req.destroy();
                     resolve({
+                        ok: false,
+                        status: null,
+                        type: 'unreachableExtLink',
                         isError: true,
                         isWarning: false,
-                        type: 'unreachableExtLink',
-                        message: `External link could not be reached or may be blocked: ${url}`,
-                        reason: 'Unreachable or blocked external link',
-                        status: null,
-                        errorType: 'unreachable',
+                        message: `The link may be blocked, offline, or the server did not respond: ${url}`,
+                        reason: `External link could not be reached`,
                         target: url
                     });
                 });
                 req.end();
             } catch (err) {
                 resolve({
+                    ok: false,
+                    status: null,
+                    type: 'unreachableExtLink',
                     isError: true,
                     isWarning: false,
-                    type: 'unreachableExtLink',
-                    message: `External link could not be reached or may be blocked: ${url}`,
-                    reason: 'Unreachable or blocked external link',
-                    status: null,
-                    errorType: 'unreachable',
+                    message: `The link may be blocked, offline, or the server did not respond: ${url}`,
+                    reason: `External link could not be reached`,
                     target: url
                 });
             }

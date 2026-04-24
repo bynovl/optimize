@@ -1,4 +1,3 @@
-import { ISSUE_KEY } from '@bynovl/optimize-lib/issue-keys.js';
 import { checkLinkValidity } from '@bynovl/optimize-lib/check-link-validity.js';
 
 // Regex for <a href="..."> tags

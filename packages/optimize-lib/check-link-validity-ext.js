@@ -1,6 +1,5 @@
 import { checkExternalLink } from '@bynovl/optimize-utils/check-external-link.js';
 import { ISSUE_KEY } from './issue-keys.js';
-import { externalUrlRegexStrict } from '@bynovl/optimize-utils/regex-links.js';
 /**
  * External link validator.
  * - Sends a fetch request to the external URL.
@@ -30,26 +29,20 @@ export async function checkLinkValidityExt(inputUrl, config = {}, sourceFile) {
     try {
         const result = await checkExternalLink(baseUrl, config);
         if (result) {
-            // Attach sourceFile for context
-            result.sourceFile = sourceFile;
-            if (!result.isError && !result.isWarning) {
-                externalLinkCache.set(cacheKey, null);
-                return null;
-            } else {
-                // Use the specific message and reason from check-external-link.js
-                externalLinkCache.set(cacheKey, result);
-                return result;
-            }
+            // Attach sourceFile for context if needed
+            if (sourceFile) result.sourceFile = sourceFile;
+            externalLinkCache.set(cacheKey, result);
+            return result;
         }
         // Defensive: treat as unreachable if no result
         const fallback = {
-            isError: true,
-            isWarning: false,
-            type: 'unreachableExtLink',
+            ok: false,
+            status: null,
+            type: ISSUE_KEY.unreachableExtLink,
+            isError: false,
+            isWarning: true,
             message: `External link could not be reached or may be blocked: ${url}`,
             reason: `External link could not be reached or may be blocked: ${url}`,
-            status: null,
-            errorType: 'unreachable',
             target: url,
             sourceFile
         };
@@ -57,13 +50,13 @@ export async function checkLinkValidityExt(inputUrl, config = {}, sourceFile) {
         return fallback;
     } catch (err) {
         const result = {
-            isError: true,
-            isWarning: false,
-            type: 'unreachableExtLink',
+            ok: false,
+            status: null,
+            type: ISSUE_KEY.unreachableExtLink,
+            isError: false,
+            isWarning: true,
             message: `External link fetch failed for link: ${url}`,
             reason: err && err.message ? err.message : String(err),
-            status: null,
-            errorType: 'unreachable',
             target: url,
             sourceFile
         };
