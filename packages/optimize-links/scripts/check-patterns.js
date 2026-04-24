@@ -48,14 +48,13 @@ export async function validateLinks(content, config, file, startUrl) {
   const results = [];
   for (const hrefValue of hrefs) {
     const linkError = await checkLinkValidity(content, hrefValue, config, file, startUrl);
-    if (linkError && linkError.isError) {
-      const isExternal = linkError.type === ISSUE_KEY.unreachableExtLink || linkError.type === ISSUE_KEY.invalidExtLink;
+    if (linkError && (linkError.isError || linkError.isWarning)) {
       results.push({
-        isError: true,
-        isWarning: false,
-        reason: isExternal ? 'Invalid external link href' : 'Invalid local link href',
+        isError: Boolean(linkError.isError),
+        isWarning: Boolean(linkError.isWarning),
+        reason: linkError.reason,
         type: linkError.type,
-        message: (isExternal ? 'External link href is invalid or unreachable: ' : 'Local link file is missing or invalid: ') + hrefValue,
+        message: linkError.message,
         target: hrefValue,
       });
     }

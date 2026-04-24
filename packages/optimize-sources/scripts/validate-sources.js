@@ -12,7 +12,7 @@ async function validateScriptSrc(item, content, config, file, startUrl) {
     while ((match = scriptRegex.exec(content)) !== null) {
         const src = match[1];
         const linkError = await checkLinkValidity(content, src, config, file, startUrl);
-        if (linkError && linkError.isError) {
+        if (linkError && (linkError.isError || linkError.isWarning)) {
             const isExternal = linkError.type === ISSUE_KEY.unreachableExtLink || linkError.type === ISSUE_KEY.invalidExtLink;
             item.sources.results.push({
                 target: 'script',
@@ -20,14 +20,13 @@ async function validateScriptSrc(item, content, config, file, startUrl) {
                 reason: isExternal
                     ? 'Invalid external script src'
                     : 'Invalid internal script src',
-                isError: true,
-                isWarning: false,
+                isError: Boolean(linkError.isError),
+                isWarning: Boolean(linkError.isWarning),
                 message: isExternal
                     ? `External script src is invalid or unreachable: ${src}`
                     : `Internal script src is missing or invalid: ${src}`,
             });
         }
-        // ...existing code...
     }
 }
 async function validateStylesheetHref(item, content, config, file, startUrl) {
@@ -47,7 +46,7 @@ async function validateStylesheetHref(item, content, config, file, startUrl) {
             continue;
         }
         const linkError = await checkLinkValidity(content, href, config, file, startUrl);
-        if (linkError && linkError.isError) {
+        if (linkError && (linkError.isError || linkError.isWarning)) {
             const isExternal = linkError.type === ISSUE_KEY.unreachableExtLink || linkError.type === ISSUE_KEY.invalidExtLink;
             item.sources.results.push({
                 target: 'stylesheet',
@@ -55,8 +54,8 @@ async function validateStylesheetHref(item, content, config, file, startUrl) {
                 reason: isExternal
                     ? 'Invalid external stylesheet link'
                     : 'Invalid internal stylesheet link',
-                isError: true,
-                isWarning: false,
+                isError: Boolean(linkError.isError),
+                isWarning: Boolean(linkError.isWarning),
                 message: isExternal
                     ? `External stylesheet link is invalid or unreachable: ${href}`
                     : `Internal stylesheet link is missing or invalid: ${href}`,

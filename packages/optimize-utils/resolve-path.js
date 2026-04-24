@@ -9,7 +9,6 @@ export function resolvePath(p, baseDir = process.cwd()) {
     return path.isAbsolute(p) ? p : path.resolve(baseDir, p);
 }
 
-
 export function resolveFilePath(config, file) {
     const resolvedBase = path.resolve(config.outDir);
     const resolvedTemp = path.resolve('_temp');

@@ -23,7 +23,7 @@ export async function checkLinkValidityInt(content, link, config = {}, sourceFil
     }
     let baseDir = getBaseDirFromSourceFile(sourceFile);
     try {
-        // Ignore mailto, tel, javascript, ftp, and placeholder links ("#" and "")
+        // Ignore mailto, tel, javascript, ftp, and placeholder links ("" and "#")
         if (
             link.startsWith('mailto:') ||
             link.startsWith('tel:') ||
@@ -31,43 +31,45 @@ export async function checkLinkValidityInt(content, link, config = {}, sourceFil
             link.startsWith('ftp:') ||
             link === '' || link === '#'
         ) {
-            // For "" skip check entirely (not even a warning)
-            if (link === '' || link === '#') {
-                return null;
-            }
+            if (link === '' || link === '#') return null;
             return { isError: false, isWarning: true, reason: `Non-HTTP(s) link ignored`, message: link, target: link, sourceFile };
         }
 
-        // Hash-only link: check if the hash exists in the current page or file
-        if (link.startsWith('#') && link.split('').length > 1) {
-            const hash = link.slice(1);
-            // Special case: href="#" or href="" are common placeholders and should not be treated as errors
-            if (link === '#' || link === '') {
-                return { isError: false, isWarning: false, reason: 'Hash-only placeholder ("#" or empty) is not an error', message: link, target: link, sourceFile };
-            }
+        // Helper: test HTML string for the anchor id
+        const hasAnchorInHtml = (html, hash) => {
+            if (!html || typeof html !== 'string') return false;
             const idRegex = anchorIdRegex(hash);
-            let htmlToCheck = content;
-            // If sourceFile is provided and exists, read HTML from disk for more accuracy
-            if (sourceFile && fs.existsSync(sourceFile)) {
-                htmlToCheck = fs.readFileSync(sourceFile, 'utf8');
+            return idRegex.test(html);
+        };
+
+        // Root-relative hash (e.g. /#section): check root index.html
+        if (link.startsWith('/#') && link.length > 2) {
+            const hash = link.slice(2);
+            const rootDir = config.outDir ? config.outDir : process.cwd();
+            const indexPath = path.resolve(rootDir, 'index.html');
+            if (fs.existsSync(indexPath)) {
+                const html = fs.readFileSync(indexPath, 'utf8');
+                if (hasAnchorInHtml(html, hash)) return { isError: false, isWarning: false, reason: `Hash found in root index.html`, message: link, target: link, sourceFile };
             }
-            if (htmlToCheck && typeof htmlToCheck === 'string' && idRegex.test(htmlToCheck)) {
-                return { isError: false, isWarning: false, reason: `Hash found`, message: link, target: link, sourceFile };
-            }
+            return { isError: true, isWarning: false, reason: `Hash "${hash}" not found in root index.html`, message: link, target: link, sourceFile };
+        }
+
+        // Hash-only link (#section): check current page (sourceFile) or provided content
+        if (link.startsWith('#') && link.length > 1) {
+            const hash = link.slice(1);
+            const htmlToCheck = (sourceFile && fs.existsSync(sourceFile)) ? fs.readFileSync(sourceFile, 'utf8') : content;
+            if (hasAnchorInHtml(htmlToCheck, hash)) return { isError: false, isWarning: false, reason: `Hash found`, message: link, target: link, sourceFile };
             return { isError: true, isWarning: false, reason: `Hash "${hash}" not found in HTML`, message: link, target: link, sourceFile };
         }
 
-        // Only use path resolution for local/internal links
+        // Only use path resolution for local/internal links (handles /about, /about#section, relative paths)
         let filePath;
         let relPath = link;
-        // Remove query/hash for file path resolution
         relPath = relPath.split('?')[0].split('#')[0];
         if (relPath.startsWith('/')) {
-            // Root-relative: resolve from config.outDir (site root)
             relPath = relPath.slice(1);
             baseDir = config.outDir ? config.outDir : (sourceFile ? path.dirname(sourceFile) : process.cwd());
         } else {
-            // Relative: resolve from HTML file's directory
             baseDir = sourceFile ? path.dirname(sourceFile) : process.cwd();
         }
 
@@ -80,7 +82,7 @@ export async function checkLinkValidityInt(content, link, config = {}, sourceFil
 
         filePath = path.resolve(baseDir, relPath);
         if (!fs.existsSync(filePath)) {
-            let fallbackPath = path.resolve(baseDir, relPath + '.html');
+            const fallbackPath = path.resolve(baseDir, relPath + '.html');
             if (fs.existsSync(fallbackPath)) {
                 filePath = fallbackPath;
             } else {
@@ -88,25 +90,23 @@ export async function checkLinkValidityInt(content, link, config = {}, sourceFil
             }
         }
 
-        // For hash fragments, check the target file for the id
+        // For links with hash (e.g. /about#section), check the resolved file for the anchor
         const hash = link.split('#')[1];
         if (hash) {
             let htmlToCheck = content;
             if (filePath && fs.existsSync(filePath)) {
                 htmlToCheck = fs.readFileSync(filePath, 'utf8');
+            } else if (sourceFile && fs.existsSync(sourceFile)) {
+                htmlToCheck = fs.readFileSync(sourceFile, 'utf8');
             }
-            if (htmlToCheck && typeof htmlToCheck === 'string' && htmlToCheck.includes(`id="${hash}"`)) {
-                return { isError: false, isWarning: false, reason: 'Hash found', message: '', target: link };
-            }
+            if (hasAnchorInHtml(htmlToCheck, hash)) return { isError: false, isWarning: false, reason: 'Hash found', message: '', target: link };
             return { isError: true, isWarning: false, reason: `Hash "${hash}" not found in HTML`, message: '', target: link };
         }
 
         // For non-hash internal links, check if the file exists
         if (filePath) {
             const exists = fs.existsSync(filePath);
-            if (exists) {
-                return null;
-            }
+            if (exists) return null;
         }
         return { isError: true, isWarning: false, reason: `Internal link target file not found`, message: `Validated path: ${link}`, target: link, sourceFile };
     } catch (err) {
