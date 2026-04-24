@@ -1,7 +1,8 @@
 import path from 'path';
 import { checkLinkValidityInt } from './check-link-validity-int.js';
 import { checkLinkValidityExt } from './check-link-validity-ext.js';
-import { debug } from '../optimize-utils/debug-log.js'
+import { debug } from '../optimize-utils/debug-log.js';
+
 /**
  * Main dispatcher for link validation.
  * Determines if a link is internal or external and delegates to the appropriate handler.
@@ -10,56 +11,77 @@ import { debug } from '../optimize-utils/debug-log.js'
  * @param {object} config - Config object. Should include startUrl (for offline/extracted validation), outDir, isOffline, etc.
  * @param {string} sourceFile - The source file path for context (used for resolving relative links).
  * @param {string} [startUrl] - Optional. The origin URL to resolve root-relative/relative links for offline/extracted pages.
- * @param {string} [startUrl] - Optional. If included, all on-page links are treated as external and resolved relative to startUrl.
  * @returns {Promise<object>} - Validation result object.
- *
-*/
+ */
 
-// For internal testing naturally get file extensions
-// For example when searching if file exists search as-is and with .html, .htm, .php, etc. extensions
-// For external links, rely on URL resolution to determine final URL
 
-// Add a helper to ignore SSA URLs
+// Helper: ignore SSA URLs
 function isIgnoredSSAUrl(url) {
   return /^https:\/\/ssa\..*\.com/.test(url);
 }
 
+// Helper: check if link is localhost or 127.0.0.1 root
+function isLocalhostRoot(link) {
+  return (
+    /^https?:\/\/localhost(:\d+)?\/?$/i.test(link) ||
+    /^https?:\/\/127\.0\.0\.1(:\d+)?\/?$/i.test(link)
+  );
+}
+
+// Helper: normalize protocol-relative links
+function normalizeProtocolRelative(link) {
+  return link?.startsWith('//') ? 'https:' + link : link;
+}
+
+// Helper: remove accidental double .html
+function removeDoubleHtml(str) {
+  return typeof str === 'string' && str.endsWith('.html.html')
+    ? str.replace(/\.html\.html$/, '.html')
+    : str;
+}
+
+// Helper: run internal validation and format result
+async function validateInternal(content, path, config, sourceFile, label = null) {
+  try {
+    const result = await checkLinkValidityInt(content, path, config, sourceFile);
+    if (result?.isError) {
+      return { ...result, reason: result.reason, message: `Validated path: ${label || path}`, sourceFile };
+    }
+    return { isError: false, isWarning: false, reason: 'Link is valid', message: label || path, target: path, sourceFile };
+  } catch (err) {
+    return { isError: true, isWarning: false, reason: 'Internal link validation error', message: err.message, target: path };
+  }
+}
+
 export async function checkLinkValidity(content, link, config = {}, sourceFile, startUrl) {
-  // Helper: treat hash-only links as internal immediately
-  if (link && link.startsWith('#')) {
-    return await checkLinkValidityInt(content, link, config, sourceFile);
+  // 1. Internal/Local checks
+  if (link?.startsWith('#')) {
+    return validateInternal(content, link, config, sourceFile);
+  }
+  if (link === '/' && !startUrl) {
+    return validateInternal(content, 'index.html', config, sourceFile, '/');
+  }
+  if (isLocalhostRoot(link)) {
+    return validateInternal(content, 'index.html', config, sourceFile, link);
   }
 
-  // Treat root '/' as internal only if startUrl is not present
-  if (link && link === '/' && !startUrl) {
-    return await checkLinkValidityInt(content, 'index.html', config, sourceFile);
-  }
-
-  // Treat localhost/127.0.0.1 URLs with no pathname as index.html
-  if (
-    link && (
-      /^https?:\/\/localhost(:\d+)?\/?$/i.test(link) ||
-      /^https?:\/\/127\.0\.0\.1(:\d+)?\/?$/i.test(link)
-    )
-  ) {
-    return await checkLinkValidityInt(content, 'index.html', config, sourceFile);
-  }
-
-  // Normalize protocol-relative links for parsing but don't assume external forever
-  let normalizedLink = link;
-  if (link && link.startsWith('//')) normalizedLink = 'https:' + link;
+  let normalizedLink = normalizeProtocolRelative(link);
+  normalizedLink = removeDoubleHtml(normalizedLink);
 
   // Determine if external
-  let isExternal = Boolean(
-    typeof normalizedLink === 'string' &&
-    (/^https?:\/\//i.test(normalizedLink) || normalizedLink.startsWith('//'))
-  ) || Boolean(startUrl);
+  const isExternal =
+    (typeof normalizedLink === 'string' &&
+      (/^https?:\/\//i.test(normalizedLink) || normalizedLink.startsWith('//')))
+    || Boolean(startUrl);
 
-  // Combined internal/local/localhost link resolution with error handling
-  const isLocal = !isExternal || (typeof normalizedLink === 'string' && (/^https?:\/\/localhost/i.test(normalizedLink) || /^\/\/localhost/i.test(normalizedLink)));
+  // Local/internal link resolution
+  const isLocal =
+    !isExternal ||
+    (typeof normalizedLink === 'string' &&
+      (/^https?:\/\/localhost/i.test(normalizedLink) || /^\/\/localhost/i.test(normalizedLink)));
+
   if (isLocal) {
     let internalPath = link;
-    // For localhost, extract the pathname; for others, use as-is or normalized
     if (typeof normalizedLink === 'string' && (/^https?:\/\/localhost/i.test(normalizedLink) || /^\/\/localhost/i.test(normalizedLink))) {
       try {
         const urlObj = new URL(normalizedLink.startsWith('//') ? 'http:' + normalizedLink : normalizedLink);
@@ -68,28 +90,14 @@ export async function checkLinkValidity(content, link, config = {}, sourceFile, 
         internalPath = normalizedLink;
       }
     }
-    try {
-      const result = await checkLinkValidityInt(content, internalPath, config, sourceFile);
-      if (result && result.isError) {
-        return { ...result, reason: `${result.reason}`, message: `Validated path: ${internalPath}`, sourceFile };
-      }
-      return { isError: false, isWarning: false, reason: `Link is valid`, message: internalPath, target: internalPath, sourceFile };
-    } catch (err) {
-      return { isError: true, isWarning: false, reason: 'Internal link validation error', message: err.message, target: internalPath };
-    }
+    return validateInternal(content, internalPath, config, sourceFile);
   }
 
-  // Prevent accidental double .html tokens in user-supplied hrefs
-  if (typeof normalizedLink === 'string' && normalizedLink.endsWith('.html.html')) {
-    normalizedLink = normalizedLink.replace(/\.html\.html$/, '.html');
-  }
-
-  // If offline, skip external validation early
+  // 2. External checks
   if (config.isOffline && isExternal) {
-    return { isError: false, isWarning: true, reason: `Offline mode: external link validation skipped`, message: link, target: link, sourceFile };
+    return { isError: false, isWarning: true, reason: 'Offline mode: external link validation skipped', message: link, target: link, sourceFile };
   }
 
-  // External link validation
   if (isExternal) {
     let baseForUrl;
     if (startUrl) {
@@ -100,7 +108,7 @@ export async function checkLinkValidity(content, link, config = {}, sourceFile, 
         baseForUrl = startUrl;
       }
     } else {
-      baseForUrl = config.startUrl || undefined;
+      baseForUrl = config.startUrl;
     }
 
     let urlObj;
@@ -109,46 +117,36 @@ export async function checkLinkValidity(content, link, config = {}, sourceFile, 
     } catch {
       try {
         urlObj = new URL(normalizedLink, baseForUrl);
-      } catch (err) {
-        // Could not form a URL; fall back to treating as internal path
-        const fallbackResult = await checkLinkValidityInt(content, link, config, sourceFile);
-        if (fallbackResult && fallbackResult.isError) {
-          return { ...fallbackResult, reason: `${fallbackResult.reason}`, message: `Validated path: ${link}`, sourceFile };
-        }
-        return { isError: false, isWarning: false, reason: `Link is valid`, message: link, target: link, sourceFile };
+      } catch {
+        // Fallback to internal validation
+        return validateInternal(content, link, config, sourceFile);
       }
     }
 
-    // Normalize pathname double .html
-    if (urlObj.pathname && urlObj.pathname.endsWith('.html.html')) {
-      urlObj.pathname = urlObj.pathname.replace(/\.html\.html$/, '.html');
-    }
+    urlObj.pathname = removeDoubleHtml(urlObj.pathname);
 
-    // If this URL resolves to the same origin as the site (startUrl/config.startUrl)
-    // and we have a local outDir, prefer local/internal validation. This lets '/about'
-    // map naturally to '/about/index.html' or '/about.html' depending on what exists.
+    // Prefer local validation if same origin and outDir exists
     let siteOrigin = null;
     try {
       siteOrigin = new URL(startUrl || config.startUrl).origin;
-    } catch { }
+    } catch {}
 
     if (siteOrigin && urlObj.origin === siteOrigin && config.outDir) {
       const pathAndQueryHash = `${urlObj.pathname}${urlObj.search || ''}${urlObj.hash || ''}`;
       const intResult = await checkLinkValidityInt(content, pathAndQueryHash, config, sourceFile);
-      if (!intResult || !intResult.isError) {
-        return { isError: false, isWarning: false, reason: `Link is valid (resolved locally)`, message: urlObj.href, target: urlObj.href, sourceFile };
+      if (!intResult?.isError) {
+        return { isError: false, isWarning: false, reason: 'Link is valid (resolved locally)', message: urlObj.href, target: urlObj.href, sourceFile };
       }
-      // otherwise fall through to external check
+      // Otherwise, fall through to external check
     }
 
-    // Skip validation for ignored SSA URLs
     if (isIgnoredSSAUrl(urlObj.href)) {
-      return { isError: false, isWarning: true, reason: `Ignored SSA URL`, message: urlObj.href, target: urlObj.href, sourceFile };
+      return { isError: false, isWarning: true, reason: 'Ignored SSA URL', message: urlObj.href, target: urlObj.href, sourceFile };
     }
 
     const result = await checkLinkValidityExt(urlObj.href, config, sourceFile);
-    if (!result || !result.isError) {
-      return { isError: false, isWarning: false, reason: `Link is valid`, message: urlObj.href, target: urlObj.href, sourceFile };
+    if (!result?.isError) {
+      return { isError: false, isWarning: false, reason: 'Link is valid', message: urlObj.href, target: urlObj.href, sourceFile };
     }
     return result;
   }
