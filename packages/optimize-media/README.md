@@ -82,8 +82,8 @@ console.log(results);
 
 ## What It Does
 
-- **Validates media tags and sources:** Checks for valid `<img>` tags. `<video>`, `<audio>` and `<object>` coming soon. Ensures `src` exist and are reachable. 
-- **Checks for missing alt text and attributes:** Reports missing `alt` text on images.
+- **Validates media tags and asset sources:** Checks `<img>` tags and validates image `src` values. Also scans inline styles and `<style>` blocks for `background` and `background-image` URLs.
+- **Reports missing, empty, and invalid media asset URLs:** Flags missing image `src` attributes, broken local image paths, unreachable external image URLs, empty CSS background URLs, and invalid background asset references.
 - **Integrates with the NOVL Optimize CLI:** Can be run standalone or as part of the full site check suite.
 
 ### Known Limitations

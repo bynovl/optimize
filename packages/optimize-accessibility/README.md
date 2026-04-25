@@ -82,13 +82,12 @@ console.log(results);
 ```
 
 ## What It Does
-
-- **Validates accessibility attributes and structure:**  
-  Ensures presence and correctness of ARIA attributes, alt text, and form labels.
+- **Validates accessibility attributes and structure (static checks):**  
+Ensures presence and basic correctness of ARIA attributes, `alt` text, and form labels by scanning built HTML for missing, empty, or malformed attributes.
 - **Checks for missing, duplicate, or empty attributes:**  
-  Reports missing `alt` text, unlabeled form fields, and other aria attributess
+Reports missing `alt` text, unlabeled form fields, empty attributes, and other common static accessibility issues.
 - **Integrates with the NOVL Optimize CLI:**  
-  Can be run standalone or as part of the full site check suite.
+Can be run standalone or as part of the full site check suite.
 
 ### Known Limitations
 - **Static analysis only.** Checks run on built HTML; dynamically injected content (client-side rendering, JS frameworks) is not visible and will not be evaluated.
@@ -96,6 +95,8 @@ console.log(results);
 - **No runtime behavior.** Focus management, keyboard traps, live region announcements, and focus order cannot be detected from static HTML.
 - **No color contrast checking.** Contrast ratios between text and background are not evaluated.
 - **Complement with dedicated a11y tools.** For full WCAG compliance audits, pair with axe, pa11y, or Lighthouse in addition to running this check.
+
+Note: This module is intentionally lightweight for fast CI feedback. For deeper, runtime, or visual checks (contrast, simulated user interactions, or full WCAG coverage) run a dedicated tool such as `pa11y`, `axe`/`axe-core`, or `Lighthouse` against a running site or within a headless browser.
 
 ## Configuration
 

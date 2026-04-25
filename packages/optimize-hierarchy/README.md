@@ -89,8 +89,8 @@ console.log(results);
   Ensures headings (`<h1>`–`<h6>`) are used in a logical, sequential order without skipping levels.
 - **Checks for missing or duplicate headings:**  
   Reports missing `<h1>`, duplicate headings, and improper heading structure.
-- **Flags semantic structure issues:**  
-  Detects improper use of sectioning elements, orphaned headings, and non-semantic containers.
+ - **Flags heading-placement structure issues:**
+  Detects heading-placement problems (for example, multiple `<h1>` tags in the same container, orphaned headings, and skipped levels). This check focuses on heading placement and order; it does not perform deep semantic analysis of sectioning elements.
 - **Integrates with the NOVL Optimize CLI:**  
   Can be run standalone or as part of the full site check suite.
 
