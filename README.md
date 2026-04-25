@@ -235,7 +235,7 @@ We developed a global SKILL.md to help you summarize, analyze, and fix issues wi
 You can add optimize to any CI/CD workflow. Grab the workflow file using the [custom installer](https://optimize.bynovl.com/1c98b4b4), or [view the source](./templates/optimize.yml) and download. If any module fails, your workflow will return as failed, helping you catch issues before you go live.
 
 
-## LLM-Driven Reporting
+## LLM-Driven Reporting (experimental)
 Optimize supports AI-powered, markdown-first reporting using Large Language Models (LLMs) such as OpenAI, Anthropic, or GitHub Models. This feature lets you generate professional, stakeholder-ready audit reports with actionable recommendations, summaries, and visual hierarchy—all in clean markdown for easy version control. You can convert your Markdown report to HTML and spin up a local server with your own styles. And even use your own skill and prompt to help guide AI to deliver the best results every time.
 
 **Example config:**
@@ -261,6 +261,13 @@ report: {
 
 **Custom Skills & Prompts:**
 - You can provide your own expert skill and prompt templates for custom audits (e.g., accessibility, README quality, security).
+
+**Known Limitations**
+**Known Limitations**
+- Large sites can hit the LLM context window limit unless batch processing is used.
+- Even with batch processing, LLM API rate limits (e.g., "Too many requests" errors) can prevent large audits from completing. This is a hard limitation of cloud LLM APIs.
+- There is no perfect solution for large-scale, automated reporting with cloud LLMs—context window and rate limits are both blockers.
+- The only true workaround is to use a locally hosted/self-hosted model that does not have API rate limits or token restrictions.
 
 
 ## Power your own project

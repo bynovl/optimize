@@ -36,7 +36,6 @@ export async function scriptFooter(results, config, args, totalPagesChecked) {
     }
     // export report (markdown or other, LLM-driven) only if --report flag is set or llm.auto is true
     if (config.llm && config.llm.autoRun || reportOutput) {
-        console.log(args)
         const auditPath =  await exportReport(config, filteredResults, reportOutput); // path handled by config.llm.fileOutput
         hasOutputPath = auditPath;
     }
