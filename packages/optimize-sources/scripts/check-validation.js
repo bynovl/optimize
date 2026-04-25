@@ -12,7 +12,7 @@ export async function validateCheck(item, content, config, file, startUrl) {
   const defaultTagChecks = [
     {
       name: '<link rel="stylesheet" href="...">',
-      regex: stylesheetRegex,
+      regex: null,
       required: true,
       isUrl: true,
       customValidation: {
@@ -22,7 +22,7 @@ export async function validateCheck(item, content, config, file, startUrl) {
     },
     {
       name: '<script src="..."></script>',
-      regex: scriptRegex,
+      regex: null,
       required: true,
       isUrl: true,
       customValidation: {

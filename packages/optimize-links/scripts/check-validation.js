@@ -2,7 +2,7 @@
 import { filterByHtmlSection } from '@bynovl/optimize-utils/filter-html.js';
 import { validateItem } from '@bynovl/optimize-lib/check-item.js';
 import { checkProps } from './check-props.js';
-import { validateLinks, allHrefRegex } from './check-patterns.js';
+import { validateLinks } from './check-patterns.js';
 
 export async function validateCheck(item, content, config, file, startUrl) {
   // Validate the content of the HTML file based on your custom check logic.
@@ -12,7 +12,7 @@ export async function validateCheck(item, content, config, file, startUrl) {
   const defaultTagChecks = [
     {
       name: 'Link <a href="...">',
-      regex: allHrefRegex,
+      regex: null,
       required: true,
       isUrl: true,
       customValidation: {
