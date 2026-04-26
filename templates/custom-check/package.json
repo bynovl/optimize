@@ -1,11 +1,11 @@
 {
-  "name": "@bynovl/optimize-lang",
+  "name": "@bynovl/optimize-custom-check",
   "version": "1.0.0",
   "description": "Custom check module example for optimize. Provides a template for creating custom check modules that can be used with the optimize CLI tool. This module includes a sample check that validates the presence of a specific meta tag in HTML files.",
   "main": "index.js",
   "private": false, 
   "bin": {
-    "optimize-lang": "bin/cli.js"
+    "optimize-custom-check": "bin/cli.js"
   },
   "repository": {
     "type": "git",
@@ -38,8 +38,8 @@
     "node": ">=18"
   },
   "dependencies": {
-    "@bynovl/optimize-lib": "^1.0.0",
-    "@bynovl/optimize-tests": "^1.0.0",
-    "@bynovl/optimize-utils": "^1.0.0"
+    "@bynovl/optimize-lib": "latest",
+    "@bynovl/optimize-tests": "latest",
+    "@bynovl/optimize-utils": "latest"
   }
 }

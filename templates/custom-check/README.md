@@ -30,6 +30,8 @@ Custom checks extend the NOVL Optimize engine by adding your own validation logi
    - To test externally you can system link it in the project you want run it in `pnpm link @yourhandle/optimize-performance`. 
    - Experiment with different configuration settings using the `optimize.config.js`
 
+   > **Beta Notice**: During the beta period, you must have an `.npmrc` file with your token at the root of your project. The **same token** is required to both install and update the Optimize package. Ensure your `.npmrc` is present and your token is available for both actions.
+
 4. **Automated Discovery**
    - In your test project, add the system link by running `pnpm link @your/package-name`.
    - Once your package is linked and run `pnpm install`, it will be automatically discovered and registered by Optimize.

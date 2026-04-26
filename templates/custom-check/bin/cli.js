@@ -31,7 +31,7 @@ export default async function runAllChecks() {
     let results = [];
     if (actualChecks.includes(checkProps.flag)) {
         // call the custom check function imported above
-        results = [await checkLang(config, nonIgnoredHtmlFiles)];
+        results = [await checkCustomCheck(config, nonIgnoredHtmlFiles)];
     }
     await scriptFooter(results, config, args, totalPagesChecked);
 }
