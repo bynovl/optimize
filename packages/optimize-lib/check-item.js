@@ -2,80 +2,100 @@ import { ISSUE_KEY } from './issue-keys.js';
 import { checkLinkValidity } from './check-link-validity.js';
 
 export async function validateItem(regex, checkProps, item, content, checkName, isUrl, isRequired, message, reason, customValidation, config, file, startUrl) {
-  const matches = regex ? [...content.matchAll(regex)] : [];
-  if (!item[checkProps.key]) item[checkProps.key] = { results: [] };
+  try {
+    // If regex is provided, ensure it is a RegExp and has the global flag for matchAll
+    let matches = [];
+    if (regex) {
+      if (!(regex instanceof RegExp)) {
+        console.error(`[validateItem] Error: Provided regex is not a RegExp object for check: ${checkName}`);
+        process.exit(1);
+      }
+      if (!regex.global) {
+        console.error(`[validateItem] Error: String.prototype.matchAll called with a non-global RegExp argument for check: ${checkName}`);
+        process.exit(1);
+      }
+      matches = [...content.matchAll(regex)];
+    }
 
-  // Skip regex-based matching and run custom validation directly when regex is not provided but customValidation is defined.
-  if (customValidation && regex == null) {
-    await runCustomValidation(null, checkProps, item, checkName, isRequired, message, reason, customValidation);
-    return;
-  }
+    // Initialize the results array for this check if it doesn't exist yet.
+    if (!item[checkProps.key]) item[checkProps.key] = { results: [] };
 
-  // Optional tag with custom validation: only validate based on custom validaton
-  if (!isRequired && customValidation) {
-    await runCustomValidation(matches, checkProps, item, checkName, isRequired, message, reason, customValidation);
-    return;
-  }
+    // Skip regex-based matching and run custom validation directly when regex is not provided but customValidation is defined.
+    if (customValidation && regex == null) {
+      await runCustomValidation(null, checkProps, item, checkName, isRequired, message, reason, customValidation);
+      return;
+    }
 
-  // Default flow: regex-based matching with optional custom validation for each match.
-  if (matches.length === 0) {
-    item[checkProps.key].results.push({
-      target: checkName,
-      reason: `missing ${checkName}`,
-      type: ISSUE_KEY.missing,
-      isError: !!isRequired,
-      isWarning: !isRequired,
-      message: `${checkName} is required but was not found.`,
-    });
-    return;
-  } else {
-    // Duplicate
-    if (matches.length > 1) {
+    // Optional tag with custom validation: only validate based on custom validaton
+    if (!isRequired && customValidation) {
+      await runCustomValidation(matches, checkProps, item, checkName, isRequired, message, reason, customValidation);
+      return;
+    }
+
+    // Default flow: regex-based matching with optional custom validation for each match.
+    if (matches.length === 0) {
       item[checkProps.key].results.push({
         target: checkName,
-        reason: `duplicate ${checkName}`,
-        type: ISSUE_KEY.duplicate,
+        reason: `missing ${checkName}`,
+        type: ISSUE_KEY.missing,
         isError: !!isRequired,
         isWarning: !isRequired,
-        message: `More than one ${checkName} found.`,
+        message: `${checkName} is required but was not found.`,
       });
-    }
-    // Matches found
-    for (const match of matches) {
-      const value = match[1];
-      // If run it for each match (e.g. Robots meta tag that's not required but has multiple directives that are invalid, like noindex and nofollow)
-      if (customValidation) {
-        await runCustomValidation([match], checkProps, item, checkName, isRequired, message, reason, customValidation);
-      }
-
-      // Exists but empty value
-      if (!value || value.trim() === '') {
+      return;
+    } else {
+      // Duplicate
+      if (matches.length > 1) {
         item[checkProps.key].results.push({
           target: checkName,
-          reason: `${checkName} tag exists but it is empty`,
-          type: ISSUE_KEY.empty,
+          reason: `duplicate ${checkName}`,
+          type: ISSUE_KEY.duplicate,
           isError: !!isRequired,
           isWarning: !isRequired,
-          message: `Provide a value for ${checkName}.`,
+          message: `More than one ${checkName} found.`,
         });
-        // continue;
       }
 
-      // If this is a URL tag, validate the URL
-      if (isUrl && value) {
-        const linkError = await checkLinkValidity(content, value, config, file, startUrl);
-        if (linkError && linkError.isError) {
+      // Matches found
+      for (const match of matches) {
+        const value = match[1];
+        // If run it for each match (e.g. Robots meta tag that's not required but has multiple directives that are invalid, like noindex and nofollow)
+        if (customValidation) {
+          await runCustomValidation([match], checkProps, item, checkName, isRequired, message, reason, customValidation);
+        }
+
+        // Exists but empty value
+        if (!value || value.trim() === '') {
           item[checkProps.key].results.push({
             target: checkName,
-            type: linkError.type,
-            reason: linkError.reason || 'invalid link',
+            reason: `${checkName} tag exists but it is empty`,
+            type: ISSUE_KEY.empty,
             isError: !!isRequired,
             isWarning: !isRequired,
-            message: linkError.message || `The URL provided for ${checkName} is invalid.`,
+            message: `Provide a value for ${checkName}.`,
           });
+        }
+
+        // If this is a URL tag, validate the URL
+        if (isUrl && value) {
+          const linkError = await checkLinkValidity(content, value, config, file, startUrl);
+          if (linkError && linkError.isError) {
+            item[checkProps.key].results.push({
+              target: checkName,
+              type: linkError.type,
+              reason: linkError.reason || 'invalid link',
+              isError: !!isRequired,
+              isWarning: !isRequired,
+              message: linkError.message || `The URL provided for ${checkName} is invalid.`,
+            });
+          }
         }
       }
     }
+  } catch (err) {
+    console.error(`[validateItem] Error:`, err);
+    process.exit(1);
+    // Do not return or push any result if there is an error.
   }
 }
 
@@ -127,13 +147,7 @@ async function runCustomValidation(matches, checkProps, item, checkName, isRequi
       pushCustomResults(customResults);
     }
   } catch (err) {
-    item[checkProps.key].results.push({
-      target: checkName,
-      reason: `Error in customValidation: ${err.message}`,
-      type: ISSUE_KEY.invalid,
-      isError: true,
-      isWarning: false,
-      message: `Custom validation failed for ${checkName}: ${err.message}`,
-    });
+    console.error(`[validateItem] Error:`, err);
+    process.exit(1);
   }
 }
