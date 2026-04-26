@@ -1,5 +1,11 @@
 # @bynovl/optimize-lib
 
+## 2.10.0
+
+### Minor Changes
+
+- fa83a15: Enhance get-check-modules.js for more seamless local custom check support. Improved error handling for check-item for better troubleshooting
+
 ## 2.9.0
 
 ### Minor Changes
