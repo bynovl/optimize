@@ -1,5 +1,11 @@
 # @bynovl/optimize-tests
 
+## 1.0.3
+
+### Patch Changes
+
+- 539e3bc: Update templates
+
 ## 1.0.2
 
 ### Patch Changes
