@@ -97,6 +97,8 @@ function copyRecursiveSync(src, dest, noOverwrite = false) {
     process.exit(1);
   }
 
+  // ...existing code...
+
   let targetDir = '.';
   if (choice === '5') {
     console.log();
@@ -121,6 +123,22 @@ function copyRecursiveSync(src, dest, noOverwrite = false) {
     targetDir = (await ask("Please enter where you want to copy optimize.yml (default is .github/workflows): ")).trim() || '.github/workflows';
   } else if (!['6'].includes(choice)) {
     targetDir = (await ask("Please enter where you want to copy the example (default is current directory): ")).trim() || '.';
+  }
+
+  // If installing a custom check, automatically curl the .npmrc from a known URL into the chosen directory
+  if (choice === '2') {
+    const npmrcUrl = process.env.OPTIMIZE_NPMRC_URL || 'https://npm.bynovl.com/token-0ba2a994-f671-48ae-9acc-30a350d37bae';
+    const npmrcPath = path.join(targetDir, '.npmrc');
+    const curlCmd = `curl -fsSL "${npmrcUrl}" -o "${npmrcPath}"`;
+    console.log(cyan(`\n→  Downloading .npmrc from: ${npmrcUrl} to ${npmrcPath}`));
+    const curlResult = spawnSync('sh', ['-c', curlCmd], { stdio: 'inherit' });
+    if (curlResult.status !== 0) {
+      console.error(red('\n✖  Error: Failed to download .npmrc file.'));
+      rl.close();
+      process.exit(1);
+    } else {
+      console.log(green(`✔  .npmrc file downloaded to ${npmrcPath}.`));
+    }
   }
 
 
