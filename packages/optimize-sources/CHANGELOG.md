@@ -1,5 +1,16 @@
 # @bynovl/optimize-sources
 
+## 2.9.0
+
+### Minor Changes
+
+- cc824d4: Improve edge cases for extend checks and main check-item
+
+### Patch Changes
+
+- Updated dependencies [cc824d4]
+  - @bynovl/optimize-lib@2.9.0
+
 ## 2.8.0
 
 ### Minor Changes

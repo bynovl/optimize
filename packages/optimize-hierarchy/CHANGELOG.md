@@ -1,5 +1,12 @@
 # @bynovl/optimize-hierarchy
 
+## 2.7.2
+
+### Patch Changes
+
+- Updated dependencies [cc824d4]
+  - @bynovl/optimize-lib@2.9.0
+
 ## 2.7.1
 
 ### Patch Changes
