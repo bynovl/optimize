@@ -40,6 +40,29 @@ export async function getCheckModules() {
       console.warn(`Failed to load check module from ${pkgRoot}: ${e.message}`);
     }
   }
+  // Fallback: add local scripts/check-props.js if it exists (for testing local packages)
+  try {
+    const checkPropsPath = path.join(process.cwd(), 'scripts', 'check-props.js');
+    if (fs.existsSync(checkPropsPath)) {
+      const checkPropsModule = await import(checkPropsPath);
+      const checkProps = checkPropsModule.checkProps;
+      // Only add if not already present
+      if (!checkModules.some(m => m.key === checkProps.key)) {
+        checkModules.push({
+          flag: checkProps.flag,
+          fn: null,
+          key: checkProps.key,
+          label: checkProps.label,
+          module: 'local-package'
+        });
+        checkExports[checkProps.key] = null;
+        checkExports['check' + checkProps.label.replace(/\s+/g, '')] = null;
+        debug('[getCheckModules] Local fallback loaded checkProps from scripts/check-props.js');
+      }
+    }
+  } catch (e) {
+    debug(`[getCheckModules] Local fallback failed: ${e.message}`);
+  }
   debug(`[getCheckModules] Total checks loaded: ${checkModules.length}`);
   return { checkModules, checkExports };
 }
