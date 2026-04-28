@@ -3,7 +3,7 @@ import globalConfig from '@bynovl/optimize-lib/set-config.js';
 // Cutsom CLI module config settings
 export const DEFAULT_CONFIG_SETTINGS = {
     ...globalConfig,
-    mediaTypes: ['video', 'audio', 'embed', 'img'],
+    mediaTypes: ['video', 'audio', 'embed', 'img', 'source', 'object', 'iframe'],
     inlineStyles: true,
     styleBlocks: true,
     cssFiles: true,

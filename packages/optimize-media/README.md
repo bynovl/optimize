@@ -99,7 +99,7 @@ console.log(results);
   - `outDir`: Directory containing built HTML files.
   - `ignore`: Array of glob patterns or paths to exclude.
   - `batchSize`: Number of files to process in parallel.
-  - `mediaTypes`: Array of media tag types to check (e.g., `['img', 'video', 'audio', 'iframe']`). *Note: currently only img media type is supported.*
+  - `mediaTypes`: Array of media tag types to check (e.g., `['img', 'video', 'audio', 'embed', 'source', 'object', 'iframe']`).
   - `inlineStyles`: Check media within inline styles (default true)
   - `styleBlocks`: Check media within style blocks (default true)
   - `cssFiles`: Check CSS files (default true)

@@ -2,7 +2,7 @@
 import { filterByHtmlSection } from '@bynovl/optimize-utils/filter-html.js';
 import { validateItem } from '@bynovl/optimize-lib/check-item.js';
 import { checkProps } from './check-props.js';
-import { validateImgTag, validateInlineStyles, validateStyleBlocks } from './check-patterns.js';
+import { validateImgTag, validateInlineStyles, validateStyleBlocks, validateAudioSrc, validateVideoSrc, validateSourceSrcset, validateEmbedSrc, validateObjectData, validateIframeSrc } from './check-patterns.js';
 
 export async function validateCheck(item, content, config, file, startUrl) {
   // Validate the content of the HTML file based on your custom check logic.
@@ -10,6 +10,66 @@ export async function validateCheck(item, content, config, file, startUrl) {
 
   // Define the checks for your custom check.
   const defaultTagChecks = [
+    {
+      name: '<object data> and type validity',
+      regex: null,
+      required: false,
+      isUrl: true,
+      customValidation: {
+        check: validateObjectData,
+        args: [filteredContent, config, file, startUrl]
+      }
+    },
+    {
+      name: '<iframe src> validity',
+      regex: null,
+      required: false,
+      isUrl: true,
+      customValidation: {
+        check: validateIframeSrc,
+        args: [filteredContent, config, file, startUrl]
+      }
+    },
+    {
+      name: '<embed src> validity',
+      regex: null,
+      required: false,
+      isUrl: true,
+      customValidation: {
+        check: validateEmbedSrc,
+        args: [filteredContent, config, file, startUrl]
+      }
+    },
+    {
+      name: '<audio src> validity',
+      regex: null,
+      required: false,
+      isUrl: true,
+      customValidation: {
+        check: validateAudioSrc,
+        args: [filteredContent, config, file, startUrl]
+      }
+    },
+    {
+      name: '<video src> validity',
+      regex: null,
+      required: false,
+      isUrl: true,
+      customValidation: {
+        check: validateVideoSrc,
+        args: [filteredContent, config, file, startUrl]
+      }
+    },
+    {
+      name: '<source srcset> validity',
+      regex: null,
+      required: false,
+      isUrl: true,
+      customValidation: {
+        check: validateSourceSrcset,
+        args: [filteredContent, config, file, startUrl]
+      }
+    },
     {
       name: '<img src="...">',
       regex: null,

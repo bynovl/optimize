@@ -147,14 +147,25 @@ You may not want to validate an entire site. To speed up processing time hide th
 ```
 
 ### Choose Media Types 
-Right now optimize is built to check only `<img>`. When the feature is supported you'll be able to enable/disable by adding/removing types from the `mediaTypes` array. 
+Optimize now supports validation for all major HTML media types: `<img>`, `<video>`, `<audio>`, `<embed>`, and `<source>`. You can enable or disable checks for each type by adding or removing them from the `mediaTypes` array in your config:
 
 ```javascript
-{ 
+{
   // ... other settings
-  "mediaTypes": ["img", "video", "iframe", "object"]
+  mediaTypes: ["img", "video", "audio", "embed", "source", "iframe", "object"] // fully configurable
 }
 ```
+
+For example, to only check images and video:
+
+```javascript
+{
+  // ... other settings
+  mediaTypes: ["img", "video"]
+}
+```
+
+Checks for each type will only run if that type is present in the array. This gives you granular control over which media elements are validated in your project.
 
 ### Get Data in different formats
 Include `exportResultsJson` and/or `exportResultsCsv` with the path and file name for the location where you want your results exported in your `optimize.config.js`. Note: you can also use the `--json` flag to export results at run time.
