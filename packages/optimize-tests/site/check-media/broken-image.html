@@ -24,6 +24,18 @@
 <body>
   <h1>Check Media</h1>
   <img src="missing-image.png" alt="Missing Image">
+  <embed>
+  <embed src="">
+  <embed src="/assets/audio/notfound.mp3">
+  <video src=""></video>
+  <audio src=""></audio>
+  <!-- <iframe> and <object> tests for broken cases -->
+  <iframe src="/assets/notfound.html"></iframe>
+  <iframe src=""></iframe>
+  <object type="application/pdf" data="/assets/notfound.pdf"></object>
+  <object type="application/pdf" data=""></object>
+  <object data="/assets/notfound.pdf"></object>
+  <object type="application/pdf"></object>
   <!-- Schema.org JSON-LD -->
   <script type="application/ld+json">
     {

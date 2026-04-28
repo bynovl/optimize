@@ -33,6 +33,39 @@
   <h1>Check Media</h1>
   <div class="banner"></div>
   <div style="background-image: url('/assets/images/banner.png'); width: 100px; height: 100px;"></div>
+
+  <!-- <embed> tests -->
+  <embed>
+  <embed src="">
+  <embed src="/assets/audio/valid.mp3">
+  <embed src="/assets/audio/notfound.mp3">
+  <embed src="data:audio/mp3;base64,AAAA">
+
+  <!-- <video> tests -->
+  <video src="/assets/video/valid.mp4"></video>
+  <video src="/assets/video/notfound.mp4"></video>
+  <video src=""></video>
+
+  <!-- <audio> tests -->
+  <audio src="/assets/audio/valid.mp3"></audio>
+  <audio src="/assets/audio/notfound.mp3"></audio>
+  <audio src=""></audio>
+
+  <!-- <img> tests -->
+  <img src="/assets/images/banner.png" alt="desc">
+  <img src="/assets/images/notfound.png" alt="desc">
+  <img src="" alt="desc">
+
+  <!-- <picture> tests -->
+  <picture>
+    <source srcset="/assets/images/banner.webp" type="image/webp">
+    <img src="/assets/images/banner.png" alt="desc">
+  </picture>
+  <picture>
+    <source srcset="/assets/images/banner.webp" type="image/webp">
+    <source srcset="/assets/images/banner.png" type="image/png">
+    <img src="/assets/images/banner.png" alt="desc">
+  </picture>
   <!-- Schema.org JSON-LD -->
   <script type="application/ld+json">
     {
