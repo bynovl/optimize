@@ -54,8 +54,57 @@ async function validateInternal(content, path, config, sourceFile, label = null)
 }
 
 export async function checkLinkValidity(content, link, config = {}, sourceFile, startUrl) {
+  // Early return for null, undefined, or empty string links
+  if (link === null || link === undefined || link === '') {
+    return {
+      isError: true,
+      isWarning: false,
+      reason: `Link href is missing, empty, null, or undefined (value: ${String(link)})`,
+      message: 'Link href is missing, empty, null, or undefined (no href attribute or value)',
+      target: '',
+      sourceFile
+    };
+  }
+
+  // Centralized normalization logic
+  function normalizeLink(link) {
+    let normalized = normalizeProtocolRelative(link);
+    let wasDoubleHtml = typeof normalized === 'string' && /\.html\.html$/.test(normalized);
+    let final = removeDoubleHtml(normalized);
+    return { normalized: final, wasDoubleHtml };
+  }
+
+  // Protocols to skip or warn about
+  const skipOrWarnProtocols = [
+    'data:', 'mailto:', 'tel:', 'javascript:', 'ftp:', 'file:', 'irc:', 'news:', 'gopher:', 'ws:', 'wss:'
+  ];
+  const lowerLink = String(link).toLowerCase();
+  for (const proto of skipOrWarnProtocols) {
+    if (lowerLink.startsWith(proto)) {
+      return {
+        isError: false,
+        isWarning: true,
+        reason: `Link uses unsupported or non-navigable protocol (${proto.replace(':','')})`,
+        message: `Link with protocol ${proto} skipped or not validated`,
+        target: link,
+        sourceFile
+      };
+    }
+  }
+
   // 1. Internal/Local checks
   if (link?.startsWith('#')) {
+    // Optionally warn for href="#" as a placeholder
+    if (link === '#') {
+      return {
+        isError: false,
+        isWarning: true,
+        reason: 'Fragment-only link ("#") often used as placeholder',
+        message: 'Fragment-only link ("#") often used as placeholder',
+        target: link,
+        sourceFile
+      };
+    }
     return validateInternal(content, link, config, sourceFile);
   }
   if (link === '/' && !startUrl) {
@@ -65,8 +114,8 @@ export async function checkLinkValidity(content, link, config = {}, sourceFile, 
     return validateInternal(content, 'index.html', config, sourceFile, link);
   }
 
-  let normalizedLink = normalizeProtocolRelative(link);
-  normalizedLink = removeDoubleHtml(normalizedLink);
+  const { normalized: normalizedLink, wasDoubleHtml } = normalizeLink(link);
+  const originalLink = link;
 
   // Determine if external
   const isExternal =
@@ -89,6 +138,22 @@ export async function checkLinkValidity(content, link, config = {}, sourceFile, 
       } catch {
         internalPath = normalizedLink;
       }
+    }
+    // If normalization changed the link, include both in the message and reason, and mention normalization if it was double .html
+    if (originalLink !== normalizedLink) {
+      let label = `original: ${link}, normalized: ${normalizedLink}`;
+      if (wasDoubleHtml) {
+        label += ' (normalized from .html.html to .html)';
+      }
+      // Pass label as both reason and message for clarity
+      return {
+        isError: false,
+        isWarning: false,
+        reason: label,
+        message: label,
+        target: normalizedLink,
+        sourceFile
+      };
     }
     return validateInternal(content, internalPath, config, sourceFile);
   }
@@ -123,6 +188,7 @@ export async function checkLinkValidity(content, link, config = {}, sourceFile, 
       }
     }
 
+    const originalPathname = urlObj.pathname;
     urlObj.pathname = removeDoubleHtml(urlObj.pathname);
 
     // Prefer local validation if same origin and outDir exists
@@ -135,7 +201,17 @@ export async function checkLinkValidity(content, link, config = {}, sourceFile, 
       const pathAndQueryHash = `${urlObj.pathname}${urlObj.search || ''}${urlObj.hash || ''}`;
       const intResult = await checkLinkValidityInt(content, pathAndQueryHash, config, sourceFile);
       if (!intResult?.isError) {
-        return { isError: false, isWarning: false, reason: 'Link is valid (resolved locally)', message: urlObj.href, target: urlObj.href, sourceFile };
+        let msg = urlObj.href;
+        let reason = 'Link is valid (resolved locally)';
+        if (originalPathname !== urlObj.pathname) {
+          msg = `original: ${link}, normalized: ${urlObj.href}`;
+          reason += ` (original: ${link}, normalized: ${urlObj.href})`;
+          if (wasDoubleHtml) {
+            msg += ' (normalized from .html.html to .html)';
+            reason += ' (normalized from .html.html to .html)';
+          }
+        }
+        return { isError: false, isWarning: false, reason, message: msg, target: urlObj.href, sourceFile };
       }
       // Otherwise, fall through to external check
     }
@@ -146,7 +222,29 @@ export async function checkLinkValidity(content, link, config = {}, sourceFile, 
 
     const result = await checkLinkValidityExt(urlObj.href, config, sourceFile);
     if (!result?.isError) {
-      return { isError: false, isWarning: false, reason: 'Link is valid', message: urlObj.href, target: urlObj.href, sourceFile };
+      let msg = urlObj.href;
+      let reason = 'Link is valid';
+      if (originalPathname !== urlObj.pathname) {
+        msg = `original: ${link}, normalized: ${urlObj.href}`;
+        reason += ` (original: ${link}, normalized: ${urlObj.href})`;
+        if (wasDoubleHtml) {
+          msg += ' (normalized from .html.html to .html)';
+          reason += ' (normalized from .html.html to .html)';
+        }
+      }
+      return { isError: false, isWarning: false, reason, message: msg, target: urlObj.href, sourceFile };
+    }
+    // If error, also include original/normalized if changed
+    if (originalPathname !== urlObj.pathname) {
+      result.message = `original: ${link}, normalized: ${urlObj.href} | ${result.message}`;
+      result.reason = `${result.reason} (original: ${link}, normalized: ${urlObj.href})`;
+    }
+    // Always append normalization note for .html.html normalization if it occurred, but avoid duplicates
+    const normNote = ' (normalized from .html.html to .html)';
+    if (wasDoubleHtml) {
+      if (!result.reason?.includes(normNote)) {
+        result.reason = (result.reason || '') + normNote;
+      }
     }
     return result;
   }
