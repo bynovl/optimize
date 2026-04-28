@@ -7,16 +7,29 @@ import shouldIgnore from './should-ignore.js';
 import { cliBanner } from './cli-banner.js';
 import { startStopSpinner } from '@bynovl/optimize-utils/spinner.js';
 import { crawlSite } from './crawl.js';
+import { colors } from '@bynovl/optimize-utils/ansi-colors.js';
 
 export async function scriptHeader(isFirstCheck = true, enabledChecks = [], args) {
     // Load configuration and checksOverride
     const { config } = await getConfig(enabledChecks);
 
+    function earlyExitError() {
+        console.error(colors.white('You must add or update the ') + colors.cyan('outDir') + colors.white(' property in your ') + colors.cyan('optimize.config.js') + colors.white(' file.'));
+        console.error(colors.white('This is required so Optimize knows where to find your built HTML files.'));
+        console.error(colors.white('For more information and setup instructions, visit: ') + colors.cyan('https://github.com/bynovl/optimize'));
+        process.exit(1);
+    }
+    // Early exit if outDir is not set
+    if (!config.outDir) {
+        console.log(colors.red('[novl optimize] ERROR:') + ' ' + colors.yellow('No output directory (outDir) is set!'));
+        earlyExitError();
+    }
+
     // Ensure outDir exists
-    if (!config.outDir || !fs.existsSync(config.outDir) || !fs.lstatSync(config.outDir).isDirectory()) {
+    if (!fs.existsSync(config.outDir) || !fs.lstatSync(config.outDir).isDirectory()) {
         // If outDir doesn't exist, check for common output directories in the project root and use the first one found
-        // Public is last but some SSG frameworks use it as the output dir, so we check it if nothing else is found
-        const defaultDirs = ['dist', 'out', '_site', '_build','public'];
+        // '_opt' is the branded default, followed by other common build folders
+        const defaultDirs = ['_opt', 'dist', 'out', '_site', '_build', 'public'];
         let found = false;
         for (const dir of defaultDirs) {
             if (fs.existsSync(dir) && fs.lstatSync(dir).isDirectory()) {
@@ -27,11 +40,18 @@ export async function scriptHeader(isFirstCheck = true, enabledChecks = [], args
         }
         if (!found) {
             // If no default output directory is found, log an error and exit
-            console.error(`[novl optimize] Error: The output directory specified in outDir ('${config.outDir}') does not exist, and no default output directory was found.`);
-            process.exit(1);
+            console.log(colors.red(`[novl optimize] Error: The output directory specified in outDir ('${config.outDir}') does not exist, and no default output directory was found.`));
+            earlyExitError();
         }
     }
 
+    // Check if outDir exists but is empty (no HTML files)
+    const htmlFilesInOutDir = fs.readdirSync(config.outDir).filter(f => f.endsWith('.html'));
+    if (htmlFilesInOutDir.length === 0) {
+        console.log(colors.red(`[novl optimize] Error: The output directory '${config.outDir}' exists but contains no HTML files to check. Exiting.`));
+        earlyExitError();
+    }
+    
     // Exit early if LLM report is configured but no API key is available
     if ( args['--report']) {
         const llmConfig = config.llm || {};
