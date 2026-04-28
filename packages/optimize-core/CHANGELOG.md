@@ -1,5 +1,20 @@
 # @bynovl/optimize
 
+## 2.5.12
+
+### Patch Changes
+
+- Updated dependencies [fa83a15]
+  - @bynovl/optimize-lib@2.10.0
+  - @bynovl/optimize-accessibility@2.7.3
+  - @bynovl/optimize-hierarchy@2.7.3
+  - @bynovl/optimize-links@2.9.1
+  - @bynovl/optimize-media@2.8.1
+  - @bynovl/optimize-meta@2.7.3
+  - @bynovl/optimize-open-graph@2.7.3
+  - @bynovl/optimize-schema@2.7.3
+  - @bynovl/optimize-sources@2.9.1
+
 ## 2.5.11
 
 ### Patch Changes
