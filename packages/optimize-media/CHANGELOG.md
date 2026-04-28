@@ -1,5 +1,16 @@
 # @bynovl/optimize-media
 
+## 2.9.0
+
+### Minor Changes
+
+- 6462298: Improved core logic error handling and edge cases for links and issue types; added support for all media types (video, audio, object, source, embed, img)
+
+### Patch Changes
+
+- Updated dependencies [6462298]
+  - @bynovl/optimize-lib@2.11.0
+
 ## 2.8.1
 
 ### Patch Changes

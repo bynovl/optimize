@@ -1,5 +1,12 @@
 # @bynovl/optimize-sources
 
+## 2.9.2
+
+### Patch Changes
+
+- Updated dependencies [6462298]
+  - @bynovl/optimize-lib@2.11.0
+
 ## 2.9.1
 
 ### Patch Changes

@@ -1,5 +1,15 @@
 # @bynovl/optimize-tests
 
+## 1.1.0
+
+### Minor Changes
+
+- 6462298: Added support too test more edge cases
+
+### Patch Changes
+
+- @bynovl/optimize@2.5.13
+
 ## 1.0.4
 
 ### Patch Changes

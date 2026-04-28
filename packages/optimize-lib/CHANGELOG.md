@@ -1,5 +1,11 @@
 # @bynovl/optimize-lib
 
+## 2.11.0
+
+### Minor Changes
+
+- 6462298: Improved core logic error handling and edge cases for links and issue types; added support for all media types (video, audio, object, source, embed, img)
+
 ## 2.10.0
 
 ### Minor Changes
