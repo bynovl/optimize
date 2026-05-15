@@ -22,7 +22,7 @@ Welcome to the Optimize beta. You're joining a small but growing community of De
 **Next steps**
 1) Watch for a GitHub invite to the private repo (it should arrive shortly).
 2) By accepting the invite and accessing the code, you agree it’s confidential and for evaluation/testing only (no redistribution or commercial use) during beta.
-3) Once you’re in, start here: [README](https://optimizecli.com/github) → run the quick install.
+3) Once you’re in, start here: [README](https://optimizecli.com/github) and run the quick install to get setup in seconds
 
 Then, let everyone know you're in the house and [introduce yourself](https://github.com/bynovl/optimize/discussions/10). Have questions, feedback, or ideas? Want to contribute? [Join the discussion](https://github.com/bynovl/optimize/discussions/categories/beta)
 
