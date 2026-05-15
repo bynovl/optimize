@@ -17,11 +17,14 @@ archived: true
 
 <h1 style="margin-top: 0;">You passed the bot test — you're in!</h1>
 
-Welcome to the Optimize beta. You're joining a small but growing community of SEOs and developers. And I'm excited to have you here and see how you use Optimize in your workflow. Your feedback will help me learn where it shines, where it needs work, and what you need most.
+Welcome to the Optimize beta. You're joining a small but growing community of Developers and SEOs. And I'm excited to have you here and see how you use Optimize in your workflow. Your feedback will help me learn where it shines, where it needs work, and what you need most.
 
-**Next steps**: Within the hour you'll receive a GitHub invite to the private repo. Once you're in, head to the [README](https://optimizecli.com/github) and use the quick install to get Optimize up and running.
+**Next steps**
+1) Watch for a GitHub invite to the private repo (it should arrive shortly).
+2) By accepting the invite and accessing the code, you agree it’s confidential and for evaluation/testing only (no redistribution or commercial use) during beta.
+3) Once you’re in, start here: [README](https://optimizecli.com/github) → run the quick install.
 
-Let everyone know you're in the house and [introduce yourself](https://github.com/bynovl/optimize/discussions/10). Have questions, feedback, or ideas? Want to contribute? [Join the discussion](https://github.com/bynovl/optimize/discussions/categories/beta)
+Then, let everyone know you're in the house and [introduce yourself](https://github.com/bynovl/optimize/discussions/10). Have questions, feedback, or ideas? Want to contribute? [Join the discussion](https://github.com/bynovl/optimize/discussions/categories/beta)
 
 **Together, let's optimize the web. No site left behind.**
 
