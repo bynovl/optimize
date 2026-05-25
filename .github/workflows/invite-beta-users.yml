@@ -56,40 +56,111 @@ jobs:
           SUBMISSION_COUNT=$(jq '.submissions | length' submissions.json)
           echo "✅ Found $SUBMISSION_COUNT submissions"
 
-      - name: Filter new users for invite/newsletter
+      - name: Classify users by invite status
         run: |
           echo "🔍 Fetching current collaborators..."
-          gh api repos/${{ github.repository }}/collaborators --paginate --jq '.[].login' | jq -R . | jq -s . > collaborators.json
-          echo "🔍 Fetching pending invitations..."
-          gh api repos/${{ github.repository }}/invitations --paginate --jq '.[].invitee.login' | jq -R . | jq -s . > pending.json
-          jq -s 'add | unique' collaborators.json pending.json > all_invited.json
-          jq --slurpfile all_invited all_invited.json '{submissions: [.submissions[] | select((.payload_params.username // empty | ltrimstr("@")) as $u | ($all_invited[0] | index($u) | not))]}' submissions.json > new_users.json
+          gh api repos/${{ github.repository }}/collaborators --paginate --jq '.[].login | ascii_downcase' | jq -R . | jq -s 'unique' > collaborators.json
+          echo "🔍 Fetching repository invitations..."
+          gh api repos/${{ github.repository }}/invitations --paginate \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2026-03-10" > invitations.json
+          jq '[.[] | select(.expired == false and (.invitee.login? != null)) | .invitee.login | ascii_downcase] | unique' invitations.json > pending.json
+          jq '[.[] | select(.expired == true and (.invitee.login? != null)) | { invitation_id: .id, login: (.invitee.login | ascii_downcase) }] | unique_by(.login)' invitations.json > expired_invites.json
+          jq '[.[].login] | unique' expired_invites.json > expired.json
+          jq --slurpfile expired expired.json '{submissions: [.submissions[] | select((.payload_params.username // empty | ltrimstr("@") | ascii_downcase) as $u | $u != "" and ($expired[0] | index($u)))]}' submissions.json > expired_users.json
+          jq --slurpfile collaborators collaborators.json --slurpfile pending pending.json --slurpfile expired expired.json '{submissions: [.submissions[] | select((.payload_params.username // empty | ltrimstr("@") | ascii_downcase) as $u | $u != "" and ($collaborators[0] | index($u) | not) and ($pending[0] | index($u) | not) and ($expired[0] | index($u) | not))]}' submissions.json > new_users.json
+          echo "✅ Pending invites: $(jq 'length' pending.json)"
+          echo "✅ Expired invites: $(jq 'length' expired_invites.json)"
           echo "✅ New users to invite/newsletter: $(jq '.submissions | length' new_users.json)"
 
-      - name: Send invites to new users
+      - name: Show classified invite JSON
         run: |
-          echo "📧 Sending newsletter to all new users in new_users.json..."
-          pnpm exec socializer --posts-dir=.github/templates --publish invite.md --force --list=new_users.json
+          echo "===== pending.json ====="
+          jq '.' pending.json
+          echo "===== expired.json ====="
+          jq '.' expired.json
+          echo "===== new_users.json ====="
+          jq '.' new_users.json
           
-      - name: Process and invite new collaborators
-        run: |
-          echo "📋 Inviting new GitHub usernames..."
-          jq -r '.submissions[].payload_params.username // empty | ltrimstr("@")' new_users.json | while read -r github_handle; do
-            if [[ -z "$github_handle" ]]; then
-              continue
-            fi
-            echo "➡️ Inviting by username: $github_handle"
-            if response=$(gh api \
-              --method PUT \
-              -H "Accept: application/vnd.github+json" \
-              -H "X-GitHub-Api-Version: 2022-11-28" \
-              "/repos/${{ github.repository }}/collaborators/$github_handle" \
-              -f permission='pull' 2>&1); then
-              echo "✅ Invited $github_handle"
-            else
-              error=$(echo "$response" | jq -r '.message // "Unknown error"' 2>/dev/null || echo "$response")
-              echo "⚠️ Skipped $github_handle: $error"
-            fi
-          done
-          echo "✅ Sync complete"
+      # GitHub requires expired invitations to be deleted before they can be re-sent.
+      # - name: Remove expired invitations
+      #   run: |
+      #     echo "📋 Removing expired invitations..."
+      #     jq -c '.[]' expired_invites.json | while read -r invite; do
+      #       github_handle=$(echo "$invite" | jq -r '.login')
+      #       invitation_id=$(echo "$invite" | jq -r '.invitation_id')
+      #       if [[ -z "$github_handle" || -z "$invitation_id" || "$invitation_id" == "null" ]]; then
+      #         continue
+      #       fi
+      #       echo "➡️ Removing expired invitation #$invitation_id for $github_handle"
+      #       if response=$(gh api \
+      #         --method DELETE \
+      #         -H "Accept: application/vnd.github+json" \
+      #         -H "X-GitHub-Api-Version: 2026-03-10" \
+      #         "/repos/${{ github.repository }}/invitations/$invitation_id" 2>&1); then
+      #         echo "✅ Removed expired invitation for $github_handle"
+      #       else
+      #         error=$(echo "$response" | jq -r '.message // "Unknown error"' 2>/dev/null || echo "$response")
+      #         echo "⚠️ Could not remove expired invitation for $github_handle: $error"
+      #         continue
+      #       fi
+      #     done
+
+      # - name: Send expired invite follow-ups
+      #   run: |
+      #     EXPIRED_COUNT=$(jq '.submissions | length' expired_users.json)
+      #     if [[ "$EXPIRED_COUNT" -eq 0 ]]; then
+      #       echo "ℹ️ No expired invites to follow up."
+      #       exit 0
+      #     fi
+      #     echo "📧 Sending expired invite follow-up to $EXPIRED_COUNT users..."
+      #     pnpm exec socializer --posts-dir=.github/templates --publish invite-expired.md --force --list=expired_users.json
+
+      # - name: Send invites to new users
+      #   run: |
+      #     echo "📧 Sending newsletter to all new users in new_users.json..."
+      #     pnpm exec socializer --posts-dir=.github/templates --publish invite.md --force --list=new_users.json
+
+      # - name: Re-add expired collaborators
+      #   run: |
+      #     echo "📋 Re-adding expired collaborators..."
+      #     jq -r '.submissions[].payload_params.username // empty | ltrimstr("@") | ascii_downcase' expired_users.json | while read -r github_handle; do
+      #       if [[ -z "$github_handle" ]]; then
+      #         continue
+      #       fi
+      #       echo "➡️ Re-inviting expired user: $github_handle"
+      #       if response=$(gh api \
+      #         --method PUT \
+      #         -H "Accept: application/vnd.github+json" \
+      #         -H "X-GitHub-Api-Version: 2022-11-28" \
+      #         "/repos/${{ github.repository }}/collaborators/$github_handle" \
+      #         -f permission='pull' 2>&1); then
+      #         echo "✅ Re-invited $github_handle"
+      #       else
+      #         error=$(echo "$response" | jq -r '.message // "Unknown error"' 2>/dev/null || echo "$response")
+      #         echo "⚠️ Skipped $github_handle: $error"
+      #       fi
+      #     done
+      #     
+      # - name: Process and invite new collaborators
+      #   run: |
+      #     echo "📋 Inviting new GitHub usernames..."
+      #     jq -r '.submissions[].payload_params.username // empty | ltrimstr("@")' new_users.json | while read -r github_handle; do
+      #       if [[ -z "$github_handle" ]]; then
+      #         continue
+      #       fi
+      #       echo "➡️ Inviting by username: $github_handle"
+      #       if response=$(gh api \
+      #         --method PUT \
+      #         -H "Accept: application/vnd.github+json" \
+      #         -H "X-GitHub-Api-Version: 2022-11-28" \
+      #         "/repos/${{ github.repository }}/collaborators/$github_handle" \
+      #         -f permission='pull' 2>&1); then
+      #         echo "✅ Invited $github_handle"
+      #       else
+      #         error=$(echo "$response" | jq -r '.message // "Unknown error"' 2>/dev/null || echo "$response")
+      #         echo "⚠️ Skipped $github_handle: $error"
+      #       fi
+      #     done
+      #     echo "✅ Sync complete"
 
