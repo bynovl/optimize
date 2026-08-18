@@ -31,11 +31,12 @@ npm install @bynovl/optimize-sources
 ```
 
 ### 2. Configure `optimize.config.js`
-Add/update an `optimize.config.js` to your project root. And define required `outDir` setting:
 
-```js 
-export default { 
-  outDir: "_site", // your build directory
+Use the [default settings](../README.md) which detects recognized build folders or add an `optimize.config.js` in your project root and define the build folder using `outDir`:
+
+```js
+export default {
+  outDir: "_site", // minimum required
 }
 ```
 

@@ -43,7 +43,7 @@ npm install @bynovl/optimize-core
 ```
 
 ### 2. Configure
-Add `optimize.config.js` in the root of your project. An `outDir` with the location of your build folder is all that's required:
+By default optimize looks a build folder by the name of `_site`, `_opt`, `_build`, `public`, `out` or `dist` and loads the default settings. To change the build directory add an `optimize.config.js` in the root of your project. Then update the `outDir` with the location of your build folder:
 
 ```javascript
 // optimize.config.js

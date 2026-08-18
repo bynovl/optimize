@@ -31,12 +31,14 @@ npx optimize-schema
 npm install @bynovl/optimize-schema
 ```
 
+
 ### 2. Configure `optimize.config.js`
-Add or update an `optimize.config.js` in your project root and define the required `outDir` setting:
+
+Use the [default settings](../README.md) which detects recognized build folders or add an `optimize.config.js` in your project root and define the build folder using `outDir`:
 
 ```js
 export default {
-  outDir: "_site", // your build directory
+  outDir: "_site", // minimum required
 }
 ```
 > Note: Use the [quick start installer](https://npm.bynovl.com/token-147c00d2-1d38-4f7f-9b1c-d89e47409a34?INSTALL=1&check=schema)(see above) or [custom installer](https://optimize.bynovl.com/1c98b4b4) to pick what you need.

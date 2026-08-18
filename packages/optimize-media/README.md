@@ -29,13 +29,14 @@ npx optimize-media
 npm install @bynovl/optimize-media
 ```
 
+
 ### 2. Configure `optimize.config.js`
 
-Add or update an `optimize.config.js` in your project root and define the required `outDir` setting:
+Use the [default settings](../README.md) which detects recognized build folders or add an `optimize.config.js` in your project root and define the build folder using `outDir`:
 
 ```js
 export default {
-  outDir: "_site", // your build directory
+  outDir: "_site", // minimum required
 }
 ```
 
