@@ -3,7 +3,7 @@ import { aggregateStats } from './aggregate-stats.js';
 import { printSummary } from './print-summary.js';
 import { displayLogs } from './display-logs.js';
 import { exportResultsAsJson, exportResultsAsCsv } from '@bynovl/optimize-utils/export-as.js';
-import exportReport from './generate-report.js';
+import exportReport from './generate-report-new.js';
 import { startStopSpinner } from '@bynovl/optimize-utils/spinner.js';
 import { clearSpinnerLine } from '@bynovl/optimize-utils/spinner.js';
 import { colors } from '@bynovl/optimize-utils/ansi-colors.js';
@@ -36,7 +36,7 @@ export async function scriptFooter(results, config, args, totalPagesChecked) {
     }
     // export report (markdown or other, LLM-driven) only if --report flag is set or llm.auto is true
     if (config.llm && config.llm.autoRun || reportOutput) {
-        const auditPath =  await exportReport(config, filteredResults, reportOutput); // path handled by config.llm.fileOutput
+        const auditPath =  await exportReport(config, { results: filteredResults }); // pass as { results: [...] }
         hasOutputPath = auditPath;
     }
     if (hasOutputPath !== '') {    
