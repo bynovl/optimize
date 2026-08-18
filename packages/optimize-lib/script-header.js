@@ -14,15 +14,7 @@ export async function scriptHeader(isFirstCheck = true, enabledChecks = [], args
     const { config } = await getConfig(enabledChecks);
 
     function earlyExitError() {
-        console.error(colors.white('You must add or update the ') + colors.cyan('outDir') + colors.white(' property in your ') + colors.cyan('optimize.config.js') + colors.white(' file.'));
-        console.error(colors.white('This is required so Optimize knows where to find your built HTML files.'));
-        console.error(colors.white('For more information and setup instructions, visit: ') + colors.cyan('https://github.com/bynovl/optimize'));
         process.exit(1);
-    }
-    // Early exit if outDir is not set
-    if (!config.outDir) {
-        console.log(colors.red('[novl optimize] ERROR:') + ' ' + colors.yellow('No output directory (outDir) is set!'));
-        earlyExitError();
     }
 
     // Ensure outDir exists
@@ -39,8 +31,12 @@ export async function scriptHeader(isFirstCheck = true, enabledChecks = [], args
             }
         }
         if (!found) {
-            // If no default output directory is found, log an error and exit
-            console.log(colors.red(`[novl optimize] Error: The output directory specified in outDir ('${config.outDir}') does not exist, and no default output directory was found.`));
+            if(config.outDir === undefined) {
+                console.log(colors.red(`[novl optimize] Error: You must use a recognized output directory (_opt, dist, out, _site, _build, public) or define a custom outDir in your optimize.config.js`))
+            } else {
+                // If no default output directory is found, log an error and exit
+                console.log(colors.red(`[novl optimize] Error: The output directory specified in outDir ('${config.outDir}') does not exist, and no default output directory was found.`));
+            }
             earlyExitError();
         }
     }
@@ -48,7 +44,7 @@ export async function scriptHeader(isFirstCheck = true, enabledChecks = [], args
     // Check if outDir exists but is empty (no HTML files)
     const htmlFilesInOutDir = fs.readdirSync(config.outDir).filter(f => f.endsWith('.html'));
     if (htmlFilesInOutDir.length === 0) {
-        console.log(colors.red(`[novl optimize] Error: The output directory '${config.outDir}' exists but contains no HTML files to check. Exiting.`));
+        console.log(colors.red(`[novl optimize] Error: The output directory '${config.outDir}' exists but contains no HTML files to check.`));
         earlyExitError();
     }
     
@@ -59,7 +55,7 @@ export async function scriptHeader(isFirstCheck = true, enabledChecks = [], args
         if(llmConfig.model && !apiKey) {
             console.error('[novl optimize] Error: An LLM model is configured for report generation but no API key was found.');
             console.error('Set the MODEL_KEY environment variable or add llm.key to your optimize.config.js.');
-            process.exit(1);
+            earlyExitError();
         }
     }
 

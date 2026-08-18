@@ -38,8 +38,8 @@ export function printSummary(filteredResults, totalPagesChecked) {
     });
   }
   console.log(colors.boldGray('============================================\n'));
-  if (failedChecks.length > 0 && process.argv.includes('--ci')) {
-    process.exit(1);
-  }
+  process.exit(1);
+  // if (failedChecks.length > 0 && process.argv.includes('--ci')) {
+  //   process.exit(1);
   // }
 }

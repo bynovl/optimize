@@ -62,6 +62,7 @@ export async function scriptFooter(results, config, args, totalPagesChecked) {
         }
         // End timer (update for accurracy)
         startStopSpinner(false);
+
         if (!allPassed) {
             printSummary(filteredResults, totalPagesChecked);
         }
