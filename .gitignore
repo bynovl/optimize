@@ -1,13 +1,6 @@
 node_modules/
 debug.md
-debug.txt
-server.js
 .docs/
-site-ext/
-_temp-backup/
 env.sh
 .npmrc
-./optimize.config.js
-test-extensions.js
-notes.md
 info/
