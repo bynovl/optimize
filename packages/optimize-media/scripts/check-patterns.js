@@ -6,7 +6,7 @@ import { getStyleSnippet, decodeHtmlEntities } from './check-utils.js';
 export const imgRegex = /<img\b[^>]*>/gi;
 export const altTextRegex = /\balt\s*=\s*(["'])(.*?)\1/i;
 export const srcTagRegex = /\ssrc=["']([^"']+)["']/i;
-export const inlineStyleRegex = /<[^>]+\sstyle\s*=\s*(['"\&quot;])([\s\S]*?)\1[^>]*>/gi;
+export const inlineStyleRegex = /<\s*(?!img\b)[^>]+\sstyle\s*=\s*(['"\&quot;])([\s\S]*?)\1[^>]*>/gi;
 export const styleTagRegex = /<style[^>]*>([\s\S]*?)<\/style>/gi;
 export const bgUrlRegex = /background(?:-image)?\s*:\s*url\(([^)]+)\)/gi;
 export const cssUrlRegex = /url\((['"]?)(.*?)\1\)/gi;
@@ -36,20 +36,18 @@ export async function validateEmbedSrc(content, config, file, startUrl) {
     if (src.startsWith('data:')) continue;
     const linkError = await checkLinkValidity(content, src, config, file, startUrl);
     if (linkError && linkError.isError) {
-      const isExternal = linkError.type === ISSUE_KEY.unreachableExtLink || linkError.type === ISSUE_KEY.invalidExtLink;
       results.push({
         isError: true,
         isWarning: false,
-        reason: isExternal ? 'Invalid external embed src' : 'Invalid local embed src',
+        reason: linkError.reason,
         type: linkError.type,
-        message: (isExternal ? 'External embed src is invalid or unreachable: ' : 'Local embed file is missing or invalid: ') + src,
+        message: linkError.message,
         target: src,
       });
     }
   }
   return results.length > 0 ? results : null;
 }
-
 // Custom validation functions for media check
 export async function validateImgTag(content, config, file, startUrl) {
   const results = [];
@@ -73,13 +71,12 @@ export async function validateImgTag(content, config, file, startUrl) {
       if (srcValue.startsWith('data:')) continue;
       const linkError = await checkLinkValidity(content, srcValue, config, file, startUrl);
       if (linkError && linkError.isError) {
-        const isExternal = linkError.type === ISSUE_KEY.unreachableExtLink || linkError.type === ISSUE_KEY.invalidExtLink;
         results.push({
           isError: true,
           isWarning: false,
-          reason: isExternal ? 'Invalid external image src' : 'Invalid local image src',
+          reason: linkError.reason,
           type: linkError.type,
-          message: (isExternal ? 'External image src is invalid or unreachable: ' : 'Local image file is missing or invalid: ') + srcValue,
+          message: linkError.message,
           target: srcValue,
         });
       }
@@ -112,16 +109,15 @@ export async function validateAudioSrc(content, config, file, startUrl) {
       results.push({
         isError: true,
         isWarning: false,
-        reason: 'Invalid local audio src',
-        type: ISSUE_KEY.invalid,
-        message: 'Local audio file is missing or invalid: ' + src,
+        reason: linkError.reason,
+        type: linkError.type,
+        message: linkError.message,
         target: src,
       });
     }
   }
   return results.length > 0 ? results : null;
 }
-
 // Validate <video src> URLs
 export async function validateVideoSrc(content, config, file, startUrl) {
   const results = [];
@@ -156,7 +152,6 @@ export async function validateVideoSrc(content, config, file, startUrl) {
   }
   return results.length > 0 ? results : null;
 }
-
 // Validate <source srcset> URLs in <picture> or <video>
 export async function validateSourceSrcset(content, config, file, startUrl) {
   const results = [];
@@ -175,9 +170,9 @@ export async function validateSourceSrcset(content, config, file, startUrl) {
             results.push({
               isError: true,
               isWarning: false,
-              reason: 'Invalid local source srcset',
-              type: ISSUE_KEY.invalid,
-              message: 'Local source file is missing or invalid: ' + url,
+              reason: linkError.reason,
+              type: linkError.type,
+              message: linkError.message,
               target: url,
             });
           }
@@ -187,15 +182,18 @@ export async function validateSourceSrcset(content, config, file, startUrl) {
   }
   return results.length > 0 ? results : null;
 }
+// Validate inline styles for background-image URLs
 export async function validateInlineStyles(content, config, file, startUrl) {
   const results = [];
   if (config.htmlFiles === true) {
     const inlineStyles = content.match(inlineStyleRegex) || [];
     for (const styleContent of inlineStyles) {
+      // use a local RegExp instance to avoid shared .lastIndex across concurrent runs
+      const localBgUrl = new RegExp(bgUrlRegex.source, 'gi');
       let bgMatch;
-      while ((bgMatch = bgUrlRegex.exec(styleContent)) !== null) {
+      while ((bgMatch = localBgUrl.exec(styleContent)) !== null) {
         let url = bgMatch[1] ? bgMatch[1].trim() : '';
-        url = decodeHtmlEntities(url);
+        url = decodeHtmlEntities(url).replace(/^['"]|['"]$/g, '');
 
         if (!url || url.trim() === '') {
           results.push({
@@ -209,21 +207,15 @@ export async function validateInlineStyles(content, config, file, startUrl) {
           });
           continue;
         }
+
         const linkError = await checkLinkValidity(content, url, config, file, startUrl);
         if (linkError && linkError.isError) {
-          const isExternal = linkError.type === ISSUE_KEY.unreachableExtLink || linkError.type === ISSUE_KEY.invalidExtLink;
           results.push({
             isError: true,
             isWarning: false,
             type: linkError.type,
-            reason:
-              isExternal
-                ? 'Invalid external background-image URL in inline style'
-                : 'Invalid local background-image URL in inline style',
-            message:
-              isExternal
-                ? 'External background-image URL is invalid or unreachable: '
-                : 'Local background-image file is missing or invalid: ' + url,
+            reason: linkError.reason,
+            message: linkError.message,
             target: url,
           });
         }
@@ -232,6 +224,7 @@ export async function validateInlineStyles(content, config, file, startUrl) {
   }
   return results.length > 0 ? results : null;
 }
+// Validate <style> blocks for background-image URLs
 export async function validateStyleBlocks(item, content, config, file, startUrl) {
   let results = [];
   const styleTags = content.match(styleTagRegex) || [];
@@ -256,19 +249,12 @@ export async function validateStyleBlocks(item, content, config, file, startUrl)
         }
         const linkError = await checkLinkValidity(content, url, config, file, startUrl);
         if (linkError && linkError.isError) {
-          const isExternal = linkError.type === ISSUE_KEY.unreachableExtLink || linkError.type === ISSUE_KEY.invalidExtLink;
           results.push({
             isError: true,
             isWarning: false,
-            reason:
-              isExternal
-                ? 'Invalid external background-image URL in style block'
-                : 'Invalid local background-image URL in style block',
-            message:
-              isExternal
-                ? 'External background-image URL is invalid or unreachable: '
-                : 'Local background-image file is missing or invalid: ' + url,
-            type: linkError.type || 'unknown',
+            reason: linkError.reason,
+            message: linkError.message,
+            type: linkError.type,
             target: getStyleSnippet(styleContent),
           });
         }
@@ -313,20 +299,18 @@ export async function validateObjectData(content, config, file, startUrl) {
     if (data.startsWith('data:')) continue;
     const linkError = await checkLinkValidity(content, data, config, file, startUrl);
     if (linkError && linkError.isError) {
-      const isExternal = linkError.type === ISSUE_KEY.unreachableExtLink || linkError.type === ISSUE_KEY.invalidExtLink;
       results.push({
         isError: true,
         isWarning: false,
-        reason: isExternal ? 'Invalid external object data' : 'Invalid local object data',
+        reason: linkError.reason,
         type: linkError.type,
-        message: (isExternal ? 'External object data is invalid or unreachable: ' : 'Local object file is missing or invalid: ') + data,
+        message: linkError.message,
         target: data,
       });
     }
   }
   return results.length > 0 ? results : null;
 }
-
 // Validate <iframe src>
 export async function validateIframeSrc(content, config, file, startUrl) {
   const results = [];
@@ -350,13 +334,12 @@ export async function validateIframeSrc(content, config, file, startUrl) {
     if (src.startsWith('data:')) continue;
     const linkError = await checkLinkValidity(content, src, config, file, startUrl);
     if (linkError && linkError.isError) {
-      const isExternal = linkError.type === ISSUE_KEY.unreachableExtLink || linkError.type === ISSUE_KEY.invalidExtLink;
       results.push({
         isError: true,
         isWarning: false,
-        reason: isExternal ? 'Invalid external iframe src' : 'Invalid local iframe src',
+        reason: linkError.reason,
         type: linkError.type,
-        message: (isExternal ? 'External iframe src is invalid or unreachable: ' : 'Local iframe file is missing or invalid: ') + src,
+        message: linkError.message,
         target: src,
       });
     }

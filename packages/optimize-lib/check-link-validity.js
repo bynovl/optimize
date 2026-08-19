@@ -78,13 +78,14 @@ export async function checkLinkValidity(content, link, config = {}, sourceFile, 
   const skipOrWarnProtocols = [
     'data:', 'mailto:', 'tel:', 'javascript:', 'ftp:', 'file:', 'irc:', 'news:', 'gopher:', 'ws:', 'wss:'
   ];
+
   const lowerLink = String(link).toLowerCase();
   for (const proto of skipOrWarnProtocols) {
     if (lowerLink.startsWith(proto)) {
       return {
         isError: false,
         isWarning: true,
-        reason: `Link uses unsupported or non-navigable protocol (${proto.replace(':','')})`,
+        reason: `Link uses unsupported or non-navigable protocol (${proto.replace(':', '')})`,
         message: `Link with protocol ${proto} skipped or not validated`,
         target: link,
         sourceFile
@@ -123,7 +124,7 @@ export async function checkLinkValidity(content, link, config = {}, sourceFile, 
       (/^https?:\/\//i.test(normalizedLink) || normalizedLink.startsWith('//')))
     || Boolean(startUrl);
 
-  // Local/internal link resolution
+  // 1. Local/internal link resolution
   const isLocal =
     !isExternal ||
     (typeof normalizedLink === 'string' &&
@@ -158,11 +159,12 @@ export async function checkLinkValidity(content, link, config = {}, sourceFile, 
     return validateInternal(content, internalPath, config, sourceFile);
   }
 
-  // 2. External checks
+  // 2. External checks (Offline mode skips external validation)
   if (config.isOffline && isExternal) {
     return { isError: false, isWarning: true, reason: 'Offline mode: external link validation skipped', message: link, target: link, sourceFile };
   }
 
+  // 3. External link validation
   if (isExternal) {
     let baseForUrl;
     if (startUrl) {
@@ -195,7 +197,7 @@ export async function checkLinkValidity(content, link, config = {}, sourceFile, 
     let siteOrigin = null;
     try {
       siteOrigin = new URL(startUrl || config.startUrl).origin;
-    } catch {}
+    } catch { }
 
     if (siteOrigin && urlObj.origin === siteOrigin && config.outDir) {
       const pathAndQueryHash = `${urlObj.pathname}${urlObj.search || ''}${urlObj.hash || ''}`;
@@ -234,6 +236,7 @@ export async function checkLinkValidity(content, link, config = {}, sourceFile, 
       }
       return { isError: false, isWarning: false, reason, message: msg, target: urlObj.href, sourceFile };
     }
+
     // If error, also include original/normalized if changed
     if (originalPathname !== urlObj.pathname) {
       result.message = `original: ${link}, normalized: ${urlObj.href} | ${result.message}`;

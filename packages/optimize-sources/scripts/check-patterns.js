@@ -15,14 +15,13 @@ export async function validateStylesheets(content, config, file, startUrl) {
     if (href) {
       const linkError = await checkLinkValidity(content, href, config, file, startUrl);
       if (linkError && linkError.isError) {
-        const isExternal = linkError.type === ISSUE_KEY.unreachableExtLink || linkError.type === ISSUE_KEY.invalidExtLink;
         results.push({
           target: href,
-          isError: true,
-          isWarning: false,
-          reason: isExternal ? 'Invalid external stylesheet href' : 'Invalid local stylesheet href',
+          isError: linkError.isError,
+          isWarning: linkError.isWarning,
+          reason: linkError.reason,
           type: linkError.type,
-          message: (isExternal ? 'External stylesheet href is invalid or unreachable: ' : 'Local stylesheet file is missing or invalid: ') + href,
+          message: linkError.message,
         });
       }
     }
@@ -39,15 +38,13 @@ export async function validateScripts(content, config, file, startUrl) {
     if (srcUrl) {
       const linkError = await checkLinkValidity(content, srcUrl, config, file, startUrl);
       if (linkError && linkError.isError) {
-        const isExternal = linkError.type === ISSUE_KEY.unreachableExtLink || linkError.type === ISSUE_KEY.invalidExtLink;
         results.push({
           target: srcUrl,
-          isError: true,
-          isWarning: false,
-          reason: isExternal ? 'Invalid external script src' : 'Invalid local script src',
+          isError: linkError.isError,
+          isWarning: linkError.isWarning,
+          reason: linkError.reason,
           type: linkError.type,
-          message: (isExternal ? 'External script src is invalid or unreachable: ' : 'Local script file is missing or invalid: ') + srcUrl,
-          target: srcUrl,
+          message: linkError.message,
         });
       }
     }

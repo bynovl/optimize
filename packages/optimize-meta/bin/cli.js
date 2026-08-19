@@ -5,7 +5,7 @@ import { cliDispatch } from '@bynovl/optimize-lib/cli-dispatch.js';
 import checkMeta from '../index.js';
 import { checkProps } from '../scripts/check-props.js';
 
-const { args, enabledChecks } = await cliDispatch([checkProps.flag]);
+const { args, enabledChecks, checkModules } = await cliDispatch([checkProps.flag]);
 
 if (args._handled) {
     // Help/version was shown, exit early
@@ -27,7 +27,7 @@ export default async function runAllChecks(startUrl) {
     if (actualChecks.includes(checkProps.flag)) {
         results = [await checkMeta(config, nonIgnoredHtmlFiles, effectiveStartUrl)];
     }
-    await scriptFooter(results, config, args, totalPagesChecked);
+    await scriptFooter(results, config, args, totalPagesChecked, checkModules);
 }
 
 // Run if executed from CLI

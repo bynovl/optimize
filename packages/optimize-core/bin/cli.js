@@ -33,7 +33,7 @@ export async function runAllChecks(startUrl) {
     const results = await Promise.all(
       checksToRun.map(async (mod) => mod.fn(config, nonIgnoredHtmlFiles, effectiveStartUrl))
     );
-    await scriptFooter(results, config, args, totalPagesChecked);
+    await scriptFooter(results, config, args, totalPagesChecked, checkModules);
   } catch (error) {
     console.error('Error occurred while checking optimization requirements:', error);
   }
