@@ -32,13 +32,6 @@ export default {
     //     // and are not included in the extendChecks object. 
     //     // Use the schemaDefault and schemaCustom properties to define custom schema checks as needed.
     // },
-    // llm: {
-    //     provider: 'github', // required: llm provider (e.g., 'openai', 'azure', 'github')
-    //     model: 'gpt-4.1', // required: model name or endpoint URL (e.g., 'gpt-4', 'azure-deployment-name', full URL for custom providers)
-    //     url: null, // optional: override URL for custom providers (if model is not a full URL)
-    //     options: { /* Add any model-specific options here */}, // optional: model-specific options (e.g., max_tokens, temperature)
-    //     key: process.env.MODEL_KEY, // required: environment variable containing the API key for the LLM provider
-    // }, 
     // report: {
     //     fileOutput: 'audit.md', // specify output file for the report
     //     autoRun: true, // automatically generate report after every run
@@ -55,6 +48,20 @@ export default {
     //     //   depth: 3   // Max link depth to crawl
     //     //   // Add other provider-specific options here
     //     // }
+    // }
+    // checkWeights: {
+    //     accessibility: 0.9,
+    //     links: 0.9,
+    //     media: 0.7,
+    //     sources: 0.8,
+    //     meta: 0.65,
+    //     hierarchy: 0.6,
+    //     openGraph: 0.5,
+    //     schema: 0.8
+    // }
+    // severityWeights: {
+    //     error: 1.0,
+    //     warning: 0.5,
     // }
 }
 

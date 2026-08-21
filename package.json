@@ -56,6 +56,6 @@
   },
   "license": "ISC",
   "devDependencies": {
-    "@changesets/cli": "^2.29.7"
+    "@changesets/cli": "^3.0.0"
   }
 }

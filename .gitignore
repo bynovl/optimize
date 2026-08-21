@@ -4,3 +4,5 @@ debug.md
 env.sh
 .npmrc
 info/
+results.json
+audit.md
