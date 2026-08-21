@@ -1,5 +1,6 @@
 export const checkProps = {
   label: 'Open Graph',
   key: 'openGraph',
-  flag: '--open-graph', // This is the CLI flag that will trigger this check. It should be unique and descriptive of the check being performed.
+  flag: '--open-graph',
+  weight: 0.2
 }

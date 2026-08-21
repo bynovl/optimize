@@ -24,7 +24,6 @@ export function parseCliArgs(argv = process.argv.slice(2), helpText = sharedHelp
     if (version) console.log(version);
     opts._handled = true;
   }
-
   if (opts['--help'] || argv.includes('-h')) {
     if (helpText) console.log(sharedHelpText);
     opts._handled = true;

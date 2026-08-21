@@ -141,17 +141,28 @@ async function callModel({ prompt, modelOptions }) {
       },
     };
   } else if (urlOverride) {
-    // Custom provider: use urlOverride
+    // Custom Open AI compatible provider: use urlOverride
     const url = new URL(urlOverride);
-    requestBody = JSON.stringify({ prompt, ...modelOptions });
+
+    // OpenAI: fixed hostname/path
+    const hostname = url.hostname;
+    requestBody = JSON.stringify({
+      model: modelOptions.model,
+      max_tokens: modelOptions.max_tokens || 4096,
+      messages: [
+        { role: 'system', content: modelOptions.systemPrompt || 'You are a helpful assistant.' },
+        { role: 'user', content: prompt },
+      ],
+      ...modelOptions.extra
+    });
     options = {
-      protocol: url.protocol,
-      hostname: url.hostname,
-      path: url.pathname,
+      protocol: 'https:',
+      hostname,
+      path: '/v1/chat/completions',
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        ...(key ? { 'Authorization': `Bearer ${key}` } : {}),
+        'Authorization': `Bearer ${key}`,
         'Content-Length': Buffer.byteLength(requestBody),
       },
     };

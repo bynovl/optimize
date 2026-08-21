@@ -7,7 +7,7 @@ import { packageLoader } from './resolve-packages.js';
 export async function getCheckModules() {
   const checkModules = [];
   const checkExports = {};
-  
+
   // Use the optimized package loader for discovery
   const pkgDirs = packageLoader();
 
@@ -28,11 +28,9 @@ export async function getCheckModules() {
       const checkProps = checkPropsModule.checkProps;
       const fn = checkFnModule.default || checkFnModule;
       checkModules.push({
-        flag: checkProps.flag,
         fn,
-        key: checkProps.key,
-        label: checkProps.label,
-        module: pkgName
+        module: pkgName,
+        ...checkProps
       });
       checkExports[checkProps.key] = fn;
       checkExports['check' + checkProps.label.replace(/\s+/g, '')] = fn;

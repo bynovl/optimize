@@ -3,6 +3,7 @@ import path from 'path';
 import fs from 'fs';
 import { walk } from '@bynovl/optimize-utils/walk.js';
 import { isOffline } from '@bynovl/optimize-utils/online-status.js';
+import { createConfig } from './create-config.js';
 import shouldIgnore from './should-ignore.js';
 import { cliBanner } from './cli-banner.js';
 import { startStopSpinner } from '@bynovl/optimize-utils/spinner.js';
@@ -10,6 +11,7 @@ import { crawlSite } from './crawl.js';
 import { colors } from '@bynovl/optimize-utils/ansi-colors.js';
 
 export async function scriptHeader(isFirstCheck = true, enabledChecks = [], args) {
+
     // Load configuration and checksOverride
     const { config } = await getConfig(enabledChecks);
 
@@ -31,7 +33,7 @@ export async function scriptHeader(isFirstCheck = true, enabledChecks = [], args
             }
         }
         if (!found) {
-            if(config.outDir === undefined) {
+            if (config.outDir === undefined) {
                 console.log(colors.red(`[novl optimize] Error: You must use a recognized output directory (_opt, dist, out, _site, _build, public) or define a custom outDir in your optimize.config.js`))
             } else {
                 // If no default output directory is found, log an error and exit
@@ -47,21 +49,17 @@ export async function scriptHeader(isFirstCheck = true, enabledChecks = [], args
         console.log(colors.red(`[novl optimize] Error: The output directory '${config.outDir}' exists but contains no HTML files to check.`));
         earlyExitError();
     }
-    
-    // Exit early if LLM report is configured but no API key is available
-    if ( args['--report']) {
-        const llmConfig = config.llm || {};
-        const apiKey = llmConfig.key || process.env.MODEL_KEY;
-        if(llmConfig.model && !apiKey) {
-            console.error('[novl optimize] Error: An LLM model is configured for report generation but no API key was found.');
-            console.error('Set the MODEL_KEY environment variable or add llm.key to your optimize.config.js.');
-            earlyExitError();
-        }
-    }
 
     // Show banner only once (if first check)
     if (isFirstCheck && config.apiMode !== true) {
         await cliBanner();
+    }
+
+    // If --setup was requested, create a new optimize.config.js and exit
+    if (args['--setup']) {
+        await createConfig();
+        // Exit after setup; no further checks needed
+        process.exit(0);
     }
 
     // If --crawl was requested, check for API key before running crawl

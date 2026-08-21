@@ -13,7 +13,8 @@ function compactCategoryTotals(cat) {
         totalPages,
         totalIssues: cat.totalIssues || 0,
         totalErrors: cat.totalErrors || 0,
-        totalWarnings: cat.totalWarnings || 0
+        totalWarnings: cat.totalWarnings || 0,
+        score: cat.score || null,
     };
 }
 
