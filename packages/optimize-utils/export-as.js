@@ -18,15 +18,92 @@ export async function exportResultsAsJson(data, outPath) {
  */
 
 // The Results 
+/**
+ * Flatten a nested category object into a flat array.
+ * @param {Object|Array} data - Either an array of items or an object where each key is a category name.
+ * @returns {Array} Flat array with a guaranteed `category` field on each item.
+ */
+export function flattenCategoryData(data) {
+    // If it's already an array (flat list of results), just return it.
+    if (Array.isArray(data)) return data;
+
+    if (!data || typeof data !== 'object') return [];
+
+    // The structure we receive has categories as keys, each containing an object
+    // with a `failedItems` array. Extract those items and attach the category name.
+    return Object.entries(data).flatMap(([catName, catObj]) => {
+        if (!catObj || typeof catObj !== 'object') return [];
+        const items = Array.isArray(catObj.failedItems) ? catObj.failedItems : [];
+        // Each failedItem may already have a `category` field; preserve it if present.
+        return items.map(item => ({ ...item, category: item.category ?? catName }));
+    });
+}
+
 export async function exportResultsAsCsv(data, outPath) {
-    if (!Array.isArray(data) || data.length === 0) {
-        throw new Error('Data must be a non-empty array of objects');
-    }
-    const headers = Object.keys(data[0]);
+    const headers = ['page', 'category', 'type', 'message', 'reason', 'target', 'error', 'warning'];
     const csvRows = [headers.join(',')];
-    for (const row of data) {
-        csvRows.push(headers.map(h => JSON.stringify(row[h] ?? '')).join(','));
+    let previousPage = null;
+
+    // Determine if we have the hierarchical structure (categories -> failedItems)
+    let categoriesMap;
+    if (data && data.categories) {
+        categoriesMap = data.categories;
+    } else if (data && typeof data === 'object' && Object.values(data)[0]?.failedItems) {
+        categoriesMap = data; // raw map without top‑level `categories`
     }
+
+    if (categoriesMap) {
+        // Walk category → page → issues
+        for (const [catName, catObj] of Object.entries(categoriesMap)) {
+            const failedItems = catObj.failedItems || [];
+            for (const pageItem of failedItems) {
+                const page = pageItem.page ?? '';
+                // 1️⃣ Page header row (only page column filled)
+                // Page header row: page column filled, others empty strings (properly escaped)
+                // Page header row: first column is the page name, remaining columns are empty strings
+                const headerRow = headers.map((_, idx) => idx === 0 ? JSON.stringify(page) : "\"\"");
+
+                csvRows.push(headerRow.join(','));
+                previousPage = page; // ensure subsequent issue rows are empty in page column
+                const issues = pageItem.issues || [];
+                for (const iss of issues) {
+                    const row = {
+                        page: '', // page column stays empty after header
+                        category: catName,
+                        type: iss.type ?? iss.checkType ?? '',
+                        message: iss.message ?? iss.reason ?? '',
+                        reason: iss.reason ?? '',
+                        target: iss.target ?? '',
+                        error: iss.isError ? 'true' : '',
+                        warning: iss.isWarning ? 'true' : ''
+                    };
+                    csvRows.push(headers.map(h => JSON.stringify(row[h] ?? '')).join(','));
+                }
+            }
+        }
+    } else {
+        // Fallback: treat data as a flat array (already normalized by flattenCategoryData)
+        const flatItems = flattenCategoryData(data);
+        if (flatItems.length === 0) {
+            throw new Error('No result items to export as CSV');
+        }
+        for (const item of flatItems) {
+            const currentPage = item.page ?? item.path ?? '';
+            const row = {
+                page: previousPage === currentPage ? '' : currentPage,
+                category: item.category ?? item.check ?? '',
+                type: item.type ?? item.checkType ?? '',
+                message: item.message ?? item.reason ?? '',
+                reason: item.reason ?? '',
+                target: item.target ?? '',
+                error: item.isError === true ? 'true' : '',
+                warning: item.isWarning === true ? 'true' : ''
+            };
+            csvRows.push(headers.map(h => JSON.stringify(row[h] ?? '')).join(','));
+            previousPage = currentPage;
+        }
+    }
+
     await fs.mkdir(path.dirname(outPath), { recursive: true });
     await fs.writeFile(outPath, csvRows.join('\n'), 'utf8');
 }

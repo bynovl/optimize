@@ -2,6 +2,8 @@ import path from 'path';
 import { checkLinkValidityInt } from './check-link-validity-int.js';
 import { checkLinkValidityExt } from './check-link-validity-ext.js';
 import { debug } from '../optimize-utils/debug-log.js';
+import { ISSUE_KEY } from './issue-keys.js';
+
 
 /**
  * Main dispatcher for link validation.
@@ -45,11 +47,11 @@ async function validateInternal(content, path, config, sourceFile, label = null)
   try {
     const result = await checkLinkValidityInt(content, path, config, sourceFile);
     if (result?.isError) {
-      return { ...result, reason: result.reason, message: `Validated path: ${label || path}`, sourceFile };
+      return { ...result, reason: result.reason, message: `Validated path: ${label || path}`, type: ISSUE_KEY.invalidIntLink, sourceFile };
     }
-    return { isError: false, isWarning: false, reason: 'Link is valid', message: label || path, target: path, sourceFile };
+    return { isError: false, isWarning: false, reason: 'Link is valid', message: label || path, target: path, type: ISSUE_KEY.valid, sourceFile };
   } catch (err) {
-    return { isError: true, isWarning: false, reason: 'Internal link validation error', message: err.message, target: path };
+    return { isError: true, isWarning: false, type: ISSUE_KEY.invalidIntLink, reason: 'Internal link validation error', message: err.message, target: path };
   }
 }
 
@@ -59,6 +61,7 @@ export async function checkLinkValidity(content, link, config = {}, sourceFile, 
     return {
       isError: true,
       isWarning: false,
+      type: ISSUE_KEY.empty,
       reason: `Link href is missing, empty, null, or undefined (value: ${String(link)})`,
       message: 'Link href is missing, empty, null, or undefined (no href attribute or value)',
       target: '',
@@ -85,6 +88,7 @@ export async function checkLinkValidity(content, link, config = {}, sourceFile, 
       return {
         isError: false,
         isWarning: true,
+        type: ISSUE_KEY.invalidIntLink,
         reason: `Link uses unsupported or non-navigable protocol (${proto.replace(':', '')})`,
         message: `Link with protocol ${proto} skipped or not validated`,
         target: link,
@@ -100,6 +104,7 @@ export async function checkLinkValidity(content, link, config = {}, sourceFile, 
       return {
         isError: false,
         isWarning: true,
+        type: ISSUE_KEY.invalidIntLink,
         reason: 'Fragment-only link ("#") often used as placeholder',
         message: 'Fragment-only link ("#") often used as placeholder',
         target: link,
@@ -150,6 +155,7 @@ export async function checkLinkValidity(content, link, config = {}, sourceFile, 
       return {
         isError: false,
         isWarning: false,
+        type: ISSUE_KEY.invalid,
         reason: label,
         message: label,
         target: normalizedLink,
@@ -161,7 +167,7 @@ export async function checkLinkValidity(content, link, config = {}, sourceFile, 
 
   // 2. External checks (Offline mode skips external validation)
   if (config.isOffline && isExternal) {
-    return { isError: false, isWarning: true, reason: 'Offline mode: external link validation skipped', message: link, target: link, sourceFile };
+    return { isError: false, isWarning: true, reason: 'Offline mode: external link validation skipped', type: ISSUE_KEY.invalid, message: link, target: link, sourceFile };
   }
 
   // 3. External link validation
@@ -213,13 +219,13 @@ export async function checkLinkValidity(content, link, config = {}, sourceFile, 
             reason += ' (normalized from .html.html to .html)';
           }
         }
-        return { isError: false, isWarning: false, reason, message: msg, target: urlObj.href, sourceFile };
+        return { isError: false, isWarning: false, reason, message: msg, target: urlObj.href, sourceFile, type: ISSUE_KEY.invalid };
       }
       // Otherwise, fall through to external check
     }
 
     if (isIgnoredSSAUrl(urlObj.href)) {
-      return { isError: false, isWarning: true, reason: 'Ignored SSA URL', message: urlObj.href, target: urlObj.href, sourceFile };
+      return { isError: false, isWarning: true, reason: 'Ignored SSA URL', message: urlObj.href, target: urlObj.href, sourceFile, type: ISSUE_KEY.invalid };
     }
 
     const result = await checkLinkValidityExt(urlObj.href, config, sourceFile);
@@ -234,7 +240,7 @@ export async function checkLinkValidity(content, link, config = {}, sourceFile, 
           reason += ' (normalized from .html.html to .html)';
         }
       }
-      return { isError: false, isWarning: false, reason, message: msg, target: urlObj.href, sourceFile };
+      return { isError: false, isWarning: false, reason, message: msg, target: urlObj.href, sourceFile, type: ISSUE_KEY.invalid };
     }
 
     // If error, also include original/normalized if changed

@@ -13,6 +13,15 @@ function httpsPost(options, body) {
   });
 }
 
+/* Supports Open AI and Hugging Face compatible models 
+----------------------------------------
+/v1/chat/completions (OpenAI)
+/v1/messages (Anthropic)
+----------------------------------------
+models.github.ai/inference/v1/chat/completions (GitHub)
+Hugging Face: full endpoint URL required as model
+----------------------------------------
+*/
 function validateProvider(provider, model, modelOptions, key) {
   const requirements = {
     openai: () => {

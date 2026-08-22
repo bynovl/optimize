@@ -19,6 +19,7 @@ export async function validateStylesheets(content, config, file, startUrl) {
           target: href,
           isError: linkError.isError,
           isWarning: linkError.isWarning,
+          target: linkError.target,
           reason: linkError.reason,
           type: linkError.type,
           message: linkError.message,

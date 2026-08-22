@@ -7,6 +7,7 @@ import { exportReport } from './report-generator.js';
 import { startStopSpinner } from '@bynovl/optimize-utils/spinner.js';
 import { clearSpinnerLine } from '@bynovl/optimize-utils/spinner.js';
 import { colors } from '@bynovl/optimize-utils/ansi-colors.js';
+import { json } from 'stream/consumers';
 
 export async function scriptFooter(results, config, args, totalPagesChecked, checkModules = null) {
     const jsonFlag = args['--json'] || null;
@@ -35,7 +36,8 @@ export async function scriptFooter(results, config, args, totalPagesChecked, che
 
     // JSON export -> export clean structure, keep rawResults for compatibility
     if ((config.exportResultsJson && config.exportResultsJson !== '') || jsonFlag) {
-        const jsonPath = config.exportResultsJson || jsonFlag || 'results.json';
+        const jsonFile = typeof jsonFlag === 'string' ? jsonFlag : 'results.json';
+        const jsonPath = config.exportResultsJson || jsonFile;
         hasOutputPath = jsonPath;
         const prevRun = await getPrevRun(jsonPath); // reads existing file before overwriting
         await exportResultsAsJson(prevRun ? { categories, stats, prevRun } : { categories, stats }, jsonPath);
@@ -43,16 +45,16 @@ export async function scriptFooter(results, config, args, totalPagesChecked, che
 
     // CSV export stays the same (expects flattened results)
     if ((config.exportResultsCsv && config.exportResultsCsv !== '') || csvFlag) {
-        const csvPath = config.exportResultsCsv || csvFlag || 'results.csv';
+        const csvFile = typeof csvFlag === 'string' ? csvFlag : 'results.csv';
+        const csvPath = config.exportResultsCsv || csvFile;
         hasOutputPath = csvPath;
-        await exportResultsAsCsv(filteredResults, csvPath);
+        await exportResultsAsCsv(categories, csvPath);
     }
 
     // Report export -> writes the deterministic audit.md, refining the narrative via LLM
     if (reportFlag || (config.report && config.report.autoRun)) {
         const reportPath = reportFlag || config.report.fileOutput || 'audit.md';
         hasOutputPath = reportPath;
-
         await exportReport(config, { categories, stats }, { output: reportPath });
     }
 
