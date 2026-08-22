@@ -2,5 +2,5 @@ export const checkProps = {
   label: 'Meta',
   key: 'meta',
   flag: '--meta',
-  weight: 0.2
+  weight: 0.9
 }

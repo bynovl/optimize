@@ -2,5 +2,5 @@ export const checkProps = {
   label: 'Media',
   key: 'media',
   flag: '--media',
-  weight: 0.2
+  weight: 0.5
 }
