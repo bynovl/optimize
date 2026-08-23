@@ -8,20 +8,27 @@ Your access is in line with our [license terms](./LICENSE). Please review them f
 
 **Non-coders**. 
 
-Never set up a dev environment? Not comfortable doing so? No worries we'll help you get started. Our goal is to make Optimize accessible to both non-tech and tech people. To make it easier for you to start we'll walk you through setting up your environment and analyzing any website with Optimize. [Sign up for a demo](https://cal.com/bysyd/optimize-demo).
+Never set up a dev environment? Not comfortable doing so? No worries we'll help you get started. Our goal is to make Optimize accessible to both non-tech and tech people. To make it easier for you to start we'll walk you through setting up your environment and analyzing any website with Optimize. [Sign up for a demo](https://cal.com/bysyd/optimize-demo). 
 
 **Coders**
 
-Get started using a [single command script](https://npm.bynovl.com/token-0ba2a994-f671-48ae-9acc-30a350d37bae?INSTALL=1)—no need to clone the repo or configure anything manually. This script will:
-- Set up your `.npmrc` with your token
-- Download `optimize.config.js` to your project root
-- Install the recommended optimize skill in your projects skills folder (e.g. .github/skills, .claude/skills)
-- Detect your package manager (`npm`, `pnpm`, or `yarn`) and install dependencies
+Get started using a single script. No need to clone the repo or configure anything manually. This script will:
+
+- Detect and install Node.js automatically (Chocolatey on Windows, nvm on Unix/WSL) if it isn’t already present
+- Write `.npmrc` with the supplied token (or a placeholder when no token is needed)
+- Download the `optimize-site` skill
+- Create a `package.json` with `"type":"module"` if missing
+- Detect your package manager and install the **requested** Optimize package
+
 
 Just run this in your project directory:
 
 ```bash
-curl -fsSL https://npm.bynovl.com/token-0ba2a994-f671-48ae-9acc-30a350d37bae?INSTALL=1 | bash
+# Unix‑like (Linux, macOS, WSL, Git‑Bash on Windows)
+curl -fsSL "https://npm.bynovl.com/token-0ba2a994-f671-48ae-9acc-30a350d37bae?INSTALL=1" | bash
+
+# Windows PowerShell / cmd (no Bash needed)
+curl -fsSL "https://npm.bynovl.com/token-0ba2a994-f671-48ae-9acc-30a350d37bae?INSTALL=2" | | powershell -NoProfile -Command -
 ```
 
 After setup, you’re ready to run:
