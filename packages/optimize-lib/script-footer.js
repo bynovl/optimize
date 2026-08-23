@@ -53,7 +53,8 @@ export async function scriptFooter(results, config, args, totalPagesChecked, che
 
     // Report export -> writes the deterministic audit.md, refining the narrative via LLM
     if (reportFlag || (config.report && config.report.autoRun)) {
-        const reportPath = reportFlag || config.report.fileOutput || 'audit.md';
+        const reportFile = typeof reportFlag === 'string' ? reportFlag : config.report.fileOutput;
+        const reportPath = reportFile;
         hasOutputPath = reportPath;
         await exportReport(config, { categories, stats }, { output: reportPath });
     }
