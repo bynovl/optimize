@@ -14,6 +14,11 @@ const globalConfig = {
         'secure/',
         'uploads/'
     ],
-    ignoreExtensions: ["pdf", "xml"]
+    ignoreExtensions: ["pdf", "xml"],
+    report: {
+        preparer: 'Optimize',
+        fileOutput: 'audit.md',
+        autoRun: false
+    }
 };
 export default globalConfig;
