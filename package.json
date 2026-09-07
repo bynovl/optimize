@@ -52,7 +52,8 @@
     "changeset": "changeset",
     "version": "changeset version",
     "publish": "changeset publish",
-    "public": "git push public HEAD:main"
+    "public": "git push public HEAD:main",
+    "release": "./scripts/version-bump.sh"
   },
   "license": "ISC",
   "devDependencies": {

@@ -1,5 +1,13 @@
 # @bynovl/optimize-tests
 
+## 1.2.1
+
+### Patch Changes
+
+- Pre-release for packages
+- Updated dependencies
+  - @bynovl/optimize@2.6.1
+
 ## 1.2.0
 
 ### Minor Changes

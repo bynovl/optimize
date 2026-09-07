@@ -1,6 +1,6 @@
 {
   "name": "@bynovl/optimize-meta",
-  "version": "2.8.0",
+  "version": "2.8.1",
   "description": "Meta tag validation submodule for the NOVL Optimize project.",
   "main": "index.js",
   "private": false,

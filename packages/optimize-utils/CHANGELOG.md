@@ -1,5 +1,11 @@
 # @bynovl/optimize-utils
 
+## 2.8.1
+
+### Patch Changes
+
+- Pre-release for packages
+
 ## 2.8.0
 
 ### Minor Changes
