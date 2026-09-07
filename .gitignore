@@ -6,3 +6,8 @@ env.sh
 info/
 results.json
 audit.md
+notes/
+o-results.json
+o-results.md
+o-audit.md
+.novl
