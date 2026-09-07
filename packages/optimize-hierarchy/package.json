@@ -1,6 +1,6 @@
 {
   "name": "@bynovl/optimize-hierarchy",
-  "version": "2.7.4",
+  "version": "2.8.0",
   "description": "Hierarchy validation submodule for the NOVL Optimize. Checks the order and nesting of HTML elements, such as headings and sections, to ensure semantic and accessible structure in static sites.",
   "main": "index.js",
   "type": "module",

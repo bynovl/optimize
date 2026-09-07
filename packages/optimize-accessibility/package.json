@@ -1,6 +1,6 @@
 {
   "name": "@bynovl/optimize-accessibility",
-  "version": "2.7.4",
+  "version": "2.8.0",
   "description": "Accessibility validation submodule for the NOVL Optimize. Checks HTML for accessibility best practices, ARIA usage, contrast, alt text, and semantic structure in static sites.",
   "main": "index.js",
   "private": false,

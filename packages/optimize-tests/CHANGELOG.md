@@ -1,5 +1,16 @@
 # @bynovl/optimize-tests
 
+## 1.2.0
+
+### Minor Changes
+
+- c292417: Improved link validation, added better support for deterministic report generation, cleaned up CLI flags, added check weights to for each check
+
+### Patch Changes
+
+- Updated dependencies [c292417]
+  - @bynovl/optimize@2.6.0
+
 ## 1.1.0
 
 ### Minor Changes

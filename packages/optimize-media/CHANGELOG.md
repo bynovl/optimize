@@ -1,5 +1,17 @@
 # @bynovl/optimize-media
 
+## 2.10.0
+
+### Minor Changes
+
+- c292417: Improved link validation, added better support for deterministic report generation, cleaned up CLI flags, added check weights to for each check
+
+### Patch Changes
+
+- Updated dependencies [c292417]
+  - @bynovl/optimize-lib@2.12.0
+  - @bynovl/optimize-utils@2.8.0
+
 ## 2.9.0
 
 ### Minor Changes

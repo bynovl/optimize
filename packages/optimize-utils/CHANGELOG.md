@@ -1,5 +1,11 @@
 # @bynovl/optimize-utils
 
+## 2.8.0
+
+### Minor Changes
+
+- c292417: Improved link validation, added better support for deterministic report generation, cleaned up CLI flags, added check weights to for each check
+
 ## 2.6.0
 
 ### Minor Changes

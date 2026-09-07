@@ -1,5 +1,25 @@
 # @bynovl/optimize
 
+## 2.6.0
+
+### Minor Changes
+
+- c292417: Improved link validation, added better support for deterministic report generation, cleaned up CLI flags, added check weights to for each check
+
+### Patch Changes
+
+- Updated dependencies [c292417]
+  - @bynovl/optimize-accessibility@2.8.0
+  - @bynovl/optimize-hierarchy@2.8.0
+  - @bynovl/optimize-lib@2.12.0
+  - @bynovl/optimize-links@2.10.0
+  - @bynovl/optimize-media@2.10.0
+  - @bynovl/optimize-meta@2.8.0
+  - @bynovl/optimize-open-graph@2.8.0
+  - @bynovl/optimize-schema@2.8.0
+  - @bynovl/optimize-sources@2.10.0
+  - @bynovl/optimize-utils@2.8.0
+
 ## 2.5.13
 
 ### Patch Changes
