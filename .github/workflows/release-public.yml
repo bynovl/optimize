@@ -10,14 +10,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - uses: pnpm/action-setup@v2
         with:
           version: 8
+
       - uses: actions/setup-node@v3
         with:
-          node-version: 22
+          node-version: 22           
           registry-url: 'https://npm.pkg.github.com/'
+
       - run: pnpm install
+
       - name: Configure npm for GitHub Packages
         run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.GH_PUBLISH_TOKEN }}" > ~/.npmrc
 
@@ -29,10 +33,16 @@ jobs:
       - name: Version packages
         run: pnpm changeset version
 
+      # -------------------------------------------------
+      #  Commit version bumps – **no pull before commit**
+      # -------------------------------------------------
       - name: Commit version bumps
         id: commit_version
         run: |
-          git pull origin main
+          # The version‑bump files are already present in the working tree.
+          # Adding, committing and pushing them is enough – pulling would
+          # try to merge remote changes *over* these un‑committed files and
+          # abort with “local changes would be overwritten”.
           git add .
           if git diff --cached --quiet; then
             echo "No changes to commit"
@@ -63,5 +73,3 @@ jobs:
           fi
         env:
           GH_TOKEN: ${{ secrets.GH_PUBLISH_TOKEN }}
-
-# Manage public package releases with Githhub
