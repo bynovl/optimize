@@ -10,4 +10,8 @@ notes/
 o-results.json
 o-results.md
 o-audit.md
-.novl
+.novl/
+.agents/
+.github/agents/
+commits-priv.txt
+commits.txt
