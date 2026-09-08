@@ -46,9 +46,7 @@ export async function scriptFooter(results, config, args, totalPagesChecked, che
 
     // JSON export -> export clean structure, keep rawResults for compatibility
     if (configuredJsonPath || hasJsonFlag) {
-        const jsonPath = typeof jsonFlag === 'string'
-            ? jsonFlag
-            : (configuredJsonPath || 'o-results.json');
+        const jsonPath = configuredJsonPath || 'o-results.json';
         outputPaths.push(jsonPath);
         const prevRun = await getPrevRun(jsonPath); // reads existing file before
         await exportResultsAsJson(prevRun ? { categories, stats, prevRun } : { categories, stats }, jsonPath);
@@ -56,9 +54,7 @@ export async function scriptFooter(results, config, args, totalPagesChecked, che
 
     // CSV export stays the same (expects flattened results)
     if (configuredCsvPath || hasCsvFlag) {
-        const csvPath = typeof csvFlag === 'string'
-            ? csvFlag
-            : (configuredCsvPath || 'o-results.csv');
+        const csvPath = configuredCsvPath || 'o-results.csv';
         outputPaths.push(csvPath);
         await exportResultsAsCsv(categories, csvPath);
     }
