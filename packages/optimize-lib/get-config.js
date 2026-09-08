@@ -4,7 +4,7 @@ import mergeConfig from './merge-config.js';
 import globalConfig from './set-config.js';
 import path from 'path';
 import { packageLoader } from './resolve-packages.js';
-import { loadCheckWeights } from './load-check-weights.js';
+import { loadCheckWeights } from './get-check-weights.js';
 
 
 function getDefaultOutDir() {

@@ -44,9 +44,12 @@ export async function scriptFooter(results, config, args, totalPagesChecked, che
     // Aggregate stats for categories and pages (ensure all categories present)
     const { categories, pages, stats } = aggregateStats(filteredResults, allCheckKeys, { weights, severityWeights: config?.severityWeights, totalPages: totalPagesChecked });
 
+    const isFlag = v => typeof v === 'string' && v.startsWith('--');
     // JSON export -> export clean structure, keep rawResults for compatibility
     if (configuredJsonPath || hasJsonFlag) {
-        const jsonPath = configuredJsonPath || 'o-results.json';
+        const jsonPath = typeof jsonFlag === 'string' && !isFlag(jsonFlag)
+            ? jsonFlag
+            : (configuredJsonPath || 'o-results.json');
         outputPaths.push(jsonPath);
         const prevRun = await getPrevRun(jsonPath); // reads existing file before
         await exportResultsAsJson(prevRun ? { categories, stats, prevRun } : { categories, stats }, jsonPath);
@@ -54,7 +57,9 @@ export async function scriptFooter(results, config, args, totalPagesChecked, che
 
     // CSV export stays the same (expects flattened results)
     if (configuredCsvPath || hasCsvFlag) {
-        const csvPath = configuredCsvPath || 'o-results.csv';
+        const csvPath = typeof csvFlag === 'string' && !isFlag(csvFlag)
+            ? csvFlag
+            : (configuredCsvPath || 'o-results.csv');
         outputPaths.push(csvPath);
         await exportResultsAsCsv(categories, csvPath);
     }
@@ -64,7 +69,7 @@ export async function scriptFooter(results, config, args, totalPagesChecked, che
     // - Config: report.autoRun: true (optionally with report.fileOutput)
     // report.fileOutput alone should not trigger auto export.
     if (hasReportFlag || reportAutoRun) {
-        const reportFile = typeof reportFlag === 'string' ? reportFlag : (configuredReportPath || 'o-audit.md');
+        const reportFile = typeof reportFlag === 'string' && !isFlag(reportFlag) ? reportFlag : (configuredReportPath || 'o-audit.md');
         const reportPath = reportFile;
         outputPaths.push(reportPath);
         await exportReport(config, { categories, stats }, { output: reportPath });
