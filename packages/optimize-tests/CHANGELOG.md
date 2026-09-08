@@ -1,5 +1,13 @@
 # @bynovl/optimize-tests
 
+## 1.2.2
+
+### Patch Changes
+
+- a95f43c: Package bump: workflow out of sync
+- Updated dependencies [a95f43c]
+  - @bynovl/optimize@2.6.2
+
 ## 1.2.1
 
 ### Patch Changes

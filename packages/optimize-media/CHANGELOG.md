@@ -1,5 +1,14 @@
 # @bynovl/optimize-media
 
+## 2.10.2
+
+### Patch Changes
+
+- a95f43c: Package bump: workflow out of sync
+- Updated dependencies [a95f43c]
+  - @bynovl/optimize-lib@2.12.2
+  - @bynovl/optimize-utils@2.8.2
+
 ## 2.10.1
 
 ### Patch Changes
