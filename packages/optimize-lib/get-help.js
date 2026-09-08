@@ -31,7 +31,8 @@ Crawl Flag:
 General Flags:
   --help, -h            Show this help message
   --version, -v         Show version number
-  --setup               Setup optimize.config.js file in current directory
+  --setup               Create a new optimize.config.js file in the current directory
+  --skills [name]       Installs all skills by default with name. Or provide the skills you want to install. For example: --skills site fix analyze.
 
 Examples:
   optimize 
