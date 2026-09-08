@@ -269,17 +269,24 @@ FAILED CHECKS:
 ---
 
 ### Issue Anatomy
-```
-PATH: about/index.html
-- Target: <meta name="description">
-    Reason: missing description
-    Message: include description
-```
 
 - **PATH** - File with issue (relative to outDir)
-- **Target** - Specific element affected
-- **Reason** - Technical cause
-- **Message** - Actionable fix
+  - **Target** - Specific element affected
+  - **Reason** - Technical cause
+  - **Message** - Actionable fix
+  - **isError** - true if severity is error, false if warning
+  - **isWarning** - true if severity is warning, false if error
+  - **type** - ISSUE type (e.g. invalid, missing, empty, duplicate, etc.)
+
+```bash
+PATH: about/index.html
+  Target: <meta name="keywords">
+  Type: missing
+  Reason: missing keywords
+  Message: include keywords
+  isError: true
+  isWarning: false
+```
 
 ---
 

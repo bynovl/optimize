@@ -20,6 +20,20 @@ export function parseCliArgs(argv = process.argv.slice(2), helpText = sharedHelp
     opts['--crawl'] = crawlUrl;
   }
 
+  if (opts['--skills']) {
+    if (argv.indexOf('--skills') + 1 < argv.length) {
+      const idx = argv.indexOf('--skills');
+      const names = [];
+      for (let i = idx + 1; i < argv.length; i++) {
+        const token = argv[i];
+        if (token.startsWith('--')) break;   // stop at the next flag
+        names.push(token);
+      }
+      // store the array (empty = “install all”)
+      opts['--skills'] = names;
+    }
+  }
+
   if (opts['--version'] || argv.includes('-v')) {
     if (version) console.log(version);
     opts._handled = true;

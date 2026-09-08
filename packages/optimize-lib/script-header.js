@@ -4,6 +4,7 @@ import fs from 'fs';
 import { walk } from '@bynovl/optimize-utils/walk.js';
 import { isOffline } from '@bynovl/optimize-utils/online-status.js';
 import { createConfig } from './create-config.js';
+import { installSkills } from './skills-installer.js';   // <-- NEW
 import shouldIgnore from './should-ignore.js';
 import { cliBanner } from './cli-banner.js';
 import { startStopSpinner } from '@bynovl/optimize-utils/spinner.js';
@@ -41,6 +42,16 @@ export async function scriptHeader(isFirstCheck = true, enabledChecks = [], args
     if (args['--setup']) {
         await createConfig();
         // Exit after setup; no further checks needed
+        process.exit(0);
+    }
+
+    // If --skills was requested, install skills and exit
+    if (args['--skills'] !== undefined) {
+        await installSkills({
+            skillNames: Array.isArray(args['--skills']) ? args['--skills'] : [],
+            dryRun: Boolean(args['--dry-run']),
+            force: Boolean(args['--force']),
+        });
         process.exit(0);
     }
 
