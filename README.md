@@ -50,7 +50,7 @@ npm install @bynovl/optimize-core
 ```
 
 ### 2. Configure
-By default optimize looks a build folder by the name of `_site`, `_opt`, `_build`, `public`, `out` or `dist` and loads the default settings. To change the build directory add an `optimize.config.js` in the root of your project. Then update the `outDir` with the location of your build folder:
+By default optimize looks for a build folder by the name of `_opt`, `_site`, `_build`, `public`, `out` or `dist` and loads the default settings. To change the build directory add an `optimize.config.js` in the root of your project. Then update the `outDir` with the location of your build folder:
 
 ```javascript
 // optimize.config.js
@@ -69,8 +69,10 @@ curl -fsSL https://optimize.bynovl.com/1c98b4b4 | bash
 Check the state of your project and figure out what needs to get fixed.
 
 ```bash 
-# Run all checks
+# Run all checks and see results in console
 npx optimize
+# Run all checks and get a markdown technical audit report 
+npx optimize --report
 ```
 
 ### Fix
