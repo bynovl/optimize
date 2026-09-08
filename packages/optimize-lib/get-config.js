@@ -4,10 +4,24 @@ import mergeConfig from './merge-config.js';
 import globalConfig from './set-config.js';
 import path from 'path';
 import { packageLoader } from './resolve-packages.js';
+import { loadCheckWeights } from './load-check-weights.js';
+
+
+function getDefaultOutDir() {
+    const defaultDirs = ['_opt', 'dist', 'out', '_site', '_build', 'public'];
+    let ourDir = null;
+    for (const dir of defaultDirs) {
+        if (fs.existsSync(dir) && fs.lstatSync(dir).isDirectory()) {
+            ourDir = dir;
+            break;
+        }
+    }
+    return ourDir;
+}
 
 export async function defaultConfig() {
     // Start with global defaults
-    let combinedConfig = { ...globalConfig };
+    let combinedConfig = { outDir: getDefaultOutDir(), ...globalConfig };
     const pkgDirs = packageLoader();
     for (const pkgDir of pkgDirs) {
         const configPath = path.join(pkgDir, 'default.config.js');
@@ -22,6 +36,9 @@ export async function defaultConfig() {
             }
         }
     }
+    /// Load check weights from all packages and merge into combined config
+    const checkWeights = await loadCheckWeights();
+    combinedConfig.checkWeights = { ...combinedConfig.checkWeights, ...checkWeights };
     return combinedConfig;
 }
 

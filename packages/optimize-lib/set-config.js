@@ -1,7 +1,6 @@
 // Shared across all optimize packages
 // NOTE: buildDir and outDir must be defined in your own config.
 // If using the test/demo package, set outDir to its site directory.
-// Test...
 const globalConfig = {
     batchSize: 50,
     ignore: [
@@ -19,6 +18,10 @@ const globalConfig = {
         preparer: 'Optimize',
         fileOutput: 'audit.md',
         autoRun: false
+    },
+    severityWeights: {
+        error: 1.0,
+        warning: 0.5,
     }
 };
 export default globalConfig;

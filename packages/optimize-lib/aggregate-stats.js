@@ -11,7 +11,25 @@
  *   - severityWeights: { error: number, warning: number } (defaults: { error:1, warning:0.5 })
  *   - sigmoid: { k: number, x0: number } (defaults: { k:1, x0:1 }) — uses sigmoid mapping by default
  *   - totalPages: number (optional; if omitted uses actual pages counted)
+ *  getPrevRun(jsonPath) - returns { stats, categories } or null if not found/invalid
  */
+import fs from 'fs';
+
+function compactCategoryTotals(cat) {
+    const totalPages = Array.isArray(cat.failedItems)
+        ? cat.failedItems.length
+        : Array.isArray(cat.pages)
+            ? cat.pages.length
+            : (cat.totalPages || 0);
+    return {
+        name: cat.name || null,
+        totalPages,
+        totalIssues: cat.totalIssues || 0,
+        totalErrors: cat.totalErrors || 0,
+        totalWarnings: cat.totalWarnings || 0,
+        score: cat.score || null,
+    };
+}
 export function aggregateStats(results, allCheckKeys = [], options = {}, totalPages) {
     const weights = (options && options.weights) || {};
     const _severityDefaults = { error: 1, warning: 0.5 };
@@ -127,7 +145,8 @@ export function aggregateStats(results, allCheckKeys = [], options = {}, totalPa
         totalIssues: 0,
         totalErrors: 0,
         totalWarnings: 0,
-        score: 100
+        score: 100,
+        dateTime: new Date().toISOString()
     };
 
     for (const p of pages) {
@@ -190,4 +209,30 @@ export function aggregateStats(results, allCheckKeys = [], options = {}, totalPa
     stats.score = categoryScores.length === 0 ? 100 : Math.round(categoryScores.reduce((a, b) => a + b, 0) / categoryScores.length);
 
     return { categories: categoriesOut, pages, stats };
+}
+
+export async function getPrevRun(jsonPath) {
+    try {
+        await fs.promises.access(jsonPath, fs.constants.R_OK);
+    } catch (err) {
+        return null;
+    }
+
+    try {
+        const raw = await fs.promises.readFile(jsonPath, 'utf8');
+        const existing = JSON.parse(raw);
+
+        const prevStats = existing.stats || existing.globalStats || null;
+        const prevCategories = {};
+
+        if (existing.categories && typeof existing.categories === 'object') {
+            for (const [k, v] of Object.entries(existing.categories)) {
+                prevCategories[k] = compactCategoryTotals(v);
+            }
+        }
+
+        return { stats: prevStats, categories: prevCategories };
+    } catch (err) {
+        return null;
+    }
 }

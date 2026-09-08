@@ -20,27 +20,9 @@ export async function scriptHeader(isFirstCheck = true, enabledChecks = [], args
     }
 
     // Ensure outDir exists
-    if (!fs.existsSync(config.outDir) || !fs.lstatSync(config.outDir).isDirectory()) {
-        // If outDir doesn't exist, check for common output directories in the project root and use the first one found
-        // '_opt' is the branded default, followed by other common build folders
-        const defaultDirs = ['_opt', 'dist', 'out', '_site', '_build', 'public'];
-        let found = false;
-        for (const dir of defaultDirs) {
-            if (fs.existsSync(dir) && fs.lstatSync(dir).isDirectory()) {
-                config.outDir = dir;
-                found = true;
-                break;
-            }
-        }
-        if (!found) {
-            if (config.outDir === undefined) {
-                console.log(colors.red(`[novl optimize] Error: You must use a recognized output directory (_opt, dist, out, _site, _build, public) or define a custom outDir in your optimize.config.js`))
-            } else {
-                // If no default output directory is found, log an error and exit
-                console.log(colors.red(`[novl optimize] Error: The output directory specified in outDir ('${config.outDir}') does not exist, and no default output directory was found.`));
-            }
-            earlyExitError();
-        }
+    if (config.outDir == null) {
+        console.log(colors.red(`[novl optimize] Error: You must use a recognized output directory (_opt, dist, out, _site, _build, public) or define a custom outDir in your optimize.config.js`))
+        earlyExitError();
     }
 
     // Check if outDir exists but is empty (no HTML files)
