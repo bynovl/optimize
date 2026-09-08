@@ -49,11 +49,10 @@
   "scripts": {
     "optimize": "node ./packages/optimize-core/bin/cli.js",
     "optimize:debug": "DEBUG=true node ./packages/optimize-core/bin/cli.js",
-    "changeset": "changeset",
     "version": "changeset version",
     "publish": "changeset publish",
-    "public": "git push public HEAD:main",
-    "release": "./scripts/version-bump.sh"
+    "push:public": "git push public HEAD:main",
+    "release": "./scripts/release.sh"
   },
   "license": "ISC",
   "devDependencies": {
