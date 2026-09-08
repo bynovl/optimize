@@ -1,5 +1,11 @@
 # @bynovl/optimize-utils
 
+## 2.9.0
+
+### Minor Changes
+
+- 70397d5: Added new skills directory for central location and CLI flag; patched several issues related to export functions, improved check weight loading'
+
 ## 2.8.2
 
 ### Patch Changes
