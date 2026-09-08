@@ -1,5 +1,5 @@
 export function showHelp() {
-return `
+  return `
 Automate accessibility, SEO, GEO, and best practice checks for any static site.
 Runs all checks when not passing arguments. Configurable, extensible, and 
 compatible with all static site generators.
@@ -22,12 +22,16 @@ Output Flags:
   --path [file or dir]   Specify a file or directory to check (defaults to current directory)
   --json [output.json]   Output results in JSON format to a file
   --csv [output.csv]     Output results in CSV format to a file
-  --report               Generate an Audit (markdown) with LLM-driven analysis. Requires LLM API key.
+  --report               Generate an Technical Audit (Markdown).
   --ci                   For CI/CD environments (non-interactive)
+  
+Crawl Flag:  
+  --crawl [URL]          Crawl a web page by entering URL. For full site crawl use Cloudflare crawl token and configure in optimize.config.js
 
 General Flags:
   --help, -h            Show this help message
   --version, -v         Show version number
+  --setup               Setup optimize.config.js file in current directory
 
 Examples:
   optimize 
