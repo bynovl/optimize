@@ -42,7 +42,6 @@ export function flattenCategoryData(data) {
 export async function exportResultsAsCsv(data, outPath) {
     const headers = ['page', 'category', 'type', 'message', 'reason', 'target', 'error', 'warning'];
     const csvRows = [headers.join(',')];
-    let previousPage = null;
 
     // Determine if we have the hierarchical structure (categories -> failedItems)
     let categoriesMap;
@@ -58,17 +57,10 @@ export async function exportResultsAsCsv(data, outPath) {
             const failedItems = catObj.failedItems || [];
             for (const pageItem of failedItems) {
                 const page = pageItem.page ?? '';
-                // 1️⃣ Page header row (only page column filled)
-                // Page header row: page column filled, others empty strings (properly escaped)
-                // Page header row: first column is the page name, remaining columns are empty strings
-                const headerRow = headers.map((_, idx) => idx === 0 ? JSON.stringify(page) : "\"\"");
-
-                csvRows.push(headerRow.join(','));
-                previousPage = page; // ensure subsequent issue rows are empty in page column
                 const issues = pageItem.issues || [];
                 for (const iss of issues) {
                     const row = {
-                        page: '', // page column stays empty after header
+                        page,
                         category: catName,
                         type: iss.type ?? iss.checkType ?? '',
                         message: iss.message ?? iss.reason ?? '',
@@ -88,9 +80,8 @@ export async function exportResultsAsCsv(data, outPath) {
             throw new Error('No result items to export as CSV');
         }
         for (const item of flatItems) {
-            const currentPage = item.page ?? item.path ?? '';
             const row = {
-                page: previousPage === currentPage ? '' : currentPage,
+                page: item.page ?? item.path ?? '',
                 category: item.category ?? item.check ?? '',
                 type: item.type ?? item.checkType ?? '',
                 message: item.message ?? item.reason ?? '',
@@ -100,7 +91,6 @@ export async function exportResultsAsCsv(data, outPath) {
                 warning: item.isWarning === true ? 'true' : ''
             };
             csvRows.push(headers.map(h => JSON.stringify(row[h] ?? '')).join(','));
-            previousPage = currentPage;
         }
     }
 
