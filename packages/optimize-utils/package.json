@@ -1,6 +1,6 @@
 {
   "name": "@bynovl/optimize-utils",
-  "version": "2.8.1",
+  "version": "2.8.2",
   "description": "Shared utility functions for NOVL Optimize submodules. Provides helpers for batch processing, link/media extraction, regex, path resolution, and more.",
   "main": "batch-process.js",
   "type": "module",

@@ -1,5 +1,11 @@
 # @bynovl/optimize-utils
 
+## 2.8.2
+
+### Patch Changes
+
+- a95f43c: Package bump: workflow out of sync
+
 ## 2.8.1
 
 ### Patch Changes

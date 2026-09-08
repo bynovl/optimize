@@ -1,5 +1,22 @@
 # @bynovl/optimize
 
+## 2.6.2
+
+### Patch Changes
+
+- a95f43c: Package bump: workflow out of sync
+- Updated dependencies [a95f43c]
+  - @bynovl/optimize-accessibility@2.8.2
+  - @bynovl/optimize-hierarchy@2.8.2
+  - @bynovl/optimize-lib@2.12.2
+  - @bynovl/optimize-links@2.10.2
+  - @bynovl/optimize-media@2.10.2
+  - @bynovl/optimize-meta@2.8.2
+  - @bynovl/optimize-open-graph@2.8.2
+  - @bynovl/optimize-schema@2.8.2
+  - @bynovl/optimize-sources@2.10.2
+  - @bynovl/optimize-utils@2.8.2
+
 ## 2.6.1
 
 ### Patch Changes
