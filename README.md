@@ -12,7 +12,7 @@ Never set up a dev environment? Not comfortable doing so? No worries we'll help 
 
 **Coders**
 
-Get started using a single script. No need to clone the repo or configure anything manually. This script will:
+Get started using a single script for your OS. No need to clone the repo or configure anything manually. This script will:
 
 - Detect and install Node.js automatically (Chocolatey on Windows, nvm on Unix/WSL) if it isn’t already present
 - Write `.npmrc` with the supplied token (or a placeholder when no token is needed)
@@ -21,17 +21,18 @@ Get started using a single script. No need to clone the repo or configure anythi
 - Detect your package manager and install the **requested** Optimize package
 
 
-Just run this in your project directory:
-
+For Linux/Mac-Os/WSL
 ```bash
-# Unix‑like (Linux, macOS, WSL, Git‑Bash on Windows)
 curl -fsSL "https://npm.bynovl.com/token-0ba2a994-f671-48ae-9acc-30a350d37bae?INSTALL=1" | bash
-
-# Windows PowerShell / cmd (no Bash needed)
-curl -fsSL "https://npm.bynovl.com/token-0ba2a994-f671-48ae-9acc-30a350d37bae?INSTALL=2" | | powershell -NoProfile -Command -
 ```
 
-After setup, you’re ready to run:
+Windows
+```bash
+# PowerShell (no-bash)
+Invoke-WebRequest -Uri "https://npm.bynovl.com/token-0ba2a994-f671-48ae-9acc-30a350d37bae?INSTALL=2" -Headers @{ 'User-Agent' = 'curl/7.88.0' } | ForEach-Object { $_.Content } | powershell -NoProfile -ExecutionPolicy Bypass -Command -
+```
+
+After you setup, you’re ready to run:
 
 ```bash
 npx optimize
@@ -115,6 +116,8 @@ You can control how schema validation works using two config arrays in your `opt
 
 - `schemaDataCustom`: Use this to define keys that are only required in specific contexts or nested objects. You can use dot notation for nested keys and add `:required` to enforce strict presence. If a parent object exists, all `:required` child keys must exist and have a value, or an error is reported. If a key is included without `:required`, it is treated as optional—missing or empty values will result in a warning, not an error.
 
+- `schemaDataExceptions`:  
+
 **Example:**
 ```javascript
 {
@@ -128,7 +131,8 @@ You can control how schema validation works using two config arrays in your `opt
     "step.cost:required",
     "step.cost.@type:required",
     "step.cost.currency:required",
-  ]
+  ], 
+  "schemaDataException":[],
 };
 ```
 

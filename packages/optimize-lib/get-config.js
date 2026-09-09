@@ -5,6 +5,7 @@ import globalConfig from './set-config.js';
 import path from 'path';
 import { packageLoader } from './resolve-packages.js';
 import { loadCheckWeights } from './get-check-weights.js';
+import { pathToFileURL } from 'url';
 
 
 function getDefaultOutDir() {
@@ -27,7 +28,7 @@ export async function defaultConfig() {
         const configPath = path.join(pkgDir, 'default.config.js');
         if (fs.existsSync(configPath)) {
             try {
-                const packageDefaultConfig = (await import(configPath)).default;
+                const packageDefaultConfig = (await import(pathToFileURL(configPath).href)).default;
                 // Merge package default config into combined config
                 combinedConfig = mergeConfig(combinedConfig, packageDefaultConfig);
                 debug(`[packageLoader] Loaded config from ${configPath}`);
@@ -50,7 +51,7 @@ export async function getConfig(enabledChecks = []) {
     let userConfig = {};
     const userConfigPath = path.resolve(process.cwd(), 'optimize.config.js');
     if (fs.existsSync(userConfigPath)) {
-        userConfig = (await import(userConfigPath)).default;
+        userConfig = (await import(pathToFileURL(userConfigPath).href)).default;
     }
 
     // Merge: 1. global < 2. local < 3. User
