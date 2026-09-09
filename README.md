@@ -258,40 +258,51 @@ We developed a global SKILL.md to help you summarize, analyze, and fix issues wi
 You can add optimize to any CI/CD workflow. Grab the workflow file using the [custom installer](https://optimize.bynovl.com/1c98b4b4), or [view the source](./templates/optimize.yml) and download. If any module fails, your workflow will return as failed, helping you catch issues before you go live.
 
 
-## LLM-Driven Reporting (experimental)
-Optimize supports AI-powered, markdown-first reporting using Large Language Models (LLMs) such as OpenAI, Anthropic, or GitHub Models. This feature lets you generate professional, stakeholder-ready audit reports with actionable recommendations, summaries, and visual hierarchy—all in clean markdown for easy version control. You can convert your Markdown report to HTML and spin up a local server with your own styles. And even use your own skill and prompt to help guide AI to deliver the best results every time.
+## Deterministic Reports  
+Generate professional, stakeholder-ready technical audits with actionable recommendations, summaries, and visual hierarchy—all in clean markdown for easy version control. The use an AI environment to polish it with deterministic recommendations and insights added into your report using the `optimize-audit` skill. Or fill it in with your own professional insight. Convert the Markdown report to HTML or spin up a local server with your own styles. 
 
-**Example config:**
+```bash 
+npx optimize --report 
+```
+
+Configuration: 
+
 ```js
-llm: {
-  provider: 'github', // or 'openai', 'anthropic', etc.
-  model: 'gpt-4.1',
-  key: process.env.MODEL_KEY,
-},
-report: {
-  fileOutput: 'audit.md',
-  autoRun: true,
-  preparer: 'Your Name or Team',
-  skill: 'seo-expert.md',
-  prompt: 'seo-audit.md'
+export default {
+  report: {
+    fileOutput: 'audit.md',
+    autoRun: true, // Skips CLI output generates audit automatically
+    preparer: 'Your Name or Team'
+  }
 }
 ```
 
-**To use:**
-- Set your API key in the environment (e.g., `MODEL_KEY`), `model` and `provider`.
-- Run Optimize with the `--report` flag or set `autoRun: true` in your config.
-- Find your generated markdown report in the specified output file.
+## External Site Crawl
 
-**Custom Skills & Prompts:**
-- You can provide your own expert skill and prompt templates for custom audits (e.g., accessibility, README quality, security).
+Sometimes you need to audit a **live website** rather than a local build – for example, to compare a production deployment with a staging build, or to run SEO checks on a site that isn’t checked into your repo. You can crawl a single pweb page natively or an entire website using third party support platforms. *Note: cloudflare support only*. A single command will fetch the web page or full website and run optimize automatically. You can use it to run a production vs local sanity check, get an SEO audit of a competitor, and so much more using all the features of optimize. 
 
-**Known Limitations**
-**Known Limitations**
-- Large sites can hit the LLM context window limit unless batch processing is used.
-- Even with batch processing, LLM API rate limits (e.g., "Too many requests" errors) can prevent large audits from completing. This is a hard limitation of cloud LLM APIs.
-- There is no perfect solution for large-scale, automated reporting with cloud LLMs—context window and rate limits are both blockers.
-- The only true workaround is to use a locally hosted/self-hosted model that does not have API rate limits or token restrictions.
+```bash 
+# Crawl a single page
+npx optimize --crawl https://example.com
+```
 
+To crawl full site add the following to your `optimize.config.js`: 
+
+```js
+// Full site crawl
+export default {
+  crawl: {
+    provider: 'cloudflare',          // Only Cloudflare is supported right now
+    apiToken: '<YOUR_API_TOKEN>',    // Cloudflare API token with Crawl permissions
+    accountId: '<YOUR_ACCOUNT_ID>',  // Your Cloudflare account ID
+    options: {                       // Provider‑specific options (optional)
+      limit: 15,   // Max number of pages to crawl
+      depth: 3,    // How deep to follow internal links
+      // Add any other Cloudflare crawl parameters here
+    }
+  }
+}
+```
 
 ## Power your own project
 You can use `@bynovl/optimize` as a library to build your own tools, workflows, or integrations for non-commercial distribution. For license terms and more information, see the [LICENSE](./LICENSE) file.
