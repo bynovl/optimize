@@ -3,6 +3,7 @@ import fs from 'fs';
 import path from 'path';
 import { debug } from '@bynovl/optimize-utils/debug-log.js';
 import { packageLoader } from './resolve-packages.js';
+import { fileURLToPath, pathToFileURL } from 'url';
 
 export async function getCheckModules() {
   const checkModules = [];
@@ -23,8 +24,8 @@ export async function getCheckModules() {
     }
 
     try {
-      const checkPropsModule = await import(checkPropsPath);
-      const checkFnModule = await import(indexPath);
+      const checkPropsModule = await import(pathToFileURL(checkPropsPath).href);
+      const checkFnModule = await import(pathToFileURL(indexPath).href);
       const checkProps = checkPropsModule.checkProps;
       const fn = checkFnModule.default || checkFnModule;
       checkModules.push({
@@ -42,7 +43,7 @@ export async function getCheckModules() {
   try {
     const checkPropsPath = path.join(process.cwd(), 'scripts', 'check-props.js');
     if (fs.existsSync(checkPropsPath)) {
-      const checkPropsModule = await import(checkPropsPath);
+      const checkPropsModule = await import(pathToFileURL(checkPropsPath).href);
       const checkProps = checkPropsModule.checkProps;
       // Only add if not already present
       if (!checkModules.some(m => m.key === checkProps.key)) {

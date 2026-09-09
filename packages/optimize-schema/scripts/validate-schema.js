@@ -1,6 +1,7 @@
 import { ISSUE_KEY } from '@bynovl/optimize-lib/issue-keys.js';
 import { walkKeys } from '@bynovl/optimize-utils/walk.js';
 import { checkLinkValidity } from '@bynovl/optimize-lib/check-link-validity.js';
+import fs from 'fs';
 
 // REGEX
 const schemaRegex =
@@ -158,7 +159,6 @@ export async function extractJsonLd(item, content, siteDir, allParsedKeys, start
                             const url = new URL(value);
                             const filePath = url.pathname.startsWith('/') ? url.pathname.slice(1) : url.pathname;
                             const resolvedPath = siteDir + '/' + filePath;
-                            const fs = await import('fs');
                             if (fs.existsSync(resolvedPath) && fs.statSync(resolvedPath).isFile()) {
                                 // Valid localhost URL, file exists
                                 return;

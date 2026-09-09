@@ -1,10 +1,12 @@
 // Dynamically load and merge default config settings from all @bynovl/optimize-* dependencies
 import path from 'path';
 import fs from 'fs';
+import { fileURLToPath, pathToFileURL } from 'url';
 // read our own package.json without using JSON module import assertions
 const pkg = JSON.parse(fs.readFileSync(path.resolve(new URL(import.meta.url).pathname, '../package.json'), 'utf8'));
 const rootPkgPath = path.join(process.cwd(), 'package.json');
 const rootPkg = JSON.parse(fs.readFileSync(rootPkgPath, 'utf8'));
+
 
 const optimizeDeps = [
     ...Object.keys(pkg.dependencies || {}),
@@ -33,14 +35,14 @@ async function loadAndMergeConfigs() {
             if (pkgRoot) {
                 const configPath = path.join(pkgRoot, 'default.config.js');
                 if (fs.existsSync(configPath)) {
-                    const mod = await import(configPath);
+                    const mod = await import(pathToFileURL(configPath).href);
                     const config = mod.DEFAULT_CONFIG_SETTINGS || mod.default || {};
                     merged = { ...merged, ...config };
                     continue;
                 }
             }
             // last-resort try specifier (may fail)
-            const mod = await import(`${dep}/default.config.js`);
+            const mod = await import(pathToFileURL(`${dep}/default.config.js`).href);
             const config = mod.DEFAULT_CONFIG_SETTINGS || mod.default || {};
             merged = { ...merged, ...config };
         } catch (err) {

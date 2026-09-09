@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { debug } from '@bynovl/optimize-utils/debug-log.js';
 import { packageLoader } from './resolve-packages.js';
+import { fileURLToPath, pathToFileURL } from 'url';
 
 function pickWeightFromCheckProps(checkProps = {}) {
     if (typeof checkProps.key !== 'string' || typeof checkProps.weight !== 'number') {
@@ -23,7 +24,7 @@ export async function loadCheckWeights() {
         if (!fs.existsSync(checkPropsPath)) continue;
 
         try {
-            const module = await import(checkPropsPath);
+            const module = await import(pathToFileURL(checkPropsPath).href);
             const parsed = pickWeightFromCheckProps(module?.checkProps);
             if (parsed) checkWeights[parsed.key] = parsed.weight;
         } catch (e) {
@@ -35,7 +36,7 @@ export async function loadCheckWeights() {
     try {
         const localPath = path.join(process.cwd(), 'scripts', 'check-props.js');
         if (fs.existsSync(localPath)) {
-            const localModule = await import(localPath);
+            const localModule = await import(pathToFileURL(localPath).href);
             const parsed = pickWeightFromCheckProps(localModule?.checkProps);
             if (parsed) checkWeights[parsed.key] = parsed.weight;
         }
