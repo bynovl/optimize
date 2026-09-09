@@ -1,5 +1,11 @@
 # @bynovl/optimize-lib
 
+## 2.13.1
+
+### Patch Changes
+
+- 81101e9: Update file import paths
+
 ## 2.13.0
 
 ### Minor Changes

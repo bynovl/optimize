@@ -1,5 +1,12 @@
 # @bynovl/optimize-schema
 
+## 2.8.4
+
+### Patch Changes
+
+- Updated dependencies [81101e9]
+  - @bynovl/optimize-lib@2.13.1
+
 ## 2.8.3
 
 ### Patch Changes
