@@ -1,5 +1,11 @@
 # @bynovl/optimize-lib
 
+## 2.13.2
+
+### Patch Changes
+
+- a21a85d: Windows support
+
 ## 2.13.1
 
 ### Patch Changes
