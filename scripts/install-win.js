@@ -147,15 +147,13 @@ if (-not (Test-Path "package.json")) {
 # Create a .gitignore if it does not exist
 # --------------------------------------------------
 if (-not (Test-Path ".gitignore")) {
-   @"
- node_modules
- env.sh
-  .env
-@" | Set-Content -Path ".gitignore" -Encoding UTF8
+  @"
+node_modules
+env.sh
+.env
+"@ | Set-Content -Path ".gitignore" -Encoding UTF8
   Write-Host "Created .gitignore with common ignore patterns"
 }
-
-Write-Host "Testing..."
 
 # ------------------------------------------------------------------
 # Detect which package manager to use (pnpm > yarn > npm)
