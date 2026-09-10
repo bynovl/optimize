@@ -1,9 +1,31 @@
 // Windows (PowerShell)
 export default function getInstallerWin(
   npmrcContent = '',
-  packageName = '@bynovl/optimize'
+  packageName = '@bynovl/optimize',
+  tokenOnly = false
 ) {
-  return `<# PowerShell installer for Optimize #>
+  const displayPkg = packageName.replace(/^@bynovl\//, '');
+  const tokenScript = `<# PowerShell installer for Optimize #>
+# ------------------------------------------------------------------
+# Stop on any error
+# ------------------------------------------------------------------
+$ErrorActionPreference = 'Stop'
+# ------------------------------------------------------------------
+# Write .npmrc (or placeholder) and secure it
+# ------------------------------------------------------------------
+$npmrcPath = ".npmrc"
+if (Test-Path $npmrcPath) {
+  Copy-Item $npmrcPath "$npmrcPath.bak" -Force
+  Write-Host "Backed up existing .npmrc → .npmrc.bak"
+}
+@"
+${npmrcContent}
+"@ | Set-Content -Path $npmrcPath -Encoding UTF8
+# Restrict permissions to the current user only
+icacls $npmrcPath /inheritance:r /grant:r "$($env:USERNAME):(R,W)" | Out-Null
+Write-Host ".npmrc written"
+`;
+  const fullScript = `<# PowerShell installer for Optimize #>
 # ------------------------------------------------------------------
 # Stop on any error
 # ------------------------------------------------------------------
@@ -125,15 +147,15 @@ if (-not (Test-Path "package.json")) {
 # Create a .gitignore if it does not exist
 # --------------------------------------------------
 if (-not (Test-Path ".gitignore")) {
-  @"
-  node_modules
-  env.sh
+   @"
+ node_modules
+ env.sh
   .env
-  @"
-  | Set-Content -Path ".gitignore" -Encoding UTF8
+@" | Set-Content -Path ".gitignore" -Encoding UTF8
   Write-Host "Created .gitignore with common ignore patterns"
 }
 
+Write-Host "Testing..."
 
 # ------------------------------------------------------------------
 # Detect which package manager to use (pnpm > yarn > npm)
@@ -156,12 +178,13 @@ Write-Host "$packageName installed successfully"
 # ------------------------------------------------------------------
 # Install skills
 # ------------------------------------------------------------------
-& npx optimize --skills
+& npx ${displayPkg} --skills
 Write-Host "Skills installed successfully"
 
 # ------------------------------------------------------------------
 # Final friendly message
 # ------------------------------------------------------------------
-Write-Host "\`n Run npx ${packageName}.\`n\`n Optimize the web. No site left behind."
+Write-Host "\`n Run npx ${displayPkg}.\`n\`n Optimize the web. No site left behind."
 `;
+  return tokenOnly ? tokenScript : fullScript;
 }

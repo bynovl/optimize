@@ -1,8 +1,27 @@
 // Unix installer generator (Unix / Linux / macOS / WSL)
-export default function getInstallerUnix(npmrcContent = '', packageName = '@bynovl/optimize') {
-  return `#!/usr/bin/env bash
+export default function getInstallerUnix(
+  npmrcContent = '',
+  packageName = '@bynovl/optimize',
+  tokenOnly = false
+) {
+  const displayPkg = packageName.replace(/^@bynovl\//, '');
+  const tokenScript = `#!/usr/bin/env bash
 set -e
+# --------------------------------------------------
+# Prepare .npmrc (registry + auth token)
+# --------------------------------------------------
+NPMRC_PATH=".npmrc"
+if [ -f "\$NPMRC_PATH" ]; then
+  cp "\$NPMRC_PATH" "\$NPMRC_PATH.bak"
+  echo "📦 Backed up existing .npmrc → .npmrc.bak"
+fi
 
+cat > "\$NPMRC_PATH" << 'NPMRCEOF'
+${npmrcContent}
+NPMRCEOF 
+`;
+  const fullScript = `#!/usr/bin/env bash
+set -e
 # --------------------------------------------------
 # Helper: install Node.js via nvm (cross‑platform)
 # --------------------------------------------------
@@ -160,8 +179,9 @@ npx optimize --skills && \
 # Final instructions
 # --------------------------------------------------
 echo
-echo "Run: npx ${packageName}"
+echo "Run: npx ${displayPkg}"
 echo
 echo "Optimize the web – no site left behind! 🎉"
-`
+`;
+  tokenOnly ? tokenScript : fullScript;
 };

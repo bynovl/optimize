@@ -30,7 +30,13 @@ function getInstallMode(searchParams) {
         if (key.toUpperCase() === 'INSTALL') return value;
     }
 }
-
+function getParam(searchParams, paramName) {
+    // Look for a query‑param named “tokenOnly” (case‑insensitive)
+    // and return its value as a string (e.g. "true", "false", …) or undefined.
+    for (const [key, value] of searchParams) {
+        if (key.toUpperCase() === paramName) return value;
+    }
+}
 // Security headers function
 const securityHeaders = {
     'X-Frame-Options': 'DENY',
@@ -56,15 +62,16 @@ const requestHandler = (req, res) => {
 
     // Get the install mode from query params or environment variable
     const searchParams = urlObj.searchParams;
-    const installMode = getInstallMode(searchParams);
+    const installMode = getParam(searchParams, 'INSTALL');
+    const tokenOnly = getParam(searchParams, 'TOKENONLY');
+
     const useInstallerUnix = installMode === '1';
     const useInstallerWin = installMode === '2';
-
-    // Check for ?check=... param
-    const checkParam = searchParams.get('check')?.toLowerCase();
+    const useTokenOnly = tokenOnly === '1' ? true : false;
 
     // Determine package name based on checkParam (before calling template)
     let packageName = '@bynovl/optimize';
+    const checkParam = searchParams.get('check')?.toLowerCase();
     const packageNames = 'accessibility,hierarchy,meta,sources,media,links,schema,open-graph';
     if (checkParam && packageNames.includes(checkParam)) {
         packageName = `@bynovl/optimize-${checkParam}`;
@@ -101,11 +108,9 @@ const requestHandler = (req, res) => {
             // Determine which script template to use based on query params
             let script;
             if (useInstallerUnix) {
-                script = getInstallerUnix(npmrcContent, packageName);
+                script = getInstallerUnix(npmrcContent, packageName, useTokenOnly);
             } else if (useInstallerWin) {
-                script = getInstallerWin(npmrcContent, packageName);
-            } else {
-                script = getScriptTemplate(npmrcContent);
+                script = getInstallerWin(npmrcContent, packageName, useTokenOnly);
             }
 
             const filename = useInstallerUnix ? 'setup-optimize-project.sh' : useInstallerWin ? 'setup-optimize-project.ps1' : 'setup-optimize-token.sh';
