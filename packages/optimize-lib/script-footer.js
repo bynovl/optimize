@@ -6,7 +6,7 @@ import { exportReport } from './report-generator.js';
 import { startStopSpinner, clearSpinnerLine } from '@bynovl/optimize-utils/spinner.js';
 import { colors } from '@bynovl/optimize-utils/ansi-colors.js';
 
-export async function scriptFooter(results, config, args, totalPagesChecked, checkModules = null) {
+export async function scriptFooter(results, config, args, totalPagesChecked, checkModules = null, enabledChecks = []) {
     // Flags
     const hasJsonFlag = Object.prototype.hasOwnProperty.call(args, '--json');
     const hasCsvFlag = Object.prototype.hasOwnProperty.call(args, '--csv');
@@ -32,13 +32,12 @@ export async function scriptFooter(results, config, args, totalPagesChecked, che
 
     const filteredResults = Array.isArray(results) ? results.filter(r => r && r.failedItems !== undefined) : [];
 
-    const moduleList = Array.isArray(checkModules) ? checkModules : [];
-
     // Ensure all check keys are included in the aggregation, even if no results exist for them
+    const moduleList = Array.isArray(checkModules) ? checkModules : [];
     const allCheckKeys = moduleList.map(c => c.key || c.flag);
 
     // Weights are centralized in getConfig via load-check-weights.js
-    // and user overrides are already merged there.
+    // and user overrideKs are already merged there.
     const weights = config?.checkWeights || {};
 
     // Aggregate stats for categories and pages (ensure all categories present)
@@ -72,7 +71,7 @@ export async function scriptFooter(results, config, args, totalPagesChecked, che
         const reportFile = typeof reportFlag === 'string' && !isFlag(reportFlag) ? reportFlag : (configuredReportPath || 'o-audit.md');
         const reportPath = reportFile;
         outputPaths.push(reportPath);
-        await exportReport(config, { categories, stats }, { output: reportPath });
+        await exportReport(config, { categories, stats }, { output: reportPath, enabledChecks: enabledChecks });
     }
 
     if (outputPaths.length > 0) {

@@ -78,7 +78,7 @@ export async function simpleCrawl(siteUrl, config, outputDir = 'crawl_output') {
   await saveHtmlPages([{ url: siteUrl, html }], outputDir);
   consoleLog(colors.green(`Fetched and saved single page: ${siteUrl}\n`), config);
   consoleLog(colors.green(`Crawl completed in ${duration} seconds. Saved 1 page\n`), config);
-  return; 
+  return;
 }
 
 export async function crawlWithProvider(siteUrl, config, outputDir = 'crawl_output', configPath = './optimize.config.js') {

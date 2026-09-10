@@ -12,8 +12,8 @@ export async function crawlSite(config, siteUrl, outputDir = null) {
   // If outputDir is not provided, generate a unique one
   const baseDir = process.cwd();
   const outDir = outputDir || getUniqueCrawlOutputDir(baseDir, 'crawl_output');
-  
-  if(!config.crawl || !config.crawl.provider) {
+
+  if (!config.crawl || !config.crawl.provider) {
     await simpleCrawl(siteUrl, config, outDir);
   } else {
     // Start crawl with provider (Cloudflare or others in the future)

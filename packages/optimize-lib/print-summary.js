@@ -1,7 +1,8 @@
 // Print summary of failed checks before exiting in CI
 import { colors } from '@bynovl/optimize-utils/ansi-colors.js';
+import { argv } from 'node:process';
+
 export function printSummary(filteredResults, totalPagesChecked) {
-  // if (process.argv.includes('--ci')) {
   const failedChecks = filteredResults.filter(r => r && Array.isArray(r.failedItems) && r.failedItems.length > 0);
   const passedChecks = filteredResults.filter(r => r && Array.isArray(r.failedItems) && r.failedItems.length === 0);
   // Count unique pages with issues by aggregating all failedItems' file/page properties
@@ -38,8 +39,7 @@ export function printSummary(filteredResults, totalPagesChecked) {
     });
   }
   console.log(colors.boldGray('============================================\n'));
-  process.exit(1);
-  // if (failedChecks.length > 0 && process.argv.includes('--ci')) {
-  //   process.exit(1);
-  // }
+
+  const exitCode = failedChecks.length > 0 ? 1 : 0;
+  process.exit(exitCode);
 }

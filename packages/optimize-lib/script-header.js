@@ -3,7 +3,7 @@ import path from 'path';
 import fs from 'fs';
 import { walk } from '@bynovl/optimize-utils/walk.js';
 import { isOffline } from '@bynovl/optimize-utils/online-status.js';
-import { createConfig } from './create-config.js';
+import { scaffold } from './scaffold.js';
 import { installSkills } from './skills-installer.js';   // <-- NEW
 import shouldIgnore from './should-ignore.js';
 import { cliBanner } from './cli-banner.js';
@@ -16,45 +16,17 @@ export async function scriptHeader(isFirstCheck = true, enabledChecks = [], args
     // Load configuration and checksOverride
     const { config } = await getConfig(enabledChecks);
 
-    function earlyExitError() {
-        process.exit(1);
-    }
-
-    // Ensure outDir exists
-    if (config.outDir == null) {
-        console.log(colors.red(`[novl optimize] Error: You must use a recognized output directory (_opt, dist, out, _site, _build, public) or define a custom outDir in your optimize.config.js`))
-        earlyExitError();
-    }
-
-    // Check if outDir exists but is empty (no HTML files)
-    const htmlFilesInOutDir = fs.readdirSync(config.outDir).filter(f => f.endsWith('.html'));
-    if (htmlFilesInOutDir.length === 0) {
-        console.log(colors.red(`[novl optimize] Error: The output directory '${config.outDir}' exists but contains no HTML files to check.`));
-        earlyExitError();
-    }
-
     // Show banner only once (if first check)
-    if (isFirstCheck && config.apiMode !== true) {
+    if (isFirstCheck && config.apiMode !== true && !config.disableBanner) {
         await cliBanner();
     }
 
-    // If --setup was requested, create a new optimize.config.js and exit
-    if (args['--setup']) {
-        await createConfig();
-        // Exit after setup; no further checks needed
-        process.exit(0);
+    function earlyExitError() {
+        process.exit(1);
     }
-
-    // If --skills was requested, install skills and exit
-    if (args['--skills'] !== undefined) {
-        await installSkills({
-            skillNames: Array.isArray(args['--skills']) ? args['--skills'] : [],
-            dryRun: Boolean(args['--dry-run']),
-            force: Boolean(args['--force']),
-        });
-        process.exit(0);
-    }
-
+    // ----------------------------------------------
+    // Scaffolding/Setup Flags
+    // ----------------------------------------------
     // If --crawl was requested, check for API key before running crawl
     if (args['--crawl']) {
         // Full crawl: require config.crawl enabled and both apiToken and accountId set
@@ -81,6 +53,38 @@ export async function scriptHeader(isFirstCheck = true, enabledChecks = [], args
         await crawlSite(config, args['--crawl']);
     }
 
+    // If --setup was requested, create a new optimize.config.js and exit
+    if (args['--setup']) {
+        await scaffold(args);
+        // Exit after setup; no further checks needed
+        process.exit(0);
+    }
+
+    // If --skills was requested, install skills and exit
+    if (args['--skills'] !== undefined) {
+        await installSkills({
+            skillNames: Array.isArray(args['--skills']) ? args['--skills'] : [],
+            dryRun: Boolean(args['--dry-run']),
+            force: Boolean(args['--force']),
+        });
+        process.exit(0);
+    }
+    // ----------------------------------------------
+    // Checks Preparation
+    // ----------------------------------------------
+    if (config.outDir == null) {
+        console.log(colors.red(`[novl optimize] Error: You must use a recognized output directory (_opt, dist, out, _site, _build, public) or define a custom outDir in your optimize.config.js`))
+        earlyExitError();
+    }
+
+    // Check if outDir exists but is empty (no HTML files)
+    const htmlFilesInOutDir = fs.readdirSync(config.outDir).filter(f => f.endsWith('.html'));
+    if (htmlFilesInOutDir.length === 0) {
+        console.log(colors.red(`[novl optimize] Error: The output directory '${config.outDir}' exists but contains no HTML files to check.`));
+        earlyExitError();
+    }
+
+    // Start timer 
     if (!config.apiMode) {
         // Start timer (update for accuracy)
         startStopSpinner(true);
