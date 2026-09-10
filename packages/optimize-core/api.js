@@ -3,6 +3,10 @@ import { getCheckModules } from '@bynovl/optimize-lib/get-check-modules.js';
 // Export a mapping object for programmatic use
 export const checkFns = await getCheckModules().then(mods => mods.checkExports);
 
+// Allows you to run a specifoc check by its flag
+// import { checkFns } from '@bynovl/optimize-core/api.js';
+// await checkFns.accessibility(config, nonIgnoredHtmlFiles);
+
 // Optionally, export a function to run all enabled checks
 export async function runAllChecks(config, htmlFiles, startUrl) {
   const { checkModules } = await getCheckModules();

@@ -31,7 +31,7 @@ Crawl Flag:
 General Flags:
   --help, -h            Show this help message
   --version, -v         Show version number
-  --setup               Create a new optimize.config.js file in the current directory
+  --setup [mode]        Create project files. Mode: config, custom-check, extend-check, workflow, all. If no mode is provided, the default config file will be created.
   --skills [name]       Installs all skills by default with name. Or provide the skills you want to install. For example: --skills site fix analyze.
 
 Examples:
