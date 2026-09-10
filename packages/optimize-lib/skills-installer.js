@@ -11,8 +11,6 @@ const __dirname = path.dirname(__filename);
 // ------------------------------------------------------------------
 // Where the skills live in the repo
 const REPO_SKILLS_ROOT = path.resolve(__dirname, 'skills');
-console.log(colors.gray(`Repo skills root: ${REPO_SKILLS_ROOT}`));
-
 // Supported environment folders
 const SUPPORTED_ENVS = ['.agents', '.github', '.claude'];
 

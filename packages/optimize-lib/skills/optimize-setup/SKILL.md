@@ -92,6 +92,10 @@ Stop and ask for clarification when:
 ## Schema handling (schemaDataDefault / schemaDataCustom)
 Schema requirements are expressed in a dot‑notation format that maps to the expected JSON‑LD structure. The skill will parse the requirements and generate the appropriate `schemaDataDefault` and `schemaDataCustom` arrays in the config.
 
+- **`schemaDataDefault`**: applies to all schema blocks, while **`schemaDataCustom`** applies to specific page types.
+- **`schemaDataCustom`**: can be used to enforce page-type-specific schema requirements (e.g., `Product`, `BlogPosting`, etc.).
+- **Use `:required`** to indicate that a field must be present; otherwise, it is treated as a warning-level suggestion.
+
 When a schema type is mentioned (e.g., `Product`, `BlogPosting`) the skill attempts to fetch `https://schema.org/docs/search_results.html?q=<type>` using the `webfetch` tool if a `<type>` can not be inferred from the requirements.
 
 - **Language strength** – Strong language (`required`, `must`, `mandatory`) adds `:required`; soft language (`should`, `recommended`) adds a warning‑level rule.

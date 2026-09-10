@@ -27,7 +27,7 @@ metadata:
 * You need recommendation sections updated in the report artifact.
 
 ## Inputs
-* `audit.md` (or configured `report.fileOutput` path in the `optimize.config.js`) is the primary source of truth for this skill.
+* `o-audit.md` (or configured `report.fileOutput` path in the `optimize.config.js`) is the primary source of truth for this skill.
 * If no report exists yet, generate one with `npx optimize --report`, then use that generated report as the baseline artifact.
 * Optional interpreter output for recommendation population.
 
@@ -35,7 +35,7 @@ metadata:
 There are two stages of output for this skill as follows: 
 
 ### Stage 1 (Deterministic baseline)
-The engine generates the original report artifact (`audit.md` or configured report path). This artifact is the evidence snapshot that the AI will use as the source of truth for any edits.  The artifact:
+The engine generates the original report artifact (`o-audit.md` or configured report path). This artifact is the evidence snapshot that the AI will use as the source of truth for any edits.  The artifact:
 * includes summary, category sections, findings, and recommendation scaffolds.
 * treats engine-generated evidence blocks as immutable.
 * does not invent, recalculate, or manipulate audit data.
@@ -72,7 +72,7 @@ AI may edit:
 ### Generate
 * Build a new report artifact from engine output.
 * Path behavior:
-  * `--report` writes to `audit.md`.
+  * `--report` writes to `o-audit.md`.
   * `--report <filename>.md` writes to the provided filename.
   * `report.fileOutput` is used when no CLI report path override is provided.
 
@@ -87,7 +87,7 @@ AI may edit:
 * Never invent findings not present in source data.
 
 ## Workflow
-1. Resolve target report path with precedence: `--report <filename>.md` > `--report` (default `audit.md`) > `report.fileOutput`.
+1. Resolve target report path with precedence: `--report <filename>.md` > `--report` (default `o-audit.md`) > `report.fileOutput`.
 2. If target report exists and request is refine/update, load that report and edit by section.
 3. If target report does not exist, run the engine to generate the baseline report artifact.
 4. If recommendation population is requested, enrich only recommendation sections.

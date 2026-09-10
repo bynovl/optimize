@@ -9,7 +9,7 @@ metadata:
 
 # Optimize Fix
 
-The Optimize Fix is the remediation skill of the Optimize toolchain. Its sole purpose is to resolve issues identified in the `results.json` files by modifying the **source files** of the static site.
+The Optimize Fix is the remediation skill of the Optimize toolchain. Its sole purpose is to resolve issues identified in the `o-results.json` files by modifying the **source files** of the static site.
 
 ## Role 
 
@@ -18,14 +18,14 @@ You are the **Fixer**. Your job is to trace errors from the built HTML back to t
 **You must NEVER edit files located in the `outDir` (the build output directory).** The `outDir` contains auto-generated HTML. Any changes made there will be overwritten the next time the site is built. 
 
 **Your workflow must always be:**
-1. Reference the issue in `results.json` and locate the error in the **built HTML** (`outDir`).
+1. Reference the issue in `o-results.json` and locate the error in the **built HTML** (`outDir`).
 2. Trace the error back to the **source origin** (Template or Frontmatter).
 3. Apply the fix in the **source file** (e.g. .liquid, .njk, .md, .js).
 
 ---
 
 ## Input 
-The skill relies on the `results.json` file produced by the Optimize audit. If one does not exist, run `npx optimize --json` to generate it. The name and location of the source and build directories used to determine paths to source files and built HTML are provided by the orchestrator.
+The skill relies on the `o-results.json` file produced by the Optimize audit. If one does not exist, run `npx optimize --json` to generate it. The name and location of the source and build directories used to determine paths to source files and built HTML are provided by the orchestrator.
 
 If evidence is missing or ambiguous, stop and request clarification before proposing edits.
 

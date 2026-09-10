@@ -16,16 +16,17 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+        
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '18.x'
+          node-version: 22
       
       - name: Install optimize
         run: npm install -g @bynovl/optimize  
 
       - name: Run optimize
-        run: npx optimize --ci
+        run: npx optimize
         # Can run targeted checks
-        # e.g. npx optimize --ci --meta --hierarchy
+        # e.g. npx optimize --meta --hierarchy
 

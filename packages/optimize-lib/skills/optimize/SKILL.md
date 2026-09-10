@@ -29,8 +29,8 @@ You are the knowledge expert and **manager** of the Optimize toolchain. Route re
 | Skill | Owns | Typical user intent |
 |------|------|---------------------|
 | `optimize-setup` | Config generation and configuration changes | "set up config", "update batchSize", "add custom check" |
-| `optimize-audit` | Audit report artifact lifecycle (`audit.md`) | "run audit", "refine report", "fill recommendations" |
-| `optimize-analyze` | Insight and prioritization from `results.json` | "summarize failures", "prioritize fixes", "why is this failing" |
+| `optimize-audit` | Audit report artifact lifecycle (`o-audit.md`) | "run audit", "refine report", "fill recommendations" |
+| `optimize-analyze` | Insight and prioritization from `o-results.json` | "summarize failures", "prioritize fixes", "why is this failing" |
 | `optimize-fix` | Source-level remediation workflow | "fix audit errors", "apply safe fixes", "remediate meta issues" |
 
 ## End-to-End Lifecycle (Sibling Weave)
@@ -38,9 +38,9 @@ You are the knowledge expert and **manager** of the Optimize toolchain. Route re
 | Stage | Owning skill | Primary inputs | Primary outputs | Handoff rule |
 |------|---------------|----------------|-----------------|--------------|
 | 1. Setup baseline | `optimize-setup` | User requirements, existing `optimize.config.js` | Updated `optimize.config.js`, optional `extended-checks.js` | Always complete before first meaningful audit unless config is already valid. |
-| 2. Produce evidence | `optimize-audit` | Built site output plus config | `results.json`, `audit.md` | If `results.json` is missing, generate it before analysis or fixes. |
-| 3. Prioritize work | `optimize-analyze` | `results.json` | Ranked issues, risk/impact rationale, remediation order | Promote highest-impact systemic issues first (template/global issues before page-local issues). |
-| 4. Remediate safely | `optimize-fix` | `results.json`, priorities from analyze | Fix plan or applied safe source edits | Default to plan mode unless user explicitly requests apply mode. |
+| 2. `optimize-audit` | Built site output plus config | `o-results.json`, `o-audit.md` | If `o-results.json` is missing, generate it before analysis or fixes. |
+| 3. `optimize-analyze` | `o-results.json` | Ranked issues, risk/impact rationale, remediation order | Promote highest-impact systemic issues first (template/global issues before page-local issues). |
+| 4. `optimize-fix` | `o-results.json`, priorities from analyze | Fix plan or applied safe source edits | Default to plan mode unless user explicitly requests apply mode. |
 | 5. Verify closure | `optimize-audit` then optional `optimize-analyze` | Updated source + rebuilt output | Refreshed report and delta in issue counts | Re-run audit after any applied fix batch to confirm no regressions. |
 
 ## Preflight: Config and Path Resolution
@@ -156,7 +156,7 @@ jobs:
 
 ## Interpreting Results
 
-There are several ways to consume the results. The fastest way is via `npx optimize` which will produce a summary in the console. For more detailed information, check the `results.json` and `audit.md` files. The `results.json` file contains structured data about each finding, while the `audit.md` file provides a human-readable report with recommendations. All results have the same issue anatomy fields to preserve in diagnosis and fix handoffs:
+There are several ways to consume the results. The fastest way is via `npx optimize` which will produce a summary in the console. For more detailed information, check the `o-results.json` and `o-audit.md` files. The `o-results.json` file contains structured data about each finding, while the `o-audit.md` file provides a human-readable report with recommendations. All results have the same issue anatomy fields to preserve in diagnosis and fix handoffs:
 
 | Field | Meaning |
 |-------|---------|
