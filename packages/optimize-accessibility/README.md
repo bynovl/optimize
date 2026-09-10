@@ -2,85 +2,62 @@
 
 Accessibility validation submodule for NOVL Optimize. Checks HTML files for accessibility best practices, ARIA usage, and common issues to ensure static sites are usable by everyone.
 
+## Quick Start
 
-## Quick Start (Recommended)
+For new projects or testing out optimize, the fastest way to get started is use the Optimize installer script. Whether you're a Developer or not the script will ensure your environment is ready,  install Optimize, and add the neccessary starter files and skills to help you get started.  
 
-For the fastest and most reliable setup, use the one-command installer script. This will:
-- Set up your `.npmrc` with your token
-- Download `optimize.config.js` to your project root
-- Install the recommended optimize skill in your project's skills folder (e.g. `.github/skills`, `.claude/skills`)
-- Detect your package manager (`npm`, `pnpm`, or `yarn`) and install dependencies
+Open **Terminal** or **Powershell** on your computer and `cd [folder/name]` you want to setup project. Then copy/paste the following based on your OS environment:
 
-Just run this in your project directory:
+<details>
+  <summary>
+  For Linux/MacOS/WSL
+  </summary>
+  
+    ```bash
+    # Add &TOKEN=1  after INTALL=2 for token-only.
+    curl -fsSL "https://npm.bynovl.com/token-0ba2a994-f671-48ae-9acc-30a350d37bae?INSTALL=1&check=accessibility" | bash
+    ```
+</details>
 
-```bash
-curl -fsSL "https://npm.bynovl.com/token-147c00d2-1d38-4f7f-9b1c-d89e47409a34?INSTALL=1&check=accessibility" | bash
-```
+<details>
+  <summary>
+  Windows
+  </summary>
 
-After setup, run optimize:
+  ```bash
+  # PowerShell (no-bash). Add &TOKEN=1  after INTALL=2 for token-only.
+  Invoke-WebRequest -Uri "https://npm.bynovl.com/token-0ba2a994-f671-48ae-9acc-30a350d37bae?INSTALL=2&check=accessibility" -Headers @{ 'User-Agent' = 'curl/7.88.0' } | ForEach-Object { $_.Content } | powershell -NoProfile -ExecutionPolicy Bypass -Command -
+  ```
+</details>
 
-```bash
-npx optimize-accessibility
-```
-
-> Note: Optimize uses `_site` as your build directory by default. If you use a different name for your build folder you will needs to change this in yourr `optimize.config.js`
+**Note: You can view scripts via the [scripts/](../../scripts/) folder*
 
 ## Usage
-### 1. Install package
+### Install
 ```bash 
 npm install @bynovl/optimize-accessibility
 ```
 
+### Configuration
 
-### 2. Configure `optimize.config.js`
-
-Use the [default settings](../README.md) which detects recognized build folders or add an `optimize.config.js` in your project root and define the build folder using `outDir`:
+By default Optimize automatically looks for a build folder by the name of `_opt`, `_site`, `_build`, `public`, `out` or `dist` and loads the default settings. To change the build directory add an `optimize.config.js` in the root of your project. 
 
 ```js
 export default {
-  outDir: "_site", // minimum required
+  outDir: "_custom-dir", 
 }
 ```
 
-> Note: Use the [quick start installer](https://npm.bynovl.com/token-147c00d2-1d38-4f7f-9b1c-d89e47409a34?INSTALL=1&check=accessibility)(see above) or [custom installer](https://optimize.bynovl.com/1c98b4b4) to pick what you need.
+*Tip: run `npx optimize --setup` to install an optimize.config.js with default settings*
 
-### 3. Choose how you want to use it and optimize
+### Optimize
 
-**CLI:**
-Single check
 ```bash
-npx optimize --accessibility
+# Runs check for accessibility only
+npx optimize-accessibility
 ```
 
-Multiple flags:
-```bash
-npx optimize --accessibility --hierarchy
-# Note: Multiple flags require the core package (@bynovl/optimize-core).
-```
-
-> Note: For most use cases, you’ll want to use [@bynovl/optimize-core](../optimize-core/README.md) to run multiple checks together or as a single CLI entry point.
-
-**Config:**
-If you regularly check the same things update your the `enabledChecks` in your config:
-
-```js 
-export default {
-  outDir: "_site", // your build directory, 
-  enabledChecks: ["--accessibility"]
-}
-```
-
-**API:**
-Plug into any custom tool.
-
-```js
-import { getConfig } from '@bynovl/optimize-lib/get-config.js';
-import checkAccessibility from '@bynovl/optimize-accessibility/index.js';
-
-const { config, nonIgnoredHtmlFiles } = await getConfig();
-const results = await checkAccessibility(config, nonIgnoredHtmlFiles);
-console.log(results);
-```
+> Note: For most use cases, you’ll want to use [@bynovl/optimize-core](../optimize-core/README.md) as a single CLI entry point to to run multiple checks.
 
 ## What It Does
 - **Validates accessibility attributes and structure (static checks):**  
@@ -97,80 +74,53 @@ Can be run standalone or as part of the full site check suite.
 - **No color contrast checking.** Contrast ratios between text and background are not evaluated.
 - **Complement with dedicated a11y tools.** For full WCAG compliance audits, pair with axe, pa11y, or Lighthouse in addition to running this check.
 
-Note: This module is intentionally lightweight for fast CI feedback. For deeper, runtime, or visual checks (contrast, simulated user interactions, or full WCAG coverage) run a dedicated tool such as `pa11y`, `axe`/`axe-core`, or `Lighthouse` against a running site or within a headless browser.
+*Note: This module is intentionally lightweight for fast CI feedback. For deeper, runtime, or visual checks (contrast, simulated user interactions, or full WCAG coverage) run a dedicated tool such as `pa11y`, `axe`/`axe-core`, or `Lighthouse` against a running site or within a headless browser.*
 
 ## Configuration
 
-- Inherit config from the main `default.config.js` or provide a local config `optimize.config.js`.
-- Key options:
-  - `outDir`: Directory containing built HTML files.
-  - `ignore`: Array of glob patterns or paths to exclude.
-  - `batchSize`: Number of files to process in parallel.
-
-See the [project README](../../README.md) for full configuration and parameter conventions.
+All standard Optimize options are available (see the [main README](../../README.md) for the full list):
+s
+- `outDir`: directory containing the built HTML files.  
+- `ignore`: glob patterns or paths to exclude from the audit.  
+- `batchSize`: number of files processed in parallel (default = 50)
 
 ## Output
+Returns a category object with Accessibility issues per page. 
 
-Returns an array of result objects per file, with details for each accessibility issue:
 ```js
-[
-  {
-    "page": "index.html",
-    "accessibility": [
-      { "target": "<img>", "reason": "missing alt attribute", ... },
-      // ...
-    ]
-  }
+// ..other categories
+"accessibility": [
+  // ...top level category stats 
+  "failedItems": [
+    {
+      "page": "index.html", 
+      "issues": [
+        {
+          "target": "<img>",
+          "type": "missing", 
+          "reason": "missing alt attribute", 
+          "isError": true, 
+          "isWarning": false, 
+          "message": ""
+        }
+        // ...other accessibility issues
+      ]
+    },
+    // ...other pages
+  ]
 ]
-
 ```
 
+## Automate with AI SKILLS
+Optimize ships with five core AI‑powered skills. Install them with:
 
-## Automate with AI SKILLS
-We developed a global SKILL.md to help you summarize, analyze, and fix issues with AI. You can use it in the CLI or directly in the chat window—just choose your model and go!
-
-**How to use:**
-
-**Get the global SKILL file:**
-
-**Learn more about SKILLS**
-
-
-
-## Make it your own
-You can extend the accessibility check with your own rules and custom validation with `extendChecks` in your `optimize.config.js`. To get started, quickly add the `extend-checks.js` template using the installer script (see above), or see [`extend-checks.js`](../../templates/extend-checks.js) and the sample config.
-
-```js
-import {
-  customAccessibiltyChecks,
-  // ...other categories
-} from './extend-checks.js';
-
-export default {
-  // existing settings
-  extendChecks: {
-    accessibility: customAccessibilityChecks,
-    // ...other categories
-  }
-}
+```bash 
+npx optimize --skills
 ```
-
-## Automate with AI SKILLS
-We developed an agent SKILL to help you summarize, analyze, and fix issues with AI. You can use optimize-site SKILL in the CLI or directly in the chat window—just choose your model and go!
-
-**How to use:**
-- Quickly add the SKILL file to your project using the [installer script](https://optimize.bynovl.com/1c98b4b4) (see above)
-- Or download/copy the SKILL file from the repo (see link below)
-- Add it to your project SKILLS folder `.github/skills` or `.claude/skills`.
-- Use it to interpret optimize results, get summaries, and generate fixes automatically
-
-**Resources**
-- [View the Optimize SKILL](https://github.com/bynovl/optimize/skills/optimize/SKILL.md)
-- [Learn more about Agent SKILLS](https://agentskills.io/what-are-skills)
-
+*Note: Currently auto‑detects .github, .claude, .agents, and .opencode.*
 
 ## Make it your own
-You can extend the accessibility check with your own rules and custom validation with `extendChecks` in your `optimize.config.js`. To get started, quickly add the `extend-checks.js` template using the installer script (see above), or see [`extend-checks.js`](../../templates/extend-checks.js) and the sample config.
+You can extend the accessibility check with your own rules and custom validation with `extendChecks` in your `optimize.config.js`. To get started, run `npx optimize --setup extend-check` to get started with an `extend-checks.js` template.
 
 ```js
 import {
@@ -186,13 +136,23 @@ export default {
   }
 }
 ```
-Learn more about [custom checks and extensions](../../templates/README.md)
+
+For completely new checks, run `npx optimize --setup custom-check` and refer to the generated README. 
 
 ## CI/CD Workflows
-You can add optimize to any CI/CD workflow. Quickly add the workflow file using the [installer script](https://optimize.bynovl.com/1c98b4b4), or view [optimize.yml](../../templates/optimize.yml) in templates. If any module fails, your workflow will return as failed helping you catch issues before you go live.
+You can add optimize to any CI/CD workflow. Quickly add the workflow file using `npx optimize --setup workflow`. An `optimize.yml` will be installed in your project root. If any module fails, your workflow will fail helping you catch issues before you go live.
 
-## Power your own project
+## Power your own project (API)
 You can use `@bynovl/optimize-accessibility` as a library to build your own tools, workflows, or integrations for non-commercial distribution. For license terms and more information, see the [LICENSE](../../LICENSE) file.
+
+```js
+import { getConfig } from '@bynovl/optimize-lib/get-config.js';
+import checkAccessibility from '@bynovl/optimize-accessibility/index.js';
+
+const { config, nonIgnoredHtmlFiles } = await getConfig();
+const results = await checkAccessibility(config, nonIgnoredHtmlFiles);
+console.log(results);
+```
 
 ## Contributing
 Times are changing and we needed something in-house that can help us work smarter not harder. This project started out as a need to solve some of our own unseen static site and static site generator (SSG) problems and figured it might help some of you too. 
@@ -201,4 +161,4 @@ We don't have time to manage pull requests at the moment. Good news, we actively
  
 For features you'd like to see or if you spot any bugs jump into the [discussion](https://github.com/bynovl/optimize/discussions).  Want to contribute? Yes please, let's build together and make websites better, faster, accessible and AI-ready without any dependencies other than the ones you choose to use. 
 
-Say hello at contributors@bynovl.com!
+**Say hello**: at contributors@bynovl.com!
