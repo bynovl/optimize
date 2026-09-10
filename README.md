@@ -15,14 +15,15 @@ An open source toolkit for auditing and validating your static site. You can aut
 
 ## Quick Start 
 
-Our goal is to make Optimize accessible to both non-tech and tech people. Never setup a dev environment? Already have a project you want to test Optimize? Whether you're a Developer or Non-Developer, you can get started using a script that installs only what you need based on your environment. It will:
+Never setup a dev environment? Already have a project you want to test Optimize? Whether you're a Developer or Non-Developer, novice or power user you can get started with the Optimize installer script. It will:
 
 - Detect and install Node.js automatically (Chocolatey on Windows, nvm on MacOS/Unix/WSL) if it isn’t already present.
 - Write an `.npmrc` with the token you need to use Optimize. Backs up your current one if you have one installed. 
 - Creates or modifies a `package.json` with `"type":"module"`
-- Installs or updates `.gitignore` so you don't write and secrets to a remote Git environment (e.g. Github). 
+- Installs or updates `.gitignore` so you don't write any secrets or unnecceary files to a remote Git environment (e.g. Github). 
+- Creates a minimal `_opt` directory with a test `index.html` if it does't recognize any default build folders.
 - Detects your package manager (npm, yarn or pnpm) and installs Optimize
-- And adds all the Optimize skills 
+- Adds all the Optimize skills 
 
 Open **Terminal** or **Powershell** on your computer and enter `cd [folder/name]` you want to setup project and copy/paste the following. You can also see what these scripts do via the [scripts/](./scripts/) folder.
 

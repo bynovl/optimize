@@ -1,4 +1,4 @@
-// Unix installer generator (Unix / Linux / macOS)
+// Unix installer generator (Unix / Linux / macOS / WSL)
 export default function getInstallerUnix(npmrcContent = '', packageName = '@bynovl/optimize') {
   return `#!/usr/bin/env bash
 set -e
@@ -112,6 +112,18 @@ else
   PKG_MGR="npm"
 fi
 echo "🔧 Using package manager: \$PKG_MGR"
+
+# --------------------------------------------------
+# Create a .gitignore if it does not exist
+# --------------------------------------------------
+if [ ! -f ".gitignore" ]; then
+  cat > ".gitignore" <<'GITIGNORE_EOF'
+  node_modules
+  env.sh
+  .env
+  GITIGNORE_EOF
+  echo "Created .gitignore with common ignore patterns"
+fi
 
 # --------------------------------------------------
 # Ensure a package.json exists with type:module

@@ -1,9 +1,9 @@
-// PowerShell installer generator (Windows)
+// Windows (PowerShell)
 export default function getInstallerWin(
-    npmrcContent = '',
-    packageName = '@bynovl/optimize'
+  npmrcContent = '',
+  packageName = '@bynovl/optimize'
 ) {
-    return `<# PowerShell installer for Optimize #>
+  return `<# PowerShell installer for Optimize #>
 # ------------------------------------------------------------------
 # Stop on any error
 # ------------------------------------------------------------------
@@ -120,6 +120,20 @@ if (-not (Test-Path "package.json")) {
   $pkg | ConvertTo-Json -Depth 10 | Set-Content "package.json" -Encoding UTF8
   Write-Host "Created package.json with \"type\":\"module\""
 }
+
+# --------------------------------------------------
+# Create a .gitignore if it does not exist
+# --------------------------------------------------
+if (-not (Test-Path ".gitignore")) {
+  @"
+  node_modules
+  env.sh
+  .env
+  @"
+  | Set-Content -Path ".gitignore" -Encoding UTF8
+  Write-Host "Created .gitignore with common ignore patterns"
+}
+
 
 # ------------------------------------------------------------------
 # Detect which package manager to use (pnpm > yarn > npm)
