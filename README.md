@@ -55,12 +55,12 @@ Open **Terminal** or **Powershell** on your computer and enter `cd [folder/name]
 
 ## Getting Started
 
-### 1. Install
+### Install
 ```bash
 npm install @bynovl/optimize-core
 ```
 
-### 2. Configure
+### Configure
 By default Optimize looks for a build folder by the name of `_opt`, `_site`, `_build`, `public`, `out` or `dist` and loads the default settings. To change the build directory add an `optimize.config.js` in the root of your project. 
 
 ```bash 
@@ -77,7 +77,7 @@ export default {
 }
 ```
 
-### 3. Run Your First Audit
+### Optimize
 Check the health your website and figure out what needs to get fixed.
 
 ```bash 
