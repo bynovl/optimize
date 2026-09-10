@@ -17,6 +17,7 @@ export async function runAllChecks(startUrl) {
     const actualChecks = Array.isArray(config.enabledChecks) && config.enabledChecks.length > 0 ? config.enabledChecks : enabledChecks;
     const totalPagesChecked = nonIgnoredHtmlFiles.length;
     debug(config, 'Final merged config to be used for checks:');
+
     // If API mode, skip CLI output
     const isApiMode = config.apiMode || process.env.MODE === 'API';
     if (isApiMode) return;
@@ -29,11 +30,13 @@ export async function runAllChecks(startUrl) {
       .map(flag => checkModules.find(m => m.flag === flag))
       .filter(Boolean);
 
+    const checksToRunProps = checksToRun.map(mod => ({ flag: mod.flag, label: mod.label, key: mod.key }));
+
     // Run all selected checks
     const results = await Promise.all(
       checksToRun.map(async (mod) => mod.fn(config, nonIgnoredHtmlFiles, effectiveStartUrl))
     );
-    await scriptFooter(results, config, args, totalPagesChecked, checkModules);
+    await scriptFooter(results, config, args, totalPagesChecked, checkModules, checksToRunProps);
   } catch (error) {
     console.error('Error occurred while checking optimization requirements:', error);
   }

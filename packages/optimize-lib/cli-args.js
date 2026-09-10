@@ -1,15 +1,63 @@
 import { isValidHttpUrl } from '@bynovl/optimize-utils/crawl-utils.js';
 import { showHelp } from './get-help.js';
+import path from 'node:path';
 
 export const sharedHelpText = showHelp();
 
-export function parseCliArgs(argv = process.argv.slice(2), helpText = sharedHelpText, version = null) {
+export function parseCliArgs(argv = process.argv.slice(2), helpText = sharedHelpText, version = null, checkModules = []) {
   const opts = {};
   argv.forEach(arg => {
     if (arg.startsWith('--')) {
       opts[arg] = true;
     }
   });
+
+  // Get dynamic check flags from checkModules
+  const dynamicCheckFlags = checkModules.map(m => m.flag).filter(Boolean);
+
+  // List of known flags for validation
+  const systemFlags = [
+    '--crawl',
+    '--skills',
+    '--setup',
+    '--version',
+    '--help',
+    '--path',
+    '--json',
+    '--csv',
+    '--report',
+    '--ci',
+    '--output',
+    '--dry-run',
+    '--force',
+    '-v',
+    '-h',
+  ];
+
+  // All known flags (system + dynamic)
+  const knownFlags = new Set([...systemFlags, ...dynamicCheckFlags]);
+
+  // Check for unknown flags in argv
+  const unknown = argv.filter(tok => {
+    // Only look at tokens that *look* like flags.
+    if (!tok.startsWith('-')) return false;
+    // If the token is exactly a known flag, it’s fine.
+    if (knownFlags.has(tok)) return false;
+    // Anything else (including “-x” or “--foo”) is unknown.
+    return true;
+  });
+
+  // Safety/Helper for unknown flags: if any unknown flags are present, exit with an error message.
+  if (unknown.length > 0) {
+    // By default we just warn – the tool will keep running.
+    // If you prefer a hard stop, set the env var OPTIMIZE_STRICT_FLAGS=1.
+    const strict = process.env.OPTIMIZE_STRICT_FLAGS === '1';
+    const msg = `Warning: Unrecognised CLI flag${unknown.length > 1 ? 's' : ''}: ${unknown.join(', ')}`;
+    console.error(msg);
+    console.error('Run with "npx optimize" with --help or "-h" to see the list of supported flags.');
+    process.exit(1);
+  }
+
 
   if (opts['--crawl'] && argv.indexOf('--crawl') + 1 < argv.length) {
     const crawlUrl = argv[argv.indexOf('--crawl') + 1];
@@ -31,6 +79,17 @@ export function parseCliArgs(argv = process.argv.slice(2), helpText = sharedHelp
       }
       // store the array (empty = “install all”)
       opts['--skills'] = names;
+    }
+  }
+
+  if (argv.includes('--setup')) {
+    const idx = argv.indexOf('--setup');
+    const next = argv[idx + 1];
+    // If the next token exists and is *not* another flag, treat it as the mode
+    if (next && !next.startsWith('--')) {
+      opts['--setup'] = next;
+    } else {
+      opts['--setup'] = true;
     }
   }
 

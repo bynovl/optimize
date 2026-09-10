@@ -25,10 +25,12 @@ export default async function runAllChecks(startUrl) {
     const effectiveStartUrl = startUrl || config.startUrl || process.env.START_URL;
 
     let results = [];
+    const checksToRun = checkModules.filter(m => actualChecks.includes(m.flag));
+
     if (actualChecks.includes(checkProps.flag)) {
         results = [await checkOpenGraph(config, nonIgnoredHtmlFiles, effectiveStartUrl)];
     }
-    await scriptFooter(results, config, args, totalPagesChecked, checkModules);
+    await scriptFooter(results, config, args, totalPagesChecked, checkModules, checksToRun);
 }
 
 // Run if executed from CLI
