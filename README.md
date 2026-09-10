@@ -1,12 +1,17 @@
 # Optimize <img src="https://img.shields.io/badge/beta-4ade80" alt="Beta">
 An open source toolkit for auditing and validating your static site. You can automate accessibility, schema, meta, and other best-practice checks. It's configurable, extensible, and compatible with all static site generators. Use it in CI/CD or during development to catch issues before you go live.
 
-## Hey Everyone
-Thanks for joining the beta. While the project may be a little further along then a normal beta. Our goal is to build community-first. This private repo and package are shared for testing and feedback, and we’d love to hear how Optimize works in your workflow. 
+<details>
+  <summary>
+  <strong>👋🏾 Hey Beta Members! Start Here.</strong>
+  </summary>
+  <br>
+  Thanks for joining the beta. Optimize is in active beta. Our goal is to build community-first. This private repo and package are shared for testing and feedback, and we’d love to hear how Optimize works in your workflow. 
 
-Your access is in line with our [license terms](./LICENSE). Please review them for permitted uses and restrictions before sharing or adapting the code. While during the beta sharing is restricted to those within the beta group, we encourage you to invite more people to join us. That said we’re open to feedback as we explore sustainable open-source models. Let's help open source survive!
+  Your access is in line with our [license terms](./LICENSE). Please review them for permitted uses and restrictions before sharing or adapting the code. While during the beta sharing is restricted to those within the beta group, we encourage you to invite more people to join us. That said we’re open to feedback as we explore sustainable open-source models. Let's help open source survive!
 
-Everything below contains the full documentation. Have thoughts? feedback? Found an issue? Or just want to say hello? Join the [discussion](https://github.com/bynovl/optimize/discussions/categories/beta). Once you've had a chance to test Optimize out, help us understand what matters most. [Your feedback](https://github.com/bynovl/optimize/discussions/8) is appreciated!
+  Everything below contains the full documentation. Have thoughts? feedback? Found an issue? Or just want to say hello? Join the [discussion](https://github.com/bynovl/optimize/discussions/categories/beta). Once you've had a chance to test Optimize out, help us understand what matters most. [Your feedback](https://github.com/bynovl/optimize/discussions/8) is appreciated!
+</details>
 
 ## Quick Start 
 
@@ -23,22 +28,22 @@ Open **Terminal** or **Powershell** on your computer and enter `cd [folder/name]
 
 <details>
   <summary>
-  For Linux/MacOS/WSL
+  <strong>For Unix/MacOS/WSL</strong>
   </summary>
   
-    ```bash
-    # Add &TOKEN=1  after INTALL=2 for token-only.
-    curl -fsSL "https://npm.bynovl.com/token-0ba2a994-f671-48ae-9acc-30a350d37bae?INSTALL=1" | bash
-    ```
+  ```bash
+  # Add &TOKEN=1 after INSTALL=2 for token-only.
+  curl -fsSL "https://npm.bynovl.com/token-0ba2a994-f671-48ae-9acc-30a350d37bae?INSTALL=1" | bash
+  ```
 </details>
 
 <details>
   <summary>
-  Windows
+  <strong>Windows</strong>
   </summary>
 
   ```bash
-  # PowerShell (no-bash). Add &TOKEN=1  after INTALL=2 for token-only.
+  # PowerShell (no-bash). Add &TOKEN=1 after INSTALL=2 for token-only.
   Invoke-WebRequest -Uri "https://npm.bynovl.com/token-0ba2a994-f671-48ae-9acc-30a350d37bae?INSTALL=2" -Headers @{ 'User-Agent' = 'curl/7.88.0' } | ForEach-Object { $_.Content } | powershell -NoProfile -ExecutionPolicy Bypass -Command -
   ```
 </details>
@@ -112,9 +117,10 @@ npx optimize  --path /path/folder-name
 - `--path`: combine with a check flag to analyze a folder or file.
 - `--json`: export results as JSON 
 - `--help`: list of flags
+- `--version`: current package version
 - `--skills`: install Optimize SKILLS
 - `--setup`: install optimize.config.js, workflow, custom check and extend check files
-- `--version`: current package version
+- `--crawl`: crawl a page or full site
 
 ## Configuration
 Optimize works out-of-the-box with **zero-config**. For granular control over Optimize add an `optimize.config.js` and customize the config for your project. To get started with the defaults run: 
@@ -316,9 +322,9 @@ You can extend Optimize in two ways:
 Use `extendChecks` in your `optimize.config.js` to add custom validation to existing core checks (meta, links, media, etc.). To get started run `npx optimize --setup extend-check` and install an `extend-checks.js` sample file in the root of your project. There are 3-ways you can plugin to core checks from simple true/false validation to robust logic driven validation. *The file ships with comments and examples to help you get started*
 
 ```bash 
-# Intall in project root 
+# INSTALL in project root 
 npx optimize --setup extend-check
-# Intall in chosen directory 
+# INSTALL in chosen directory 
 npx optimize --setup extend-check path/to/dir
 ```
 

