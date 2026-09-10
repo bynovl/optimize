@@ -78,7 +78,7 @@ export default {
 ```
 
 ### Optimize
-Check the health your website and figure out what needs to get fixed.
+Check the health of your website and discover web quality issues.
 
 ```bash 
 # Run all checks and see results in console
@@ -102,6 +102,8 @@ npx optimize --meta --path /path/name-to-file.html
 # Run all checks on folder
 npx optimize  --path /path/folder-name
 ```
+
+Then run `npx optimize` again to validate and ensure the fixes are resolved. 
 
 **Core Flag Checks**
 - `--meta`: Check for required and recommended meta tags only.

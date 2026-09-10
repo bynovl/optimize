@@ -17,27 +17,43 @@ jobs:
 
       - uses: actions/setup-node@v3
         with:
-          node-version: 24          
+          node-version: 24
           registry-url: 'https://npm.pkg.github.com/'
 
       - run: pnpm install
 
+      # Guard: run the rest of the job only if a changeset file exists
+      - name: Check for changeset files
+        id: changeset_check
+        run: |
+          # Look for new .md files inside .changeset/
+          if ls .changeset/*.md 1> /dev/null 2>&1; then
+            echo "has_changeset=true" >> $GITHUB_OUTPUT
+          else
+            echo "has_changeset=false" >> $GITHUB_OUTPUT
+          fi
+
+      # Configure npm for GitHub Packages
       - name: Configure npm for GitHub Packages
+        if: steps.changeset_check.outputs.has_changeset == 'true'
         run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.GH_PUBLISH_TOKEN }}" > ~/.npmrc
 
+      # Set up Git user (only needed when we have a changeset)
       - name: Set up Git user
+        if: steps.changeset_check.outputs.has_changeset == 'true'
         run: |
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git config --global user.name "github-actions[bot]"
 
+      # Version packages (runs `pnpm changeset version`)
       - name: Version packages
+        if: steps.changeset_check.outputs.has_changeset == 'true'
         run: pnpm changeset version
 
-      # -------------------------------------------------
-      #  Commit version bumps – **no pull before commit**
-      # -------------------------------------------------
+      # Commit version bumps – **no pull before commit**
       - name: Commit version bumps
         id: commit_version
+        if: steps.changeset_check.outputs.has_changeset == 'true'
         run: |
           # The version‑bump files are already present in the working tree.
           # Adding, committing and pushing them is enough – pulling would
@@ -53,13 +69,16 @@ jobs:
             echo "committed=true" >> $GITHUB_OUTPUT
           fi
 
+      # Publish packages
       - name: Publish packages
+        if: steps.changeset_check.outputs.has_changeset == 'true'
         run: pnpm changeset publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GH_PUBLISH_TOKEN }}
 
+      # Tag core version and push
       - name: Tag core version and push
-        if: steps.commit_version.outputs.committed == 'true'
+        if: steps.changeset_check.outputs.has_changeset == 'true' && steps.commit_version.outputs.committed == 'true'
         run: |
           CORE_PKG=packages/optimize-core/package.json
           VERSION=$(jq -r .version "$CORE_PKG")
@@ -73,3 +92,11 @@ jobs:
           fi
         env:
           GH_TOKEN: ${{ secrets.GH_PUBLISH_TOKEN }}
+
+      - name: Release process completed
+        if: steps.changeset_check.outputs.has_changeset == 'true'
+        run: echo "Release process completed successfully."
+
+      - name: No changeset found
+        if: steps.changeset_check.outputs.has_changeset == 'false'
+        run: echo "No changeset files found. Skipping release process."
