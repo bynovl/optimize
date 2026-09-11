@@ -1,4 +1,5 @@
 # Optimize <img src="https://img.shields.io/badge/beta-4ade80" alt="Beta">
+
 An open source toolkit for auditing and validating your static site. You can automate accessibility, schema, meta, and other best-practice checks. It's configurable, extensible, and compatible with all static site generators. Use it in CI/CD or during development to catch issues before you go live.
 
 <details>
@@ -10,7 +11,7 @@ An open source toolkit for auditing and validating your static site. You can aut
 
   Your access is in line with our [license terms](./LICENSE). Please review them for permitted uses and restrictions before sharing or adapting the code. While during the beta sharing is restricted to those within the beta group, we encourage you to invite more people to join us. That said we’re open to feedback as we explore sustainable open-source models. Let's help open source survive!
 
-  Everything below contains the full documentation. Have thoughts? feedback? Found an issue? Or just want to say hello? Join the [discussion](https://github.com/bynovl/optimize/discussions/categories/beta). Once you've had a chance to test Optimize out, help us understand what matters most. [Your feedback](https://github.com/bynovl/optimize/discussions/8) is appreciated!
+  Everything below contains the full documentation. Have thoughts? feedback? Found an issue? Or just want to say hello? Join the [discussion](https://github.com/bynovl/optimize/discussions/categories/beta). Once you've had a chance to test Optimize out, help us understand what matters most. [Your feedback](https://github.com/bynovl/optimize/discussions/8) is appreciated! Excited to use optimize? Help us [spread the word](https://optimize.bynovl.com/3e33e4ef)!
 </details>
 
 ## Quick Start 
@@ -61,10 +62,6 @@ Never setup a dev environment? Already have a project you want to test Optimize?
   ```
 </details>
 <br>
-
-*Still need help? [Sign up for a demo](https://cal.com/bysyd/optimize-demo)*
-
-----
 
 ## Getting Started
 

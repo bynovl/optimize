@@ -1,22 +1,19 @@
 # Templates
-Copy any template to your local workspace and start building using the [install-init](../scripts/install-init) script.
-
-You can choose to install any of the following at run time: 
+Using `npx optimize --setup [template]` you can quickly install any of the following at run time: 
 - **optimize.config.js**: configuration file
 - **optimize.yml**: CI/CD workflow
 - **extend-checks.js**: extensions file 
 - **custom-check**: folder with all files needed for check
 
 ## Use cases
+### Configuration 
+Spin up settings for your project with `npx optimize --setup` or `npx optimize --setup config` to generate a `optimize.config.js`. You can configure which checks to run and set project-specific options. For full information on the available settings, see the [main README](../../../README.md).
 
-### optimize.config.js
-Quickly spin up settings for your project. This file lets you configure which checks to run, extend or override default validation, and set project-specific options. Flexible and easy to customize.
+### Workflow 
+Get an example `optimize.yml` workflow file for CI/CD with `npx optimize --setup workflow`. Use this to automate optimize checks in your build pipeline, catch issues before deployment, and integrate with GitHub Actions or other CI tools.
 
-### optimize.yml
-Your base workflow file for CI/CD. Use this to automate optimize checks in your build pipeline, catch issues before deployment, and integrate with GitHub Actions or other CI tools.
-
-### extend-checks.js
-Add power and flexibility to existing checks! This file acts as a **mini rule engine** that integrates with optimize core functionality:
+### Extend Check
+Add power and flexibility to existing checks with `npx optimize --setup extend-check` and generate an example ` extend-checks.js`! This file acts as a **mini rule engine** that integrates with optimize core functionality:
 
 **What you can do:**
 - Require or optionally check for any tag, attribute, or pattern
@@ -38,8 +35,8 @@ Add power and flexibility to existing checks! This file acts as a **mini rule en
 
 You can enforce any content, SEO, accessibility, or business rule you need—all from your config, with no core code changes required.
 
-### custom-checks
-Custom checks let you build advanced, project-specific validation modules, combine multiple checks, or create reusable plugins for your team. Perfect for complex workflows or specialized requirements.
+### Custom Check
+Custom checks let you build advanced, project-specific validation modules, combine multiple checks, or create reusable plugins for your team. Perfect for complex workflows or specialized requirements. Create a sample custom-check with `npx optimize --setup custom-check` with the files you need to add the Optimize engine. 
 
 **What you can do:**
 - Validate any HTML, meta, schema, accessibility, or business rule you need
@@ -48,8 +45,5 @@ Custom checks let you build advanced, project-specific validation modules, combi
 - Integrate with the core engine or run standalone
 - **Disable all core checks and run only your own custom checks on top of the optimize engine**
 
-For full details on architecture, setup, and best practices, see the [custom-check README](./custom-check/README.md).
-
-See the file for robust examples and documentation on how to use this pattern.
-
+For full details on architecture, setup, and best practices, see the [optimize-check README](./custom-check/README.md).
 

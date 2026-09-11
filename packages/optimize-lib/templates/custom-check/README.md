@@ -4,11 +4,10 @@ Custom checks extend the NOVL Optimize engine by adding your own validation logi
 
 ## Setup
 ### 1. Copy the Template
-- Download or copy the files from `templates/custom-check`.
-- Use the [install-init](../../scripts/install-init) script for quick setup.
+- Run `npx optimize --setup custom-check` or copy the files from `templates/custom-check`.
 
 ### 2. Set Up Your Module
-- Name your module using the `optimize` prefix (e.g. optimize-performance). Update your `package.json` to use the same name.
+- Name your module using the `optimize-` prefix (e.g. optimize-performance). Update your `package.json` to use the same name. This ensures the engine auto picks up your check.
 
     ```json
     "name": "@yourusername/optimize-performance"
