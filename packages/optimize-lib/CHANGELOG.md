@@ -1,5 +1,13 @@
 # @bynovl/optimize-lib
 
+## 2.13.4
+
+### Patch Changes
+
+- 6a575dd: Fix path issue for crawl; update scaffolding output for config
+- Updated dependencies [6a575dd]
+  - @bynovl/optimize-utils@2.9.2
+
 ## 2.13.3
 
 ### Patch Changes

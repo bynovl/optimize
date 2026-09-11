@@ -1,5 +1,11 @@
 # @bynovl/optimize-utils
 
+## 2.9.2
+
+### Patch Changes
+
+- 6a575dd: Fix path issue for crawl; update scaffolding output for config
+
 ## 2.9.1
 
 ### Patch Changes
