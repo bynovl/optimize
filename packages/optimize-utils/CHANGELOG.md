@@ -1,5 +1,11 @@
 # @bynovl/optimize-utils
 
+## 2.9.1
+
+### Patch Changes
+
+- 083d0c8: Small patches formatting and other windows compatibility issues; Added known/unknown flags for better feedback
+
 ## 2.9.0
 
 ### Minor Changes

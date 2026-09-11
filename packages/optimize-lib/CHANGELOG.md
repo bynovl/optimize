@@ -1,5 +1,13 @@
 # @bynovl/optimize-lib
 
+## 2.13.3
+
+### Patch Changes
+
+- 083d0c8: Small patches formatting and other windows compatibility issues; Added known/unknown flags for better feedback
+- Updated dependencies [083d0c8]
+  - @bynovl/optimize-utils@2.9.1
+
 ## 2.13.2
 
 ### Patch Changes
