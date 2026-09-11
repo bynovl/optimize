@@ -22,8 +22,7 @@
     "optimize"
   ],
   "dependencies": {
-    "@bynovl/optimize-utils": "workspace:*",
-    "chalk": "5.6.2"
+    "@bynovl/optimize-utils": "workspace:*"
   },
   "engines": {
     "node": ">=18"
