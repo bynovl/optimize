@@ -6,6 +6,23 @@ export const sharedHelpText = showHelp();
 
 export function parseCliArgs(argv = process.argv.slice(2), helpText = sharedHelpText, version = null, checkModules = []) {
   const opts = {};
+
+  const getOptionalFlagValue = (flag) => {
+    if (!opts[flag]) return null;
+
+    const index = argv.indexOf(flag);
+    if (index === -1 || index + 1 >= argv.length) {
+      return true;
+    }
+
+    const nextArg = argv[index + 1];
+    if (nextArg.startsWith('--')) {
+      return true;
+    }
+
+    return nextArg;
+  };
+
   argv.forEach(arg => {
     if (arg.startsWith('--')) {
       opts[arg] = true;
@@ -46,6 +63,16 @@ export function parseCliArgs(argv = process.argv.slice(2), helpText = sharedHelp
     // Anything else (including “-x” or “--foo”) is unknown.
     return true;
   });
+
+  const positional = [];
+  if (argv.length > 0 && (argv[0] === 'web' || argv[0] === 'dashboard')) {
+    positional.push(argv[0]);   // remember it
+    argv = argv.slice(1);       // remove it so the flag loop sees only flags
+  }
+
+  if (positional.length) {
+    opts._ = positional;   // e.g., opts._ = ['web']
+  }
 
   // Safety/Helper for unknown flags: if any unknown flags are present, exit with an error message.
   if (unknown.length > 0) {
@@ -104,6 +131,10 @@ export function parseCliArgs(argv = process.argv.slice(2), helpText = sharedHelp
   // path input option (use only --path for both file and directory)
   if (opts['--path'] && argv.indexOf('--path') + 1 < argv.length) {
     opts['--path'] = argv[argv.indexOf('--path') + 1];
+  }
+  // Ouput directory option
+  if (opts['--output'] && argv.indexOf('--output') + 1 < argv.length) {
+    opts['--output'] = argv[argv.indexOf('--output') + 1];
   }
   // JSON output option
   if (opts['--json'] && argv.indexOf('--json') + 1 < argv.length) {

@@ -62,13 +62,26 @@ export function copyTemplate(
 }
 
 /**
- * Writes a fresh `optimize.config.js` to the repository root.
- * Existing config is backed up as `optimize.config.js.bak`.
+ * Writes a fresh `optimize.config.js`.
  */
-export async function setupConfig() {
+export async function setupConfig(targetDir = null) {
     const config = await defaultConfig();
-    const rootDir = path.resolve(process.cwd());
-    const configPath = path.join(rootDir, "optimize.config.js");
+
+    // Resolve the directory where we will write the config.
+    const destDir = targetDir ? path.resolve(targetDir) : path.resolve(process.cwd());
+
+    // Ensure the directory exists
+    if (!fs.existsSync(destDir)) {
+        try {
+            fs.mkdirSync(destDir, { recursive: true });
+        } catch (e) {
+            console.error(`Failed to create output directory "${destDir}":`, e);
+            process.exit(1);
+        }
+    }
+
+    // Path to the config file we will write
+    const configPath = path.join(destDir, "optimize.config.js");
 
     // --------------------------------------------------------------
     // Load the *old* config (if it exists) so we can keep its outDir
@@ -90,7 +103,7 @@ export async function setupConfig() {
             );
         }
 
-        // Back it up before we overwrite it
+        // Back it up before we overwrite it (in the same target directory)
         try {
             const uniqueBackupPath = getUniqueBackupPath(configPath);
             fs.renameSync(configPath, uniqueBackupPath);
@@ -111,7 +124,10 @@ export async function setupConfig() {
         "_build",
         "public",
     ];
-    const defaultFound = outputFolders.some((f) => fs.existsSync(f));
+    // Look for default output folders **relative to the target directory**,
+    // because when the user asks to scaffold into a custom location we want
+    // to respect any existing build output there.
+    const defaultFound = outputFolders.some((f) => fs.existsSync(path.join(destDir, f)));
 
     // --------------------------------------------------------------
     // Preserve outDir from the old config *only* when no default folder was found
@@ -120,12 +136,14 @@ export async function setupConfig() {
         // Use the outDir from the previous config (convert to relative if needed)
         config.outDir = oldOutDir;
         if (path.isAbsolute(config.outDir)) {
-            config.outDir = path.relative(process.cwd(), config.outDir);
+            // Preserve a relative path *relative to the target directory*,
+            // not the original cwd.
+            config.outDir = path.relative(destDir, config.outDir);
         }
     } else {
         // Normal handling – make sure a relative path is stored (avoid absolute URLs)
         if (config.outDir && path.isAbsolute(config.outDir)) {
-            config.outDir = path.relative(process.cwd(), config.outDir);
+            config.outDir = path.relative(destDir, config.outDir);
         }
     }
 
@@ -138,7 +156,7 @@ export async function setupConfig() {
     try {
         fs.writeFileSync(configPath, fileContent, { encoding: "utf8" });
         console.log(
-            "[NOVL Optimize] Created new optimize.config.js with default settings."
+            `[NOVL Optimize] Created new optimize.config.js in ${destDir}`
         );
     } catch (e) {
         console.error("Failed to write optimize.config.js:", e);
