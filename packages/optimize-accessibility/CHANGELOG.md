@@ -1,5 +1,13 @@
 # @bynovl/optimize-accessibility
 
+## 2.8.6
+
+### Patch Changes
+
+- Updated dependencies [083d0c8]
+  - @bynovl/optimize-lib@2.13.3
+  - @bynovl/optimize-utils@2.9.1
+
 ## 2.8.5
 
 ### Patch Changes
