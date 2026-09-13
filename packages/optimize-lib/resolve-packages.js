@@ -5,7 +5,7 @@ import { debug } from '@bynovl/optimize-utils/debug-log.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PACKAGE_PREFIX = 'optimize-';
-const SKIP_BASES = ['optimize-core', 'optimize-utils', 'optimize-lib', 'optimize-tests'];
+const SKIP_BASES = ['optimize-core', 'optimize-utils', 'optimize-lib', 'optimize-tests', 'optimize-web'];
 
 let memoizedDirs = null;
 
@@ -54,15 +54,15 @@ export function getPackageRoot() {
 // Discover all optimize-* packages in the root directory + linked custom packages. Memoized.
 export function packageLoader() {
     if (memoizedDirs) return memoizedDirs;
-    
+
     const root = getPackageRoot();
     const results = [];
     const seen = new Set();
-    
+
     if (!fs.existsSync(root)) {
         return (memoizedDirs = []);
     }
-    
+
     // 1. Scan the package root directory
     for (const entry of fs.readdirSync(root)) {
         if (!entry.startsWith(PACKAGE_PREFIX)) continue;
@@ -73,7 +73,7 @@ export function packageLoader() {
             seen.add(path.basename(full));
         }
     }
-    
+
     // 2. Also check root package.json for linked/custom packages
     const rootDir = findRootDir(process.cwd());
     if (rootDir) {
@@ -81,20 +81,20 @@ export function packageLoader() {
         try {
             pkgJson = JSON.parse(fs.readFileSync(path.join(rootDir, 'package.json'), 'utf8'));
         } catch (_) { /* ignore */ }
-        
+
         const allDeps = Object.assign({}, pkgJson.dependencies, pkgJson.devDependencies);
         for (const [dep, version] of Object.entries(allDeps)) {
             if (!dep.includes(PACKAGE_PREFIX)) continue;
             const short = dep.split('/').pop();
             if (SKIP_BASES.includes(short) || seen.has(short)) continue;
-            
+
             const linked = resolveLinkedPath(version, rootDir);
             if (linked && fs.existsSync(path.join(linked, 'package.json'))) {
                 results.push(linked);
             }
         }
     }
-    
+
     memoizedDirs = results;
     debug(`[packageLoader] discovered ${results.length} package(s)`);
     return memoizedDirs;

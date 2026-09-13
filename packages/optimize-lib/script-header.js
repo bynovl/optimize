@@ -10,20 +10,55 @@ import { cliBanner } from './cli-banner.js';
 import { startStopSpinner } from '@bynovl/optimize-utils/spinner.js';
 import { crawlSite } from './crawl.js';
 import { colors } from '@bynovl/optimize-utils/ansi-colors.js';
+import { setupDash, launchDash, deployDash } from './serve-dash.js';
 
 export async function scriptHeader(isFirstCheck = true, enabledChecks = [], args) {
 
     // Load configuration and checksOverride
     const { config } = await getConfig(enabledChecks);
 
+    const disableBanner = config.disableBanner || process.env.DISABLE_BANNER === 'true' || process.env.DISABLE_BANNER === '1';
+
     // Show banner only once (if first check)
-    if (isFirstCheck && config.apiMode !== true && !config.disableBanner) {
+    if (isFirstCheck && config.apiMode !== true && !disableBanner) {
         await cliBanner();
     }
 
     function earlyExitError() {
         process.exit(1);
     }
+
+    // ----------------------------------------------
+    // Web Dashboard Launch (if requested)
+    // ----------------------------------------------
+    if (Array.isArray(args._) && (args._[0] === 'web' || args._[0] === 'dashboard')) {
+        // Anything after the sub‑command is forwarded to the UI (e.g. port, theme)
+        const extraArgs = process.argv.slice(3); // node, core cli, "web"
+
+        if (args['--deploy']) {
+            const deployArgs = [args['--deploy']];
+            if (args['--force']) deployArgs.push('--force');
+            await deployDash(deployArgs);
+            process.exit(0);
+        }
+
+        // Ensure the JSON results file exists (will generate it if missing)
+        await setupDash();
+
+        // Launch the UI.  When the UI process ends we simply exit the whole CLI.
+        try {
+            await launchDash({ extraArgs });
+        } catch (e) {
+            console.error(e.message);
+            process.exit(1);
+        }
+
+        // **Important:** stop any further processing – we do NOT want the
+        // normal checks to run after the dashboard has been started.
+        process.exit(0);
+    }
+
+
     // ----------------------------------------------
     // Scaffolding/Setup Flags
     // ----------------------------------------------
