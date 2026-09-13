@@ -45,6 +45,7 @@ export function parseCliArgs(argv = process.argv.slice(2), helpText = sharedHelp
     '--report',
     '--ci',
     '--output',
+    '--deploy',
     '--dry-run',
     '--force',
     '-v',
@@ -128,26 +129,13 @@ export function parseCliArgs(argv = process.argv.slice(2), helpText = sharedHelp
     if (helpText) console.log(sharedHelpText);
     opts._handled = true;
   }
-  // path input option (use only --path for both file and directory)
-  if (opts['--path'] && argv.indexOf('--path') + 1 < argv.length) {
-    opts['--path'] = argv[argv.indexOf('--path') + 1];
-  }
-  // Ouput directory option
-  if (opts['--output'] && argv.indexOf('--output') + 1 < argv.length) {
-    opts['--output'] = argv[argv.indexOf('--output') + 1];
-  }
-  // JSON output option
-  if (opts['--json'] && argv.indexOf('--json') + 1 < argv.length) {
-    opts['--json'] = argv[argv.indexOf('--json') + 1];
-  }
-  // CSV output option
-  if (opts['--csv'] && argv.indexOf('--csv') + 1 < argv.length) {
-    opts['--csv'] = argv[argv.indexOf('--csv') + 1];
-  }
-  // Report output option
-  if (opts['--report'] && argv.indexOf('--report') + 1 < argv.length) {
-    opts['--report'] = argv[argv.indexOf('--report') + 1];
-  }
 
+  // Handle positional flags that require a value (e.g., --path, --output, --json, --csv, --report, --deploy)
+  const postionalFlags = ['--path', '--output', '--json', '--csv', '--report', '--deploy'];
+  for (const flag of postionalFlags) {
+    if (opts[flag] && argv.indexOf(flag) + 1 < argv.length) {
+      opts[flag] = argv[argv.indexOf(flag) + 1];
+    }
+  }
   return opts
 }
