@@ -52,6 +52,19 @@ if ! command -v node >/dev/null 2>&1; then
 fi
 
 # --------------------------------------------------
+# Create a new directory and cd into it.
+# --------------------------------------------------
+NEW_DIR="optimize-site"
+if [ -d "\$NEW_DIR" ]; then
+  echo "Existing directory 'optimize-site' found. Preparing to setup project..."
+  mv "\$NEW_DIR" "\$NEW_DIR.bak"
+fi
+mkdir -p "\$NEW_DIR"
+cd "\$NEW_DIR"
+echo "✔ Created and switched to directory: \$NEW_DIR"
+
+
+# --------------------------------------------------
 # Prepare .npmrc (registry + auth token)
 # --------------------------------------------------
 NPMRC_PATH=".npmrc"
@@ -137,10 +150,11 @@ echo "🔧 Using package manager: \$PKG_MGR"
 # --------------------------------------------------
 if [ ! -f ".gitignore" ]; then
   cat > ".gitignore" <<'GITIGNORE_EOF'
-  node_modules
-  env.sh
-  .env
-  GITIGNORE_EOF
+node_modules
+env.sh
+.npmrc
+.env
+GITIGNORE_EOF
   echo "Created .gitignore with common ignore patterns"
 fi
 
@@ -183,5 +197,5 @@ echo "Run: npx ${displayPkg}"
 echo
 echo "Optimize the web – no site left behind! 🎉"
 `;
-  tokenOnly ? tokenScript : fullScript;
+  return tokenOnly ? tokenScript : fullScript;
 };

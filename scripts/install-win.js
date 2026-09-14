@@ -10,6 +10,7 @@ export default function getInstallerWin(
 # Stop on any error
 # ------------------------------------------------------------------
 $ErrorActionPreference = 'Stop'
+
 # ------------------------------------------------------------------
 # Write .npmrc (or placeholder) and secure it
 # ------------------------------------------------------------------
@@ -30,6 +31,17 @@ Write-Host ".npmrc written"
 # Stop on any error
 # ------------------------------------------------------------------
 $ErrorActionPreference = 'Stop'
+
+# ------------------------------------------------------------------
+# Create a new directory and cd into it.
+# ------------------------------------------------------------------
+$installDir = "optimize-site"
+if (Test-Path $installDir) {
+  Write-Host "Existing directory 'optimize-site' found. Preparing to setup project..."
+  Rename-Item -Path $installDir -NewName "$installDir.bak" -Force
+}
+New-Item -ItemType Directory -Path $installDir -Force | Out-Null
+Set-Location $installDir
 
 # ------------------------------------------------------------------
 # Write .npmrc (or placeholder) and secure it
@@ -150,6 +162,7 @@ if (-not (Test-Path ".gitignore")) {
   @"
 node_modules
 env.sh
+.npmrc
 .env
 "@ | Set-Content -Path ".gitignore" -Encoding UTF8
   Write-Host "Created .gitignore with common ignore patterns"
@@ -170,8 +183,8 @@ Write-Host "🔧 Using package manager: $pkgMgr"
 # ------------------------------------------------------------------
 # Install the requested Optimize package
 # ------------------------------------------------------------------
-& $pkgMgr install ${packageName}
-Write-Host "$packageName installed successfully"
+& $pkgMgr install '${packageName}'
+Write-Host "${packageName} installed successfully"
 
 # ------------------------------------------------------------------
 # Install skills

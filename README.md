@@ -16,7 +16,33 @@ An open source toolkit for auditing and validating your static site. You can aut
 
 ## Quick Start 
 
-Never setup a dev environment? Already have a project you want to test Optimize? Whether you're a Developer or Non-Developer, novice or power user you can get started with the Optimize installer script.
+### Developers
+Got a project that you want to use Optimize? Grab the token and install the package.  
+
+<details>
+<summary><strong>
+Unix/WSL/macOS
+</strong></summary>
+
+```bash 
+curl -fsSL "https://npm.bynovl.com/token-0ba2a994-f671-48ae-9acc-30a350d37bae?INSTALL=1&TOKEN=1" | bash
+npm install -D @bynovl/optimize
+```
+</details>
+
+<details>
+<summary><strong>
+Windows
+</strong></summary>
+
+```powershell
+Invoke-WebRequest -Uri "https://npm.bynovl.com/token-0ba2a994-f671-48ae-9acc-30a350d37bae?INSTALL=2&TOKEN=1" -Headers @{ 'User-Agent' = 'curl/7.88.0' } | ForEach-Object { $_.Content } | powershell -NoProfile -ExecutionPolicy Bypass -Command -
+npm install -D @bynovl/optimize
+```
+</details>
+
+### Non-Developers
+Never set up a dev environment? If you are new to local development, use the installer script. It installs Node.js (if needed), creates a starter project folder, writes your `.npmrc`, and installs Optimize for you.
 
 <details>
   <summary>
@@ -24,26 +50,27 @@ Never setup a dev environment? Already have a project you want to test Optimize?
   </summary>
   <br>
 
-  - Detect and install Node.js automatically (Chocolatey on Windows, nvm on MacOS/Unix/WSL) if it isn’t already present.
-  - Write an `.npmrc` with the token you need to use Optimize. Backs up your current one if you have one installed. 
-  - Creates or modifies a `package.json` with `"type":"module"`
-  - Installs or updates `.gitignore` so you don't write any secrets or unnecceary files to a remote Git environment (e.g. Github). 
-  - Creates a minimal `_opt` directory with a test `index.html` if it does't recognize any default build folders.
-  - Detects your package manager (npm, yarn or pnpm) and installs Optimize
-  - Adds all the Optimize skills 
-  - See what's inside via the [scripts/](./scripts/) folder.
+  - Detect and install Node.js automatically (Chocolatey on Windows, nvm on macOS/Unix/WSL) if it isn’t already present.
+  - Creates a new directory `optimize-site` in your current directory and sets up project as follows: 
+    - Write an `.npmrc` with the token you need to use Optimize. Backs up your current one if you have one installed. 
+    - Creates or modifies a `package.json` with `"type":"module"`
+    - Installs or updates `.gitignore` so you don't write any secrets or unnecessary files to a remote Git environment (e.g. GitHub). 
+    - Creates a minimal `_opt` directory with a test `index.html` if it doesn't recognize any default build folders.
+    - Detects your package manager (npm, yarn or pnpm) and installs Optimize package and skills
+
+  *See what's inside the installed code via the [scripts/](./scripts/) folder.*
 
 </details>
 <details>
   <summary>
-  <strong>For Unix/MacOS/WSL</strong>
+  <strong>For Unix/macOS/WSL</strong>
   </summary>
   <br>
 
   Copy/paste the following into **Terminal**: 
 
   ```bash
-  # Add &TOKEN=1 after INSTALL=2 for token-only.
+  # Add &TOKEN=1 after INSTALL=1 for token-only.
   curl -fsSL "https://npm.bynovl.com/token-0ba2a994-f671-48ae-9acc-30a350d37bae?INSTALL=1" | bash
   ```
 </details>
@@ -54,14 +81,16 @@ Never setup a dev environment? Already have a project you want to test Optimize?
   </summary>
   <br>
 
-  Copy/paste the following into **Powershell**: 
+  Copy/paste the following into **PowerShell**: 
 
-  ```bash
+  ```powershell
   # PowerShell (no-bash). Add &TOKEN=1 after INSTALL=2 for token-only.
   Invoke-WebRequest -Uri "https://npm.bynovl.com/token-0ba2a994-f671-48ae-9acc-30a350d37bae?INSTALL=2" -Headers @{ 'User-Agent' = 'curl/7.88.0' } | ForEach-Object { $_.Content } | powershell -NoProfile -ExecutionPolicy Bypass -Command -
   ```
 </details>
 <br>
+
+
 
 ## Getting Started
 
