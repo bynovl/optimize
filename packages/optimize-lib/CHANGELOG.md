@@ -1,5 +1,13 @@
 # @bynovl/optimize-lib
 
+## 2.13.5
+
+### Patch Changes
+
+- 685b32f: Improved CLI arg support, help flag text, and engine package detection
+- Updated dependencies [685b32f]
+  - @bynovl/optimize-utils@2.9.3
+
 ## 2.13.4
 
 ### Patch Changes
