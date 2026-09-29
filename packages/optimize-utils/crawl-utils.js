@@ -18,6 +18,7 @@ async function saveHtmlPages(records, outputDir) {
     await fs.promises.writeFile(filePath, rec.html, 'utf8');
   }
 }
+
 export function isValidHttpUrl(str) {
   try {
     const url = new URL(str);
@@ -35,65 +36,6 @@ export function getUniqueCrawlOutputDir(baseDir = process.cwd(), baseName = 'cra
     idx++;
   }
   return dir;
-}
-
-export function updateUserConfig(startUrl, outDir) {
-  try {
-    const configPath = path.resolve(process.cwd(), 'optimize.config.js');
-    const absOutDir = path.resolve(outDir);
-    const safeOutDir = path.relative(process.cwd(), absOutDir);
-
-    // -------------------------------------------------------------
-    if (!fs.existsSync(configPath)) {
-      // Build a tiny, valid ES‑module (no extra spaces, no leading newline)
-      const defaultConfig = `
-export default {
-  startUrl: "${startUrl}",
-  outDir: "${safeOutDir}"
-};
-      `;
-
-      fs.writeFileSync(configPath, defaultConfig, { encoding: 'utf8' });
-      return;
-    }
-
-    // Read the existing config file
-    let cfg = fs.readFileSync(configPath, 'utf8');
-
-    // Replace startUrl and outDir if present, otherwise add them
-    if (typeof startUrl === 'string') {
-      if (/startUrl\s*:\s*['"`][^'"`]*['"`]/.test(cfg)) {
-        cfg = cfg.replace(
-          /startUrl\s*:\s*['"`][^'"`]*['"`]/,
-          `startUrl: '${startUrl}'`
-        );
-      } else {
-        cfg = cfg.replace(
-          /export\s+default\s*{/,
-          `export default {\n  startUrl: '${startUrl}',`
-        );
-      }
-    }
-
-    // Replace outDir if present, otherwise add it
-    if (outDir && /outDir\s*:\s*['"`][^'"`]*['"`]/.test(cfg)) {
-      cfg = cfg.replace(
-        /outDir\s*:\s*['"`][^'"`]*['"`]/,
-        `outDir: '${safeOutDir}'`
-      );
-    } else if (outDir) {
-      cfg = cfg.replace(
-        /export\s+default\s*{/,
-        `export default {\n  outDir: '${safeOutDir}',`
-      );
-    }
-
-    // Write the updated config back to the file
-    fs.writeFileSync(configPath, cfg, 'utf8');
-
-  } catch (e) {
-    console.warn('[novl optimize] Warning: Could not update optimize.config.js with new startUrl/outDir:', e.message);
-  }
 }
 
 // Single page crawl without provider (used if no provider is configured)

@@ -1,6 +1,6 @@
 
-import { crawlWithProvider, getUniqueCrawlOutputDir, updateUserConfig, simpleCrawl } from '@bynovl/optimize-utils/crawl-utils.js';
-
+import { crawlWithProvider, getUniqueCrawlOutputDir, simpleCrawl } from '@bynovl/optimize-utils/crawl-utils.js';
+import { updateUserConfig } from './load-config.js';
 /**
  * Crawl a site and save HTML files to outputDir.
  * config - The config object.
@@ -20,8 +20,12 @@ export async function crawlSite(config, siteUrl, outputDir = null) {
     await crawlWithProvider(siteUrl, config, outDir);
   }
 
-  // Update optimize.config.js with new startUrl and outDir for future runs
+  // Set current run startUrl and outDir 
   config.startUrl = siteUrl;
   config.outDir = outDir;
+
+  // Update or create an optimize.config.js with new startUrl and outDir for future runs
+  // ------------
+  // The trade off with this is using an AST but adds unnecessary bloat for the convenience of a config update
   updateUserConfig(siteUrl, outDir);
 }
