@@ -9,7 +9,7 @@ An open source toolkit for auditing and validating your static site. You can aut
   <br>
   Thanks for joining the beta. Optimize is in active beta. Our goal is to build community-first. This private repo and package are shared for testing and feedback, and we’d love to hear how Optimize works in your workflow. 
 
-  Your access is in line with our [license terms](./LICENSE). Please review them for permitted uses and restrictions before sharing or adapting the code. During the beta sharing is restricted to those with access. To grow the community we hope that you'll [invite more people](https://optimize.bynovl.com/3e33e4ef) to join us.
+  Your access is in line with our [license terms](./LICENSE). Please review them for permitted uses and restrictions before sharing or adapting the code. During the beta sharing is restricted to those with access. To grow the community we hope that you'll [invite more people](https://optimizecli.com/join-beta) to join us.
 
   Everything below contains the full documentation. Have thoughts? feedback? Found an issue? Or just want to say hello? Join the [discussion](https://github.com/bynovl/optimize/discussions/categories/beta). Once you've had a chance to test Optimize, help us understand what matters most and [Leave Your feedback](https://github.com/bynovl/optimize/discussions/8)! Excited to use optimize? Help us [spread the word](https://optimize.bynovl.com/3e33e4ef)!
 </details>
