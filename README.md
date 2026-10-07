@@ -240,7 +240,7 @@ export default {
 ```
 
 ### Get Data in different formats
-You can have Optimize write results automatically to a path of your choosing every run. Include `exportResultsJson` and/or `exportResultsCsv` with the path and file name for the location where you want your results exported. New results will be updated every run. 
+You can have Optimize write results automatically to a path of your choosing every run. Include `exportResultsJson` and/or `exportResultsCsv` with the path and filename for the location where you want your results exported. New results will be updated every run. 
 
 ```javascript
 // optimize.config.js
@@ -251,7 +251,7 @@ export default {
 }
 ```
 
-You can also use the `--json` or `--csv` CLI flags to export results or provide a custom file name after the flag. 
+You can also use the `--json` or `--csv` CLI flags to export results or provide a custom filename after the flag. 
 
 ```bash 
 # exports o-results.json and o-results.csv
