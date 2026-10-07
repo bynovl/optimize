@@ -90,13 +90,11 @@ Never set up a dev environment? If you are new to local development, use the ins
 </details>
 <br>
 
-
-
 ## Getting Started
 
 ### Install
 ```bash
-npm install @bynovl/optimize-core
+npm install @bynovl/optimize
 ```
 
 ### Configure
@@ -174,8 +172,7 @@ npx optimize --setup
 Have an SEO requirements doc? With the `optimize-setup` skill you can turn any existing SEO/Visibility requirements doc into a working `optimize.config.js`. *See the section below: "Optimize SKILLS"*.
 
 ### Schema Validation
-Enforce structured data with **declarative** schema validation using the `schemaDataDefault` and `schemaDataCustom` options in `optimize.config.js`.  
-Optimize **uses dot‑notation** to address nested fields e.g. `step.name` refers to the `name` property inside a `step` object.
+Enforce structured data with **declarative** schema validation using the `schemaDataDefault` and `schemaDataCustom` options in `optimize.config.js`. Optimize **uses dot‑notation** to address nested fields e.g. `step.name` refers to the `name` property inside a `step` object.
 
 | Option | Purpose |
 |--------|---------|
@@ -204,8 +201,6 @@ export default {
   ],
 };
 ```
-
-> *Tip: You can enforce complex structured‑data rules without writing any custom code. Just adjust the two arrays in your config file.*
 
 ### Batch Size for Large Sites
 
@@ -245,7 +240,7 @@ export default {
 ```
 
 ### Get Data in different formats
-You can have Optimize write results automatically to a path of your choosing, or use the CLI flags for ad‑hoc exports. Include `exportResultsJson` and/or `exportResultsCsv` with the path and file name for the location where you want your results exported.
+You can have Optimize write results automatically to a path of your choosing every run. Include `exportResultsJson` and/or `exportResultsCsv` with the path and file name for the location where you want your results exported. New results will be updated every run. 
 
 ```javascript
 // optimize.config.js
@@ -256,10 +251,18 @@ export default {
 }
 ```
 
-*Note: you can also use the `--json` or `--csv` flag to export results at run time which default to o-results.json and o-results.csv* 
+You can also use the `--json` or `--csv` CLI flags to export results or provide a custom file name after the flag. 
+
+```bash 
+# exports o-results.json and o-results.csv
+npx optimize --json --csv
+
+# export json using a custom filename
+npx optimize --json test.json
+```
 
 ### Define the checks you want to run
-You can pre‑define which checks are enabled. *If enabledChecks is omitted, Optimize runs all checks that you specify on the CLI (or all checks by default).*
+Pre‑define which checks are enabled every run. *If enabledChecks is omitted, Optimize runs all checks that you specify on the CLI (or all checks by default).*
 
 ```javascript
 // optimize.config.js
@@ -296,20 +299,6 @@ export default {
 };
 ```
 
-### API Mode 
-Run Optimize silently (no banner, no spinner, no console logs) with `apiMode` and return results only via the programmatic API (see "Power Your Own Project" below). Ideal for scripts, CI pipelines, or when you embed Optimize in another tool.
-
-```js
-// optimize.config.js
-export default {
-  // ...other settings
-  apiMode: true   // disable interactive CLI output
-};
-```
-
-### CI/CD Workflows
-Add an Optimize workflow file to your project using `npx optimize --setup workflow`. You'll get an pre-configured `optimize.yml` installed in your project root. You can add also tell Optimize where you want the file using filename `npx optimize --setup workflow .github/workflows`.  
-
 ### Deterministic Reports  
 Generate professional, stakeholder-ready deterministic markdown report with actionable summaries and issues with `npx optimiize --report`. Use any AI environment to polish it with recommendations and insights using the `optimize-audit` SKILL. Or fill in recommendations with your own professional insight.
 
@@ -336,7 +325,7 @@ Sometimes you need to audit a live website instead of a locally‑generated buil
 npx optimize --crawl https://example.com
 ```
 
-To enable a full‑site crawl, add a `crawl` block to your `optimize.config.js`:
+To enable a full‑site crawl, add a `crawl` block to your `optimize.config.js` or add env variables `CRAWL_API_TOKEN` and `CRAWL_ACCOUNT_ID`:
 
 ```js
 // Full site crawl
@@ -354,7 +343,10 @@ export default {
 }
 ```
 
-After you add the crawl block to optimize.config.js, running `npx optimize --crawl https://example.com` will invoke Cloudflare’s Crawl API, retrieve the site’s pages, and store them locally. You can then run Optimize against that local copy as many times as you like (e.g., npx optimize or npx optimize --json) without re‑crawling the remote site each time.
+After you add the crawl block to `optimize.config.js`, running `npx optimize --crawl https://example.com` will invoke Cloudflare’s Crawl API, retrieve the site’s pages, and store them locally. You can then run Optimize against that local copy as many times as you like (e.g., npx optimize or npx optimize --json) without re‑crawling the remote site each time.
+
+### CI/CD Workflows
+Add an Optimize workflow file to your project using `npx optimize --setup workflow`. You'll get an pre-configured `optimize.yml` installed in your project root. You can add also tell Optimize where you want the file using filename `npx optimize --setup workflow .github/workflows`. 
 
 ## Make it your own
 You can extend Optimize in two ways:
@@ -397,7 +389,7 @@ npx optimize --setup custom-check path/to/add
 ```
 
 ## Automate with AI SKILLS
-Use Optimize's **5-core skills** to help you setup, audit, anaylze, and fix issues with with AI. You can use it in the CLI or directly in the chat window—just choose your model and go! To get started run `npx optimize --skills` and they'll automatically install in your project's skills directory. *Currently auto-detects .github, .claude, .agents, and .opencode.*
+Use Optimize's **5-core skills** to help you setup, audit, anaylze, and fix issues with AI. You can use it in the CLI or directly in the chat window—just choose your model and go! To get started run `npx optimize --skills` and they'll automatically install in your project's skills directory. *Currently Optimize auto-detects .github, .claude, .agents, and .opencode.*
 
 **Key features**: Translate an existing SEO/Visibility requirements doc into an `optimize.config.js`, get a summary of key issues with steps to fix, and take action with or without AI and fix them. 
 
@@ -426,14 +418,25 @@ Import and run all checks:
 // Full featured API can be used internally or externally with startUrl support
 import { runAllChecks } from '@bynovl/optimize/optimize-core/api.js';
 await runAllChecks(config, htmlFiles, startUrl);
-```without
+```
 
-So that the right settings are loaded you will also need to import the `getConfig`. Then you're ready to use optimize in your project. 
+So that the right settings are loaded you will also need to import the `getConfig`. Then you're ready to use optimize as an API in your project. 
+
 ```js
 // In your main script you will also need 
 import getConfig from "@bynovl/optimize-lib/set-config.js" // config
 const htmlFiles = ['_site/index.html', '_site/about.html']; // paths to html files
 const results = await runAllChecks(config, htmlFiles);
+```
+
+You'll also likely want to run Optimize silently (no banner, no spinner, no console logs). Set the `apiMode` to true in your config file.
+
+```js
+// optimize.config.js
+export default {
+  // ...other settings
+  apiMode: true   // disable interactive CLI output
+};
 ```
 
 > Note: if you want to run multiple checks it's best to use `runAllChecks` and update `enabledChecks` unless you have a specific use case for individual checks.

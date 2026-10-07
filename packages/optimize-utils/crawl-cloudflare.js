@@ -3,14 +3,14 @@ import { colors } from './ansi-colors.js';
 import { consoleLog } from './debug-log.js';
 
 async function cloudflareCrawlUrl(targetUrl, crawlConfig) {
-  const apiToken = crawlConfig.apiToken;
-  const accountId = crawlConfig.accountId;
+  const apiToken =  process.env.CRAWL_API_TOKEN || crawlConfig.apiToken;
+  const accountId = process.env.CRAWL_ACCOUNT_ID || crawlConfig.accountId;
   const options = crawlConfig.options || {};
   if (!apiToken) {
-    throw new Error('Cloudflare apiToken missing in crawl config.');
+    throw new Error('Cloudflare API Token is not defined. Add a CRAWL_API_TOKEN variable or apiToken in the config');
   }
-  if (!accountId) {
-    throw new Error('Cloudflare accountId missing in crawl config.');
+  if (!accountId) {d
+    throw new Error('Cloudflare Acount ID is note defined. Add CRAWL_ACCOUNT_ID variable or accountId in the config.');
   }
   const apiUrl = `https://api.cloudflare.com/client/v4/accounts/${accountId}/browser-rendering/crawl`;
   const body = {
