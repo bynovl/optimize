@@ -9,9 +9,9 @@ An open source toolkit for auditing and validating your static site. You can aut
   <br>
   Thanks for joining the beta. Optimize is in active beta. Our goal is to build community-first. This private repo and package are shared for testing and feedback, and we’d love to hear how Optimize works in your workflow. 
 
-  Your access is in line with our [license terms](./LICENSE). Please review them for permitted uses and restrictions before sharing or adapting the code. While during the beta sharing is restricted to those within the beta group, we encourage you to invite more people to join us. That said we’re open to feedback as we explore sustainable open-source models. Let's help open source survive!
+  Your access is in line with our [license terms](./LICENSE). Please review them for permitted uses and restrictions before sharing or adapting the code. During the beta sharing is restricted to those with access. To grow the community we hope that you'll [invite more people](https://optimize.bynovl.com/3e33e4ef) to join us.
 
-  Everything below contains the full documentation. Have thoughts? feedback? Found an issue? Or just want to say hello? Join the [discussion](https://github.com/bynovl/optimize/discussions/categories/beta). Once you've had a chance to test Optimize out, help us understand what matters most. [Your feedback](https://github.com/bynovl/optimize/discussions/8) is appreciated! Excited to use optimize? Help us [spread the word](https://optimize.bynovl.com/3e33e4ef)!
+  Everything below contains the full documentation. Have thoughts? feedback? Found an issue? Or just want to say hello? Join the [discussion](https://github.com/bynovl/optimize/discussions/categories/beta). Once you've had a chance to test Optimize, help us understand what matters most and [Leave Your feedback](https://github.com/bynovl/optimize/discussions/8)! Excited to use optimize? Help us [spread the word](https://optimize.bynovl.com/3e33e4ef)!
 </details>
 
 ## Quick Start 
@@ -379,7 +379,7 @@ export default {
 ```
 
 ### Custom checks
-Custom checks are for creating new, independent modules/packages that run as part of Optimize's suite. They are useful for integrating third-party tools (like pa11y, Lighthouse) or your own advanced checks. Use `npx optimize --setup custom-check` and get the starter files with sample code to create you first custom check. Optimize recoginizes custom checks prefixed with `optimize-` (e.g. optimize-security) and once you add it as a depedency. *For more information review the README.md that ships with the custom check*.  
+Custom checks are for creating new, independent modules/packages that run as part of Optimize's suite. They are useful for integrating third-party tools (like pa11y, Lighthouse) or your own advanced checks. Use `npx optimize --setup custom-check` and get the starter files with sample code to create you first custom check. Optimize recoginizes custom checks prefixed with `optimize-` (e.g. optimize-security) once you add it as a depedency. *For more information review the README.md that ships with the custom check*.  
 
 ```bash 
 # Install in project root 
@@ -401,14 +401,14 @@ npx optimize --skills optimize-setup
 ```
 
 ## Power your own project (API)
-You can use `@bynovl/optimize` as a library to build your own tools, workflows, or integrations for non-commercial distribution. For license terms and more information, see the [LICENSE](./LICENSE) file.
+You can use `@bynovl/optimize` as a library to build your own tools, workflows, or integrations for non-commercial distribution. See [demo app](https://playback.website) built with the Optimize engine that uses a custom crawler. For license terms and more information, see the [LICENSE](./LICENSE) file.
 
-You will need to rebuild the checks for your project. The following outlines the minimum required to get started. *You can also use any `optimize-lib` or `optimize-utils` to aid your development.*
+To get started you will need to rebuild the checks for your project. The following outlines the minimum required to get started. *You can also use any `optimize-lib` or `optimize-utils` to aid your development.*
 
 Import and run a single check:
 
 ```js
-// Intended for local checks only
+// Intended for a specific checks only
 import { checkFns } from '@bynovl/optimize/optimize-core/api.js';
 await checkFns.checkMeta(config, htmlFiles, startUrl);
 ```
