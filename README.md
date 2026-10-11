@@ -120,7 +120,7 @@ Check the health of your website and discover web quality issues.
 ```bash 
 # Run all checks and see results in console
 npx optimize
-# Run all checks and get JSON (o-results.md) 
+# Run all checks and get JSON (o-results.json) 
 npx optimize --json
 # Run all checks and get a deterministic human-friendly report (o-audit.md)
 npx optimize --report
@@ -134,28 +134,28 @@ Once you know the areas that have the most problems you can run specific checks 
 ```bash
 # Run meta and accessibility checks only
 npx optimize --meta --accessibility
-# Run meta only on a single file
+# Run a meta check on a single file
 npx optimize --meta --path /path/name-to-file.html
-# Run all checks on folder
+# Run all checks on a specific folder
 npx optimize  --path /path/folder-name
 ```
 
-Then run `npx optimize` again to validate and ensure the fixes are resolved. 
+Fix it yourself or with AI and then run `npx optimize` again to validate and ensure the fixes are resolved. 
 
 **Core Flag Checks**
-- `--meta`: Check for required and recommended meta tags only.
-- `--open-graph`: Validate Open Graph tags for social sharing only.
-- `--schema`: Validate structured data (JSON-LD schema blocks) only.
-- `--accessibility`: Run accessibility checks (a11y best practices) only.
-- `--hierarchy`: Check HTML heading and content hierarchy only.
-- `--media`: Validate images and media assets only.
-- `--sources`: Check for valid source asset references only.
-- `--links`: Validate internal and external links only.
+- `--meta`: Validate recommended meta tags.
+- `--open-graph`: Validate Open Graph tags for social sharing.
+- `--schema`: Validate structured data (JSON-LD schema blocks).
+- `--accessibility`: Run accessibility checks (a11y best practices).
+- `--hierarchy`: Validate HTML headings and content hierarchy.
+- `--media`: Validate images and media assets.
+- `--sources`: Validate source asset references.
+- `--links`: Validate internal and external links.
 
 **Other Flags**
-- `--path`: combine with a check flag to analyze a folder or file.
+- `--path`: combine with any check flag(s) to analyze a folder or file.
 - `--json`: export results as JSON 
-- `--help`: list of flags
+- `--help`: list of flags and commands
 - `--version`: current package version
 - `--skills`: install Optimize SKILLS
 - `--setup`: install optimize.config.js, workflow, custom check and extend check files
@@ -176,7 +176,7 @@ Enforce structured data with **declarative** schema validation using the `schema
 
 | Option | Purpose |
 |--------|---------|
-| `schemaDataDefault` | An array of keys that are **required in every** JSON‑‑LD schema block found on any HTML page. Add only those properties that must always exist (e.g., `@context`, `@type`, `name`). |
+| `schemaDataDefault` | An array of keys that are **required in every** JSON‑LD schema block found on any HTML page. Add only those properties that must always exist (e.g., `@context`, `@type`, `name`). |
 | `schemaDataCustom` | An array that lets you specify keys for **specific contexts** or nested objects. Append `:required` to a key to make it mandatory; otherwise the key is optional and will only generate a warning if missing or empty. If the parent object is present, all child keys marked `:required` must also be present and non‑empty, otherwise an error is reported. |
 
 
@@ -262,7 +262,7 @@ npx optimize --json test.json
 ```
 
 ### Define the checks you want to run
-Pre‑define which checks are enabled every run. *If enabledChecks is omitted, Optimize runs all checks that you specify on the CLI (or all checks by default).*
+Pre‑define which checks are enabled every run. *If enabledChecks is omitted, Optimize runs all checks that you specify (or all checks by default).*
 
 ```javascript
 // optimize.config.js
@@ -271,14 +271,14 @@ export default {
   enabledChecks: ["--meta", "--media", "--hierarchy"]
 }
 ```
-You can also just pass the flags on the command line: 
+You can also pass the flags of the checks you want to run at run time: 
 
 ```bash 
 npx optimize --meta --media --hierarchy  
 ```
 
 ### Choose which checks have the most impact 
-Every check contributes to the overall audit score. Prioritize certain checks (e.g., accessibility, SEO, or performance) and adjust the weights in `optimize.config.js`. Accepts a weight range: 0.1 – 1.0 (the higher the number, the larger the impact on the final score). *Tip: Put the checks that matter most for your project with the highest values.*
+Every check contributes to the overall audit score. Prioritize certain checks (e.g., accessibility, meta, or media) and adjust the weights in `optimize.config.js`. Accepts a weight range: 0.1 – 1.0 (the higher the number, the larger the impact on the final score). *Tip: Put the checks that matter most for your project with the highest values.*
 
 ```js
 // optimize.config.js
@@ -300,7 +300,7 @@ export default {
 ```
 
 ### Deterministic Reports  
-Generate professional, stakeholder-ready deterministic markdown report with actionable summaries and issues with `npx optimiize --report`. Use any AI environment to polish it with recommendations and insights using the `optimize-audit` SKILL. Or fill in recommendations with your own professional insight.
+Generate a professional, stakeholder-ready deterministic markdown report with actionable summaries and issues with `npx optimiize --report`. Use any AI environment to polish it with recommendations and insights using the `optimize-audit` SKILL. Or fill in recommendations with your own professional insight.
 
 ```js
 // optimize.config.js
@@ -314,7 +314,7 @@ export default {
 }
 ```
 
-*You can convert the Markdown report to HTML or spin up a local server with your own styles. And keep track of changes using version control.* 
+*You can convert the Markdown report to HTML or spin up a local server with your own styles. Keep track of changes using version control and check the diff of each json export comparing prev run scores to current.* 
 
 
 ### Remote Site Crawl
@@ -325,7 +325,7 @@ Sometimes you need to audit a live website instead of a locally‑generated buil
 npx optimize --crawl https://example.com
 ```
 
-To enable a full‑site crawl, add a `crawl` block to your `optimize.config.js` or add env variables `CRAWL_API_TOKEN` and `CRAWL_ACCOUNT_ID`:
+To enable a full‑site crawl, you will need to add a `crawl` block to your `optimize.config.js` and/or env variables for `CRAWL_API_TOKEN` and `CRAWL_ACCOUNT_ID`. You may additionally want to control the cloudflare crawl options. If so add and options block:
 
 ```js
 // Full site crawl
@@ -343,10 +343,10 @@ export default {
 }
 ```
 
-After you add the crawl block to `optimize.config.js`, running `npx optimize --crawl https://example.com` will invoke Cloudflare’s Crawl API, retrieve the site’s pages, and store them locally. You can then run Optimize against that local copy as many times as you like (e.g., npx optimize or npx optimize --json) without re‑crawling the remote site each time.
+After you add the crawl block to `optimize.config.js`, running `npx optimize --crawl https://example.com` will invoke Cloudflare’s Crawl API, retrieve the site’s pages, and store them locally. You can then run Optimize against that local copy as many times as you like (e.g. npx optimize or npx optimize --json) without re‑crawling the remote site each time.
 
 ### CI/CD Workflows
-Add an Optimize workflow file to your project using `npx optimize --setup workflow`. You'll get an pre-configured `optimize.yml` installed in your project root. You can add also tell Optimize where you want the file using filename `npx optimize --setup workflow .github/workflows`. 
+Add an Optimize workflow file to your project using `npx optimize --setup workflow`. You'll get an pre-configured `optimize.yml` installed in your project root. You can add also tell Optimize where you want the file by adding the path `npx optimize --setup workflow .github/workflows`. 
 
 ## Make it your own
 You can extend Optimize in two ways:
@@ -361,7 +361,7 @@ npx optimize --setup extend-check
 npx optimize --setup extend-check path/to/dir
 ```
 
-Once update import it and use it in your `optimize.config.js`: 
+Once you've defined your check extensions import them into your `optimize.config.js` and add the name of export to the extendChecks block and check you're extending: 
 ```js
 // optimize.config.js
 import {
@@ -429,7 +429,7 @@ const htmlFiles = ['_site/index.html', '_site/about.html']; // paths to html fil
 const results = await runAllChecks(config, htmlFiles);
 ```
 
-You'll also likely want to run Optimize silently (no banner, no spinner, no console logs). Set the `apiMode` to true in your config file.
+To run Optimize silently (no banner, no spinner, no console logs). Set the `apiMode` to true in your config file.
 
 ```js
 // optimize.config.js
@@ -443,7 +443,7 @@ export default {
 
 
 ## Contributing
-Times are changing and we needed something in-house that can help us work smarter not harder. This project started out as a need to solve some of our own unseen static site and static site generator (SSG) problems and figured it might help some of you too. 
+Times are changing and we needed something in-house that can help us work smarter not harder. This project started out as a need to solve some of our own unseen website analysis problems and figured it might help some of you too. 
 
 We don't have time to manage pull requests at the moment. We actively use Optimize in our projects so you'll see updates regularly. At the very least we'll do our best to make updates and push changes tri-weekly.
  
