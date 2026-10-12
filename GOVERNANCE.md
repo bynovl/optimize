@@ -54,7 +54,7 @@ When license changes are approved:
 ## RFC Submission
 
 1. Navigate to [GitHub Discussions > RFCs](https://github.com/bynovl/optimize/discussions/categories/rfcs)
-2. **Open the pinned discussion**: "📋 RFC Submission Template" at the top of the category
+2. **Open the pinned discussion**: "How to Submit a License RFC" at the top of the category
 3. Copy/paste the template from that discussion into your new submission
 4. Fill in sections and submit
 
