@@ -7,11 +7,11 @@ An open source toolkit for auditing and validating your static site. You can aut
   <strong>👋🏾 Hey Community! Start Here.</strong>
   </summary>
   <br>
-  Thanks for being here. Optimize is in active beta. As more people use it, we anticipate some changes will come. That said, we're excited to see how Optimize fits into your workflow. You're free to use and adapt the code in line with our [license terms](./LICENSE). Please review the license for permitted uses and restrictions.
+  Thanks for being here. Optimize is in active beta. As more people use it, we anticipate some changes will come. That said, we're excited to see how Optimize fits into your workflow. You're free to use and adapt the code in line with our [license terms](./LICENSE). Please review the license for permitted uses and restrictions.<br><br>
 
 
   Everything below contains the full documentation. Have thoughts? feedback? Found an issue? Or just want to say hello? Join the [discussion](https://github.com/bynovl/optimize/discussions/categories/beta). 
-  
+
   Once you've had a chance to test Optimize, help us understand what matters most and [Leave Your feedback](https://github.com/bynovl/optimize/discussions/8)! 
   
   Excited about Optimize? Help us [spread the word](https://optimize.bynovl.com/3e33e4ef)!
