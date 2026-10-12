@@ -58,17 +58,8 @@ When license changes are approved:
 3. Copy/paste the template from that discussion into your new submission
 4. Fill in sections and submit
 
-> ℹ️ The template lives in the pinned discussion for easy updates. Check it for the latest version.
-
 ---
 
-## Contact
-
-- License governance inquiries: [governance@bynovl.com](mailto:governance@bynovl.com)
+## Contacts
 - Commercial licensing: [licensing@bynovl.com](mailto:licensing@bynovl.com)
 - RFC submissions: [GitHub Discussions > License RFCs](https://github.com/bynovl/optimize/discussions/categories/rfcs)
-
----
-
-*Last updated: 2026-10-11*  
-*Current license version: BYNOVL-SAL-1.0*
