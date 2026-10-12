@@ -4,45 +4,26 @@ An open source toolkit for auditing and validating your static site. You can aut
 
 <details>
   <summary>
-  <strong>👋🏾 Hey Beta Members! Start Here.</strong>
+  <strong>👋🏾 Hey Community! Start Here.</strong>
   </summary>
   <br>
-  Thanks for joining the beta. Optimize is in active beta. Our goal is to build community-first. This private repo and package are shared for testing and feedback, and we’d love to hear how Optimize works in your workflow. 
+  Thanks for being here. Optimize is in active beta. As more people use it, we anticipate some changes will come. That said, we're excited to see how Optimize fits into your workflow. You're free to use and adapt the code in line with our [license terms](./LICENSE). Please review the license for permitted uses and restrictions.
 
-  Your access is in line with our [license terms](./LICENSE). Please review them for permitted uses and restrictions before sharing or adapting the code. During the beta sharing is restricted to those with access. To grow the community we hope that you'll [invite more people](https://optimizecli.com/join-beta) to join us.
-
-  Everything below contains the full documentation. Have thoughts? feedback? Found an issue? Or just want to say hello? Join the [discussion](https://github.com/bynovl/optimize/discussions/categories/beta). Once you've had a chance to test Optimize, help us understand what matters most and [Leave Your feedback](https://github.com/bynovl/optimize/discussions/8)! Excited to use optimize? Help us [spread the word](https://optimize.bynovl.com/3e33e4ef)!
+  Everything below contains the full documentation. Have thoughts? feedback? Found an issue? Or just want to say hello? Join the [discussion](https://github.com/bynovl/optimize/discussions/categories/beta). 
+  
+  Once you've had a chance to test Optimize, help us understand what matters most and [Leave Your feedback](https://github.com/bynovl/optimize/discussions/8)! 
+  
+  Excited about Optimize? Help us [spread the word](https://optimize.bynovl.com/3e33e4ef)!
 </details>
 
-## Quick Start 
+## Getting Started
 
-### Developers
-Got a project that you want to use Optimize? Grab the token and install the package.  
-
-<details>
-<summary><strong>
-Unix/WSL/macOS
-</strong></summary>
-
-```bash 
-curl -fsSL "https://npm.bynovl.com/token-0ba2a994-f671-48ae-9acc-30a350d37bae?INSTALL=1&TOKEN=1" | bash
-npm install -D @bynovl/optimize
+### Install
+```bash
+npm install @bynovl/optimize
 ```
-</details>
 
-<details>
-<summary><strong>
-Windows
-</strong></summary>
-
-```powershell
-Invoke-WebRequest -Uri "https://npm.bynovl.com/token-0ba2a994-f671-48ae-9acc-30a350d37bae?INSTALL=2&TOKEN=1" -Headers @{ 'User-Agent' = 'curl/7.88.0' } | ForEach-Object { $_.Content } | powershell -NoProfile -ExecutionPolicy Bypass -Command -
-npm install -D @bynovl/optimize
-```
-</details>
-
-### Non-Developers
-Never set up a dev environment? If you are new to local development, use the installer script. It installs Node.js (if needed), creates a starter project folder, writes your `.npmrc`, and installs Optimize for you.
+**Not a developer and want to experience Optimize?** We put together a *quick install* to help you get started so you can run your first audit. No cloud server, external service or login needed. 
 
 <details>
   <summary>
@@ -70,7 +51,6 @@ Never set up a dev environment? If you are new to local development, use the ins
   Copy/paste the following into **Terminal**: 
 
   ```bash
-  # Add &TOKEN=1 after INSTALL=1 for token-only.
   curl -fsSL "https://npm.bynovl.com/token-0ba2a994-f671-48ae-9acc-30a350d37bae?INSTALL=1" | bash
   ```
 </details>
@@ -84,18 +64,12 @@ Never set up a dev environment? If you are new to local development, use the ins
   Copy/paste the following into **PowerShell**: 
 
   ```powershell
-  # PowerShell (no-bash). Add &TOKEN=1 after INSTALL=2 for token-only.
+  # PowerShell (no-bash)
   Invoke-WebRequest -Uri "https://npm.bynovl.com/token-0ba2a994-f671-48ae-9acc-30a350d37bae?INSTALL=2" -Headers @{ 'User-Agent' = 'curl/7.88.0' } | ForEach-Object { $_.Content } | powershell -NoProfile -ExecutionPolicy Bypass -Command -
   ```
 </details>
-<br>
 
-## Getting Started
 
-### Install
-```bash
-npm install @bynovl/optimize
-```
 
 ### Configure
 By default Optimize looks for a build folder by the name of `_opt`, `_site`, `_build`, `public`, `out` or `dist` and loads the default settings. To change the build directory add an `optimize.config.js` in the root of your project. 
