@@ -18,7 +18,8 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 24
-          registry-url: 'https://npm.pkg.github.com/'
+          # registry-url: 'https://npm.pkg.github.com/'
+          registry-url: https://registry.npmjs.org
 
       - run: pnpm install
 
@@ -34,9 +35,9 @@ jobs:
           fi
 
       # Configure npm for GitHub Packages
-      - name: Configure npm for GitHub Packages
-        if: steps.changeset_check.outputs.has_changeset == 'true'
-        run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.GH_PUBLISH_TOKEN }}" > ~/.npmrc
+      # - name: Configure npm for GitHub Packages
+      #  if: steps.changeset_check.outputs.has_changeset == 'true'
+      #  run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.GH_PUBLISH_TOKEN }}" > ~/.npmrc
 
       # Set up Git user (only needed when we have a changeset)
       - name: Set up Git user
