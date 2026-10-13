@@ -7,8 +7,7 @@ An open source toolkit for auditing and validating your static site. You can aut
   <strong>👋🏾 Hey Community! Start Here.</strong>
   </summary>
   <br>
-  Thanks for being here. Optimize is in active beta. As more people use it, we anticipate some changes will come. That said, we're excited to see how Optimize fits into your workflow. You're free to use and adapt the code in line with our [license terms](./LICENSE). Please review the license for permitted uses and restrictions. Learn more about how are license terms may evolve with community input.<br><br>
-
+  Thanks for being here. Optimize is in active beta. As more people use it, we anticipate some changes will come. That said, we're excited to see how Optimize fits into your workflow. You're free to use and adapt the code in line with our <a href="/LICENSE">license terms</a>. Please review the license for permitted uses and restrictions and learn more about how the <a href="/GOVERNANCE.md">license may evolve</a> with community input.<br><br>
 
   Everything below contains the full documentation. Have thoughts? feedback? Found an issue? Or just want to say hello? Join the [discussion](https://github.com/bynovl/optimize/discussions/categories/beta). 
 
@@ -32,7 +31,7 @@ npm install @bynovl/optimize
   </summary>
   <br>
 
-  - Detect and install Node.js automatically (Chocolatey on Windows, nvm on macOS/Unix/WSL) if it isn’t already present.
+  - Detect and install [Node.js](https://nodejs.org/en/) automatically ([Chocolatey](https://chocolatey.org/install) on Windows, [nvm](https://github.com/nvm-sh/nvm) on macOS/Unix/WSL) if it isn’t already present.
   - Creates a new directory `optimize-site` in your current directory and sets up project as follows: 
     - Write an `.npmrc` with the token you need to use Optimize. Backs up your current one if you have one installed. 
     - Creates or modifies a `package.json` with `"type":"module"`
@@ -215,7 +214,7 @@ export default {
 ```
 
 ### Get Data in different formats
-You can have Optimize write results automatically to a path of your choosing every run. Include `exportResultsJson` and/or `exportResultsCsv` with the path and filename for the location where you want your results exported. New results will be updated every run. 
+You can have Optimize write results automatically to a path of your choosing. Include `exportResultsJson` and/or `exportResultsCsv` with the path/filename location where you want your results exported. Each time you run Optimize, the files will be updated. 
 
 ```javascript
 // optimize.config.js
@@ -300,7 +299,7 @@ Sometimes you need to audit a live website instead of a locally‑generated buil
 npx optimize --crawl https://example.com
 ```
 
-To enable a full‑site crawl, you will need to add a `crawl` block to your `optimize.config.js` and/or env variables for `CRAWL_API_TOKEN` and `CRAWL_ACCOUNT_ID`. You may additionally want to control the cloudflare crawl options. If so add and options block:
+To enable a full‑site crawl, you will need to add a `crawl` block to your `optimize.config.js` and/or env variables for `CRAWL_API_TOKEN` and `CRAWL_ACCOUNT_ID`. You may additionally want to control the cloudflare crawl options. If so add an options block:
 
 ```js
 // Full site crawl
@@ -321,10 +320,9 @@ export default {
 After you add the crawl block to `optimize.config.js`, running `npx optimize --crawl https://example.com` will invoke Cloudflare’s Crawl API, retrieve the site’s pages, and store them locally. You can then run Optimize against that local copy as many times as you like (e.g. npx optimize or npx optimize --json) without re‑crawling the remote site each time.
 
 ### CI/CD Workflows
-Add an Optimize workflow file to your project using `npx optimize --setup workflow`. You'll get an pre-configured `optimize.yml` installed in your project root. You can add also tell Optimize where you want the file by adding the path `npx optimize --setup workflow .github/workflows`. 
+Add an Optimize workflow file to your project using `npx optimize --setup workflow`. You'll get an pre-configured `optimize.yml` installed in your project root. You can also tell Optimize where you want the file by adding the path `npx optimize --setup workflow .github/workflows`. 
 
 ## Make it your own
-You can extend Optimize in two ways:
 
 ### Extend checks
 Use `extendChecks` in your `optimize.config.js` to add custom validation to existing core checks (meta, links, media, etc.). To get started run `npx optimize --setup extend-check` and install an `extend-checks.js` sample file in the root of your project. There are 3-ways you can plugin to core checks from simple true/false validation to robust logic driven validation. *The file ships with comments and examples to help you get started*
@@ -376,9 +374,9 @@ npx optimize --skills optimize-setup
 ```
 
 ## Power your own project (API)
-You can use `@bynovl/optimize` as a library to build your own tools, workflows, or integrations for non-commercial distribution. See [demo app](https://playback.website) built with the Optimize engine that uses a custom crawler. For license terms and more information, see the [LICENSE](./LICENSE) file.
+You can use `@bynovl/optimize` as a library to build your own tools, workflows, or integrations for non-commercial distribution. See the [demo app](https://playback.website) built with the Optimize engine and a custom-built web crawler. You can create tools like this for internal use. Have an idea for a commercial SaaS product see our  [LICENSE](./LICENSE) terms for information.
 
-To get started you will need to rebuild the checks for your project. The following outlines the minimum required to get started. *You can also use any `optimize-lib` or `optimize-utils` to aid your development.*
+To get started you will need to rebuild the checks for your project. The following outlines the minimum required. *You can also use the `optimize-lib` or `optimize-utils` to aid your development.*
 
 Import and run a single check:
 
