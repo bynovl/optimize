@@ -44,6 +44,7 @@
     "ci/cd"
   ],
   "main": "index.js",
+  "private": true,
   "type": "module",
   "scripts": {
     "optimize": "node ./packages/optimize-core/bin/cli.js",
