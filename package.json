@@ -1,6 +1,6 @@
 {
   "author": "NOVL",
-  "name": "@bynovl/optimize",
+  "name": "Optimize",
   "version": "1.0.0",
   "description": "Automate accessibility, SEO, GEO and best practice checks for any static site—configurable, extensible, and compatible with all static site generators.",
   "repository": {
