@@ -34,10 +34,10 @@ jobs:
             echo "has_changeset=false" >> $GITHUB_OUTPUT
           fi
 
-      # Configure npm for GitHub Packages
-      # - name: Configure npm for GitHub Packages
-      #  if: steps.changeset_check.outputs.has_changeset == 'true'
-      #  run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.GH_PUBLISH_TOKEN }}" > ~/.npmrc
+      #Configure npm for GitHub Packages
+      - name: Configure npm for GitHub Packages
+        if: steps.changeset_check.outputs.has_changeset == 'true'
+        run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_PUBLISH }}" > ~/.npmrc
 
       # Set up Git user (only needed when we have a changeset)
       - name: Set up Git user
@@ -75,7 +75,7 @@ jobs:
         if: steps.changeset_check.outputs.has_changeset == 'true'
         run: pnpm changeset publish
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.GH_PUBLISH_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_PUBLISH }}
 
       # Tag core version and push
       - name: Tag core version and push
@@ -101,3 +101,8 @@ jobs:
       - name: No changeset found
         if: steps.changeset_check.outputs.has_changeset == 'false'
         run: echo "No changeset files found. Skipping release process."
+
+      # Always run even if publish fails
+      - name: Cleanup npmrc
+        if: always()  
+        run: rm -f ~/.npmrc
