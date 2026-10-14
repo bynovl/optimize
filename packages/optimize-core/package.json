@@ -3,7 +3,7 @@
   "version": "2.6.8",
   "description": "Core CLI for @bynovl/optimize. Orchestrates all modular checks for static site optimization.",
   "author": "NOVL",
-  "license": "ISC",
+  "license": "SEE LICENSE IN LICENSE",
   "private": false,
   "bin": {
     "optimize": "bin/cli.js"

@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Custom check module example for optimize. Provides a template for creating custom check modules that can be used with the optimize CLI tool. This module includes a sample check that validates the presence of a specific meta tag in HTML files.",
   "main": "index.js",
-  "private": false, 
+  "private": false,
   "bin": {
     "optimize-custom-check": "bin/cli.js"
   },
@@ -15,7 +15,7 @@
     "optimize-test": "node bin/cli.js"
   },
   "author": "bynovl",
-  "license": "SEE LICENSE IN ../../LICENSE",
+  "license": "SEE LICENSE IN LICENSE",
   "type": "module",
   "keywords": [
     "language-validation",
