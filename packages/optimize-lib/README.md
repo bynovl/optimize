@@ -1,6 +1,11 @@
 # @bynovl/optimize-lib
 
-Shared logic and helper library for NOVL Optimize. Provides core functions, validation routines, CLI utilities, and result formatting used by all optimize submodules.
+Shared logic and helper library for [NOVL Optimize](https://github.com/bynovl/optimize). Provides core functions, validation routines, CLI utilities, and result formatting used by all optimize submodules.
+
+## Install
+```bash
+npm install @bynovl/optimize-lib
+```
 
 ## What It Does
 

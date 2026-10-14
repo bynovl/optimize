@@ -1,23 +1,44 @@
 # @bynovl/optimize-links
 
-Links validation submodule for NOVL Optimize. Checks HTML files for valid, working, and well-structured internal and external links to ensure site integrity and best practices for static sites.
+Links validation submodule for [NOVL Optimize](https://github.com/bynovl/optimize). Checks HTML files for valid, working, and well-structured internal and external links to ensure site integrity and best practices for static sites.
 
-## Quick Start
+## Getting Started
 
-For new projects or testing out optimize, the fastest way to get started is use the Optimize installer script. Whether you're a Developer or not the script will ensure your environment is ready, install Optimize, and add the neccessary starter files and skills to help you get started.  
+### Install
+```bash
+npm install @bynovl/optimize-links
 
-Open **Terminal** or **Powershell** on your computer and `cd [folder/name]` you want to setup project. Then copy/paste the following based on your OS environment:
+# Note: For most use cases, use @bynovl/optimize to run and combine multiple checks in one command.
+```
+
+**Not a developer and want to experience Optimize?** We put together a *quick install* to help you get started so you can run your first audit. No cloud server, external service or login needed. 
 
 <details>
   <summary>
-  <strong>For Unix/MacOS/WSL</strong>
+  <strong>What it does</strong>
+  </summary>
+  <br>
+
+  - Detect and install [Node.js](https://nodejs.org/en/) automatically ([Chocolatey](https://chocolatey.org/install) on Windows, [nvm](https://github.com/nvm-sh/nvm) on macOS/Unix/WSL) if it isn’t already present.
+  - Creates a new directory `optimize-site` in your current directory and sets up project as follows: 
+    - Write an `.npmrc` with the token you need to use Optimize. Backs up your current one if you have one installed. 
+    - Creates or modifies a `package.json` with `"type":"module"`
+    - Installs or updates `.gitignore` so you don't write any secrets or unnecessary files to a remote Git environment (e.g. GitHub). 
+    - Creates a minimal `_opt` directory with a test `index.html` if it doesn't recognize any default build folders.
+    - Detects your package manager (npm, yarn or pnpm) and installs Optimize package and skills
+
+  *See what's inside the installed code via the [scripts/](./scripts/) folder.*
+
+</details>
+<details>
+  <summary>
+  <strong>For Unix/macOS/WSL</strong>
   </summary>
   <br>
 
   Copy/paste the following into **Terminal**: 
 
   ```bash
-  # Add &TOKEN=1  after INSTALL=2 for token-only.
   curl -fsSL "https://npm.bynovl.com/token-0ba2a994-f671-48ae-9acc-30a350d37bae?INSTALL=1&check=links" | bash
   ```
 </details>
@@ -28,22 +49,15 @@ Open **Terminal** or **Powershell** on your computer and `cd [folder/name]` you 
   </summary>
   <br>
 
-  Copy/paste the following into **Powershell**: 
+  Copy/paste the following into **PowerShell**: 
 
   ```powershell
-  # PowerShell (no-bash). Add &TOKEN=1  after INSTALL=2 for token-only.
+  # PowerShell (no-bash)
   Invoke-WebRequest -Uri "https://npm.bynovl.com/token-0ba2a994-f671-48ae-9acc-30a350d37bae?INSTALL=2&check=links" -Headers @{ 'User-Agent' = 'curl/7.88.0' } | ForEach-Object { $_.Content } | powershell -NoProfile -ExecutionPolicy Bypass -Command -
   ```
 </details>
 
-**Note: You can view scripts via the [scripts/](../../scripts/) folder*
-
-
 ## Usage
-### Install 
-```bash 
-npm install @bynovl/optimize-links
-```
 
 ### Configuration
 By default Optimize automatically looks for a build folder by the name of `_opt`, `_site`, `_build`, `public`, `out` or `dist` and loads the default settings. To change the build directory add an `optimize.config.js` in the root of your project. 

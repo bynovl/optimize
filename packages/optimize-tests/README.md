@@ -1,6 +1,6 @@
 # @bynovl/optimize-tests
 
-This package provides a global test and demo environment for NOVL Optimize. It contains sample HTML site and configuration for testing, validating, improving and adding new modules. No site setup is required. The package includes sample HTML and config for immediate testing.
+This package provides a global test and demo environment for [NOVL Optimize](https://github.com/bynovl/optimize). It contains sample HTML site and configuration for testing, validating, improving and adding new modules. No site setup is required. The package includes sample HTML and config for immediate testing.
 
 You can use this out of the box or create new scripts and validate against this directory and test all features, including link, media, schema, and meta checks.
 
@@ -8,6 +8,12 @@ You can use this out of the box or create new scripts and validate against this 
 - Centralized space for local testing and validation of optimize modules.
 - Easy onboarding to validate package checks against sample data.
 - Not required by any core package; use directly from the monorepo and copy config as needed. 
+
+## Install
+
+```bash 
+npm install @bynovl/optimize-tests 
+```
 
 ## Usage
 
